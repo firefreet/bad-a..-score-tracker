@@ -1,7 +1,6 @@
 module.exports = function (io) {
   return {
     attachEventHandlers: function () {
-      console.log('is this running?');
       io.on('connection', (socket) => {
         // console.log('a user connected');
         socket.on('chat message', (msg) => {
