@@ -12,7 +12,7 @@ module.exports = function (io) {
         });
 
         socket.on('disconnect', () => {
-          console.log('user disconnected');
+          // console.log('user disconnected');
         });
       });
     }
