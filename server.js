@@ -2,6 +2,7 @@ require("dotenv").config(); //environment variables
 const express = require("express");
 const mongoose = require("mongoose");
 const routes = require("./routes");
+const socketEvents = require('./routes/socket/socket.js');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
@@ -20,6 +21,12 @@ app.use(routes);
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/reactreadinglist");
 
 // Start the API server
-app.listen(PORT, function() {
+const server = app.listen(PORT, function() {
   console.log(`🌎  ==> API Server now listening on PORT ${PORT}!`);
 });
+
+// set up socket.io on the running server 
+const io = require('socket.io').listen(server);
+// run socket event methods from external module
+socketEvents(io).attachEventHandlers();
+
