@@ -1,7 +1,6 @@
 module.exports = function (io) {
   return {
     attachEventHandlers: function () {
-      console.log('is this running?');
       io.on('connection', (socket) => {
         // console.log('a user connected');
         socket.on('chat message', (msg) => {
@@ -13,7 +12,7 @@ module.exports = function (io) {
         });
 
         socket.on('disconnect', () => {
-          console.log('user disconnected');
+          // console.log('user disconnected');
         });
       });
     }
