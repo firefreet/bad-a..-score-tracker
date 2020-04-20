@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import './styles/chatStyles.css';
+import './style.css';
 import io from 'socket.io-client'
 const socket = io();
 
@@ -20,6 +20,7 @@ function Chat() {
     const key = ul.current.childElementCount
     const li = document.createElement('li');
     li.setAttribute('key',key);
+    li.setAttribute('class','chatLi');
     li.innerText = msg;
     ul.current.append(li);
   });
@@ -27,9 +28,9 @@ function Chat() {
   return (
     <div>
       <ul ref={ul} id="messages"></ul>
-      <form action="">
-        <input ref={input} id="m" autoComplete="off" />
-        <button onClick={submit}>Send</button>
+      <form className="chatForm" action="">
+        <input className="chatInput" ref={input} id="m" autoComplete="off" />
+        <button className="chatButton" onClick={submit}>Send</button>
       </form>
     </div>
   )
