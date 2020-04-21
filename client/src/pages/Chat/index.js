@@ -27,10 +27,10 @@ function Chat() {
 
   return (
     <div>
-      <ul ref={ul} id="messages"></ul>
-      <form className="chatForm" action="">
-        <input className="chatInput" ref={input} id="m" autoComplete="off" />
-        <button className="chatButton" onClick={submit}>Send</button>
+      <ul ref={ul} id='messages'></ul>
+      <form className='chatForm' action=''>
+        <input className='chatInput' ref={input} id='m' autoComplete='off' />
+        <button className='chatButton' onClick={submit}>Send</button>
       </form>
     </div>
   )
