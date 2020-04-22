@@ -11,24 +11,24 @@ import './global.css';
 
 function App() {
 
-  const socket = io();
-  const [roomState, setRoomState] = useState({
-    roomData: {},
-    emit: (contentName, content) => { socket.emit(contentName, content) }
-  });
+  // const socket = io();
+  // const [roomState, setRoomState] = useState({
+  //   roomData: {},
+  //   emit: (contentName, content) => { socket.emit(contentName, content) }
+  // });
 
-  socket.on('new update', function (content) {
-    console.log(content);
-    // API.getRoom(roomNumber)
-    //   .then(roomData => {
-        // setRoomState(roomData);
-      // });
-  });
+  // socket.on('new update', function (content) {
+  //   console.log(content);
+  //   // API.getRoom(roomNumber)
+  //   //   .then(roomData => {
+  //       // setRoomState(roomData);
+  //     // });
+  // });
 
   return (
     <Router>
       <div>
-        <RoomContext.Provider value={roomState}>
+        {/* <RoomContext.Provider value={roomState}> */}
           <Switch>
             <Route exact path="/">
               HELLOOOO WORLD!!!!
@@ -46,7 +46,7 @@ function App() {
               <NoMatch />
             </Route>
           </Switch>
-        </RoomContext.Provider>
+        {/* </RoomContext.Provider> */}
       </div>
     </Router>
   );

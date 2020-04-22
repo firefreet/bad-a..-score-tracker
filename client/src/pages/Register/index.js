@@ -7,6 +7,7 @@ function Register() {
   const [lastName, setlastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [validation, setValidation] = useState('');
 
   const firstNameRef = useRef();
   const lastNameRef = useRef();
@@ -14,8 +15,8 @@ function Register() {
   const passwordRef = useRef();
 
   useEffect(() => {
-    console.log(firstName, lastName, email, password);
-  }, [firstName, lastName, email, password]);
+    console.log(firstName, lastName, email, password, validation);
+  }, [firstName, lastName, email, password, validation]);
 
   function handleInput(e) {
     switch (e.target.id) {
@@ -46,7 +47,16 @@ function Register() {
       password: password
     }
 
-    console.log(userRegData);
+    API.register(userRegData)
+      .then(res => {
+        console.log(res);
+        setValidation('');
+      })
+      .catch(err => {
+        console.log('inside catch on react function');
+        console.log(err.response);
+        setValidation(err.response.data.error);
+      });
 
   }
 
@@ -110,6 +120,13 @@ function Register() {
             >
               Submit</button>
           </form>
+          {validation !== '' ?
+            <div className="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+                <strong>Warning: </strong> {validation}
+                <button type="button" className="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+            </div> : ''}
         </Col>
       </Row>
     </Container>

@@ -18,7 +18,6 @@ const UserSchema = new Schema({
   email: {
     type: String,
     unique: true,
-    match: [/.+@.+\..+/, "Please enter a valid e-mail address"],
   },
   rooms: [
     {
@@ -29,9 +28,7 @@ const UserSchema = new Schema({
   password: {
     type: String,
     trim: true,
-    required: [true, "A Password Ranging from 6 to 75 Characters is Required"],
-    minlength: 6,
-    maxlength: 75,
+    required: true,
   },
   tokens: {
     type: String,
@@ -50,13 +47,19 @@ const User = mongoose.model("User", UserSchema);
 ///////////////////////////
 
 User.prototype.generateAuthToken = async function () {
-  const user = this;
+  
+  try {
+    const user = this;
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+    user.tokens = token;
+    await user.save();
 
-  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-  user.tokens = token;
-  await user.save();
-
-  return user.tokens;
+    return user.tokens;
+  
+  } catch(err) {
+    return err;
+  }
+  
 };
 
 User.prototype.toJSON = function () {

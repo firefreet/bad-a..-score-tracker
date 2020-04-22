@@ -11,4 +11,22 @@ const contactSchema = Joi.object({
   message: Joi.required()
 });
 
-module.exports = contactSchema;
+const registrationSchema = Joi.object({
+  firstName: Joi.string()
+    .required(),
+  lastName: Joi.string()
+    .required(),
+  email: Joi.string()
+    .email({ minDomainSegments: 2 })
+    .required(),
+  password: Joi.string()
+    .min(6)
+    .max(75)
+    .required()
+});
+
+
+module.exports = {
+  contactSchema: contactSchema,
+  registrationSchema: registrationSchema
+}

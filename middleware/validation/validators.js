@@ -1,14 +1,28 @@
-const contactSchema =require('./schemas');
+const { contactSchema, registrationSchema } =require('./schemas');
 
-const contactValidator = async (req, res, next) => {
-  try {
-    await contactSchema.validateAsync(req.body);
+module.exports = {
+
+  contactValidator: async (req, res, next) => {
+    try {
+      await contactSchema.validateAsync(req.body);
+    }
+    catch (error) {
+      console.log(error)
+      return res.status(400).json({error: error.details[0].message});
+    }
+    next();
+  },
+  
+  registrationValidator: async (req, res, next) => {
+    try {
+      await registrationSchema.validateAsync(req.body);
+    }
+    catch (error) {
+      console.log(error)
+      return res.status(400).json({error: error.details[0].message});
+    }
+    next();
   }
-  catch (error) {
-    console.log(error)
-    return res.status(400).json({error: error.details[0].message});
-  }
-  next();
+
 }
 
-module.exports = contactValidator;
