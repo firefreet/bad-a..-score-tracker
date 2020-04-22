@@ -20,9 +20,8 @@ function App() {
   socket.on('new update', function (content) {
     console.log(content);
     API.getRoom(roomState.roomId)
-      .then(roomData => {
-        console.log(roomData);
-        setRoomState(roomData);
+      .then(({data}) => {
+        setRoomState({ ...roomState, roomData: data });
       });
   });
 

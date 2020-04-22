@@ -25,8 +25,12 @@ function UserRoom() {
       emit('new update', 'time to refresh room from DB')
     });
     answer.current.value = '';
-
   };
+
+  useEffect(()=>{
+    console.log(roomData);
+  })
+  
 
   return (
     <Container>
