@@ -21,7 +21,7 @@ function App() {
     console.log(content);
     API.getRoom(roomState.roomId)
       .then(({data}) => {
-        setRoomState({ ...roomState, roomData: data });
+        setRoomState({ ...roomState, roomData: data[0] });
       });
   });
 
