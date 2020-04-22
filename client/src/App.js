@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import io from 'socket.io-client'
 import RoomContext from './utils/RoomContext.js';
 import API from './utils/API';
+import Register from './pages/Register';
 import UserRoom from './pages/UserRoom';
 import Chat from './pages/Chat';
 import NoMatch from "./pages/NoMatch";
@@ -37,6 +38,9 @@ function App() {
             </Route>
             <Route exact path='/userroom'>
               <UserRoom />
+            </Route>
+            <Route exact path="/register">
+              <Register />
             </Route>
             <Route>
               <NoMatch />
