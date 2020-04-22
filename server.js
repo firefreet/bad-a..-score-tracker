@@ -18,7 +18,7 @@ if (process.env.NODE_ENV === "production") {
 app.use(routes);
 
 // Connect to the Mongo DB
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/reactreadinglist");
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/scoreTrackerDB", {useNewUrlParser: true, useUnifiedTopology: true});
 
 // Start the API server
 const server = app.listen(PORT, function() {
@@ -30,3 +30,5 @@ const io = require('socket.io').listen(server);
 // run socket event methods from external module
 socketEvents(io).attachEventHandlers();
 
+// const db = require('./models');
+// db.RoomModel.create({active:true})

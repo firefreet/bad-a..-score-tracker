@@ -1,3 +1,3 @@
 module.exports = {
-  // Model: require("./model")
+  RoomModel: require("./roomModel")
 };

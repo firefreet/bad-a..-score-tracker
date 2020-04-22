@@ -4,6 +4,6 @@ const contactValidator = require('../../utils/validators');
 
 // MATCHES -> "/api/mandrill/contact"
 router.route("/contact")
-  .post(contactValidator, mandrillController.send);
+  .post(contactValidator, ()=>{console.log("hello")});
 
 module.exports = router;

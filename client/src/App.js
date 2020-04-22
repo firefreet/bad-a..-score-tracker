@@ -13,15 +13,17 @@ function App() {
   const socket = io();
   const [roomState, setRoomState] = useState({
     roomData: {},
-    emit: (contentName, content) => { socket.emit(contentName, content) }
+    emit: (contentName, content) => { socket.emit(contentName, content) },
+    roomId: '5ea07a52782c6a0f40cc67a4'
   });
 
   socket.on('new update', function (content) {
     console.log(content);
-    // API.getRoom(roomNumber)
-    //   .then(roomData => {
-        // setRoomState(roomData);
-      // });
+    API.getRoom(roomState.roomId)
+      .then(roomData => {
+        console.log(roomData);
+        setRoomState(roomData);
+      });
   });
 
   return (
