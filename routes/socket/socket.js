@@ -11,6 +11,10 @@ module.exports = function (io) {
           io.emit('chat message', msg);
         });
 
+        socket.on('new update',(content)=>{
+          io.emit('new update',content);
+        })
+
         socket.on('disconnect', () => {
           // console.log('user disconnected');
         });
