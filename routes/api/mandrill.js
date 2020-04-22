@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const mandrillController = require("../../controllers/mandrillController");
-const contactValidator = require('../../utils/validators');
+const contactValidator = require('../../middleware/validation/validators');
 
 // MATCHES -> "/api/mandrill/contact"
 router.route("/contact")
