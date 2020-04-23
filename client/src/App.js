@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import io from 'socket.io-client'
 import RoomContext from './utils/RoomContext.js';
@@ -17,6 +17,15 @@ function App() {
     roomData: mockRoomData,
     emit: (contentName, content) => { socket.emit(contentName, content) }
   });
+
+  useEffect(() => {
+    API.getRoom(roomState.roomData._id).then((data) => {
+      console.log(data)
+      setRoomState({...roomState, roomData: data.data[0]});
+    }).catch(err => {
+      console.log('Room with id: ' + roomState.roomData._id + ' does not exist.');
+    })
+  },[])
 
   socket.on('new update', function (content) {
     console.log(content);

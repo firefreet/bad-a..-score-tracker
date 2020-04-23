@@ -26,6 +26,7 @@ function AdminRoom() {
   }
 
   useEffect(() => {
+    console.log(roomData)
     setTable();
   }, [questionState.selectedQuestion, questionState.selectedRound])
 
@@ -67,6 +68,9 @@ function AdminRoom() {
           </div>
         </Row>
         <Row>
+          <p className='text-center mx-auto mt-2 border w-75'>See Player Responses: </p>
+        </Row>
+        <Row>
           <div className='col-12 col-md-6 d-flex'>
             <select className='mx-auto w-50 mb-2' onChange={chooseRound}>
               <option>Round 1</option>
@@ -79,9 +83,6 @@ function AdminRoom() {
               <option>Question 2</option>
             </select>
           </div>
-        </Row>
-        <Row>
-          <p className='text-center mx-auto mt-2 border w-75'>Player Responses: </p>
         </Row>
         <Row>
           <table className="table table-striped border">
