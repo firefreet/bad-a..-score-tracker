@@ -1,5 +1,5 @@
 {
-  "name": "zlrportfolio",
+  "name": "trvioserver",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
@@ -21,11 +21,14 @@
   },
   "dependencies": {
     "@hapi/joi": "^17.1.1",
+    "jsonwebtoken": "^8.5.1",
+    "bcryptjs": "^2.4.3",
     "axios": "^0.18.0",
     "dotenv": "^8.2.0",
     "express": "^4.16.3",
     "if-env": "^1.0.4",
     "mandrill-api": "^1.0.45",
+    "mongojs": "^3.1.0",
     "mongoose": "^5.3.16",
     "socket.io": "^2.3.0"
   }

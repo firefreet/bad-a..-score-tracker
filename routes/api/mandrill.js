@@ -1,9 +1,9 @@
 const router = require("express").Router();
 const mandrillController = require("../../controllers/mandrillController");
-const contactValidator = require('../../utils/validators');
+const validator = require('../../middleware/validation/validators');
 
 // MATCHES -> "/api/mandrill/contact"
 router.route("/contact")
-  .post(contactValidator, ()=>{console.log("hello")});
+  .post(validator.contactValidator, mandrillController.send);
 
 module.exports = router;
