@@ -4,19 +4,18 @@ import { Col, Row, Container } from "../../components/Grid";
 import API from '../../utils/API';
 import cookies from '../../utils/cookie';
 
-function Login() {
+function Login(props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [validation, setValidation] = useState('');
-  const [user, setUser] = useState('');
-  const { loggedIn, setRoomState } = useContext(RoomContext);
-
+  const { loggedIn } = useContext(RoomContext);
 
   const emailRef = useRef();
   const passwordRef = useRef();
 
   useEffect(() => {
     console.log(loggedIn);
+    console.log(props);
   }, [loggedIn]);
 
   function handleInput(e) {
@@ -43,12 +42,12 @@ function Login() {
     API.login(userData)
       .then(res => {
         setValidation('');
-        setUser(res.data.user._doc);
+        console.log(res.data.user._doc);
         let userCookie = res.data.user._doc.tokens;
         cookies.setCookie('user', userCookie, 1);
 
         // set for later
-        // window.location='/userroom';
+        props.history.push('/userroom');
 
       })
       .catch(err => {

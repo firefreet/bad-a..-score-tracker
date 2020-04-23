@@ -6,7 +6,7 @@ export default {
     var expires = "expires=" + d.toUTCString();
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
   },
-  getCookie: function(cname) {
+  getCookie: function(cname) { //NEEDS TO BE EDITED
     var name = cname + "=";
     var decodedCookie = decodeURIComponent(document.cookie);
     var ca = decodedCookie.split(';');

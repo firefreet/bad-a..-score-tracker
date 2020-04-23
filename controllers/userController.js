@@ -52,7 +52,6 @@ module.exports = {
         res.status(400).send('USER IS NOT LOGGED IN');
       }
       
-
     } catch (err) {
       res.status(400).send("USER IS NOT LOGGED IN");
     }

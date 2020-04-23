@@ -15,9 +15,9 @@ function App() {
 
   const socket = io();
   const [roomState, setRoomState] = useState({
-    loggedIn: false,
-    userData: {},
-    roomData: {},
+    loggedIn: decodeURIComponent(document.cookie) !== '',
+    userData: null,
+    roomData: null,
     emit: (contentName, content) => { socket.emit(contentName, content) }
   });
 
@@ -35,7 +35,10 @@ function App() {
         console.log(res);
         setRoomState(currentState => ({...currentState, loggedIn: true, userData: {id: res.data.id}}));
       })
-      .catch(err => console.log(err.response));
+      .catch(err => {
+        console.log(err.response)
+        setRoomState(currentState => ({...currentState, loggedIn: false, userData: null}));
+      });
   }, []);
 
   console.log(roomState);
@@ -45,20 +48,12 @@ function App() {
       <div>
         <RoomContext.Provider value={roomState}>
           <Switch>
-            <Route exact path="/">
-              <p>HELLOOOO WORLD!!!!</p> <p>{roomState.userData.id}</p> <p>Logged in: {roomState.loggedIn.toString()}</p>
-            </Route>
+            <Route exact path="/"><p>HELLOOOO WORLD!!!!</p></Route>
             <ProtectedRoute exact path="/chat" component={Chat} />
             <ProtectedRoute exact path='/userroom' component={UserRoom} />
-            <Route exact path="/register">
-              <Register />
-            </Route>
-            <Route exact path="/login">
-              <Login />
-            </Route>
-            <Route>
-              <NoMatch />
-            </Route>
+            <Route exact path="/register" component={Register} />
+            <Route exact path="/login" component={Login} />
+            <Route component ={NoMatch} />
           </Switch>
         </RoomContext.Provider>
       </div>
