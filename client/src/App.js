@@ -4,6 +4,7 @@ import io from 'socket.io-client'
 import RoomContext from './utils/RoomContext.js';
 import API from './utils/API';
 import UserRoom from './pages/UserRoom';
+import AdminRoom from './pages/AdminRoom';
 import Chat from './pages/Chat';
 import NoMatch from "./pages/NoMatch";
 import './global.css';
@@ -38,6 +39,9 @@ function App() {
             </Route>
             <Route exact path='/userroom'>
               <UserRoom />
+            </Route>
+            <Route exact path='/adminroom'>
+              <AdminRoom />
             </Route>
             <Route>
               <NoMatch />
