@@ -1,21 +1,23 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
+import RoomContext from '../../utils/RoomContext';
 import { Col, Row, Container } from "../../components/Grid";
 import API from '../../utils/API';
 import cookies from '../../utils/cookie';
-import auth from '../../utils/auth';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [validation, setValidation] = useState('');
   const [user, setUser] = useState('');
+  const { loggedIn, setRoomState } = useContext(RoomContext);
+
 
   const emailRef = useRef();
   const passwordRef = useRef();
 
   useEffect(() => {
-
-  }, []);
+    console.log(loggedIn);
+  }, [loggedIn]);
 
   function handleInput(e) {
     switch (e.target.id) {
@@ -42,12 +44,11 @@ function Login() {
       .then(res => {
         setValidation('');
         setUser(res.data.user._doc);
-
-        let userCookie = JSON.stringify(res.data.user._doc);
+        let userCookie = res.data.user._doc.tokens;
         cookies.setCookie('user', userCookie, 1);
 
         // set for later
-        window.location='/userroom';
+        // window.location='/userroom';
 
       })
       .catch(err => {

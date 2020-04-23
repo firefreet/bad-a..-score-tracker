@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import io from 'socket.io-client'
 import RoomContext from './utils/RoomContext.js';
@@ -15,6 +15,8 @@ function App() {
 
   const socket = io();
   const [roomState, setRoomState] = useState({
+    loggedIn: false,
+    userData: {},
     roomData: {},
     emit: (contentName, content) => { socket.emit(contentName, content) }
   });
@@ -27,13 +29,24 @@ function App() {
       // });
   });
 
+  useEffect(() => {
+    API.isAuthenticated()
+      .then(res => {
+        console.log(res);
+        setRoomState(currentState => ({...currentState, loggedIn: true, userData: {id: res.data.id}}));
+      })
+      .catch(err => console.log(err.response));
+  }, []);
+
+  console.log(roomState);
+  
   return (
     <Router>
       <div>
         <RoomContext.Provider value={roomState}>
           <Switch>
             <Route exact path="/">
-              HELLOOOO WORLD!!!!
+              <p>HELLOOOO WORLD!!!!</p> <p>{roomState.userData.id}</p> <p>Logged in: {roomState.loggedIn.toString()}</p>
             </Route>
             <ProtectedRoute exact path="/chat" component={Chat} />
             <ProtectedRoute exact path='/userroom' component={UserRoom} />

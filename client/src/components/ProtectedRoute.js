@@ -1,30 +1,15 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useContext } from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import auth from '../utils/auth';
-import API from '../utils/API';
+import RoomContext from '../utils/RoomContext';
 
 function ProtectedRoute({ component: Component, ...rest }) {
-  
-  // const [authStatus, setAuthStatus] = useState('');
-
-  // useEffect(function() {
-  //   console.log(authStatus);
-
-  // }, [authStatus]);
-
-  // API.isAuthenticated()
-  // .then(res => {
-  //   setAuthStatus(res.data);
-  // })
-  // .catch(err => {
-  //   console.log(err);
-  // })
-
+  const { loggedIn } = useContext(RoomContext);
+  console.log(loggedIn);
   return (
     <Route
       {...rest}
       render={props => {
-        if (true) {
+        if (loggedIn) {
           return <Component {...props} />
         }
         else {

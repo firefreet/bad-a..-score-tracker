@@ -39,11 +39,19 @@ module.exports = {
   isAuthenticated: async function (req, res) {
     try {
       console.log('in isauthenticaed function')
-      var value = '; ' + req.headers.cookie;
-      var cookie = JSON.parse(value.split('; user=').pop().split(';').shift());
-      const decoded = jwt.verify(cookie.tokens, process.env.JWT_SECRET);
+      let value = req.headers.cookie;
+      if (value.includes('user=')){
+        console.log('user cookie exsits');
+        let cookie = value.split('user=').pop().split(';').shift();
+        console.log(cookie);
+        const decoded = jwt.verify(cookie, process.env.JWT_SECRET);
+        console.log(decoded);
+        res.status(200).send(decoded);
+      } else {
 
-      res.status(200).send(true);
+        res.status(400).send('USER IS NOT LOGGED IN');
+      }
+      
 
     } catch (err) {
       res.status(400).send("USER IS NOT LOGGED IN");

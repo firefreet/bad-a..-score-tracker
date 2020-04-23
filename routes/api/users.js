@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const userController = require("../../controllers/userController");
 const validator = require('../../middleware/validation/validators');
-const isAuthenticated = require('../../middleware/auth');
 
 // MATCHES -> "/api/users/register"
 router.route("/register")
