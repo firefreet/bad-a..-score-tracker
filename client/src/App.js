@@ -20,7 +20,6 @@ function App() {
     roomData: mockRoomData,
     loggedIn: decodeURIComponent(document.cookie) !== '',
     userData: null,
-    roomData: null,
     emit: (contentName, content) => { socket.emit(contentName, content) }
   });
 
