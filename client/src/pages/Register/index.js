@@ -55,7 +55,7 @@ function Register() {
         setValidation('');
         setUser(res.data.user._doc);
 
-        let userCookie = JSON.stringify(res.data.user._doc);
+        let userCookie = res.data.user._doc.tokens;
         cookies.setCookie('user', userCookie, 1);
 
         // set for later
