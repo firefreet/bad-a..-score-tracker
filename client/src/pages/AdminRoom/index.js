@@ -1,9 +1,54 @@
-import React, { useRef, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Container, Row } from '../../components/Grid';
-import RoomContext from '../../utils/API';
+import RoomContext from '../..//utils/RoomContext';
 import RoomNav from '../../components/RoomNav';
 
+
 function AdminRoom() {
+  const { roomData, emit } = useContext(RoomContext);
+  const table = [];
+  const [questionState, setQuestionState] = useState(
+    {
+      selectedRound: 1,
+      selectedQuestion: 1,
+      table: []
+    }
+  );
+
+  const chooseRound = (e) => {
+    const round = parseInt(e.target.value.slice(6));
+    setQuestionState({ ...questionState, selectedRound: round });
+  };
+
+  const chooseQuestion = (e) => {
+    const question = parseInt(e.target.value.slice(9));
+    setQuestionState({ ...questionState, selectedQuestion: question });
+  }
+
+  useEffect(() => {
+    setTable();
+  }, [questionState.selectedQuestion, questionState.selectedRound])
+
+  const setTable = () => {
+    roomData.participants.forEach((player, i) => {
+      const currentResponse = player.responses.filter(resp => {
+        if (resp.roundNumber === questionState.selectedRound
+          && resp.questionNumber === questionState.selectedQuestion) {
+          return true
+        } else return false
+      })
+      if (currentResponse.length) {
+        table.push(
+          {
+            player: player.name,
+            answer: currentResponse[0].answer
+          }
+        )
+      }
+    })
+    setQuestionState({ ...questionState, table })
+  }
+
   return (
     <div>
       <RoomNav />
@@ -23,13 +68,13 @@ function AdminRoom() {
         </Row>
         <Row>
           <div className='col-12 col-md-6 d-flex'>
-            <select className='mx-auto w-50 mb-2'>
+            <select className='mx-auto w-50 mb-2' onChange={chooseRound}>
               <option>Round 1</option>
               <option>Round 2</option>
             </select>
           </div>
           <div className='col-12 col-md-6 d-flex'>
-            <select className='mx-auto ml-auto mb-2 w-50'>
+            <select className='mx-auto ml-auto mb-2 w-50' onChange={chooseQuestion}>
               <option>Question 1</option>
               <option>Question 2</option>
             </select>
@@ -47,39 +92,26 @@ function AdminRoom() {
                 <th scope="col" className='text-center'>Delete</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td>Gorgon</td>
-                <td>
-                  <div className="d-flex">
-                    <input type="checkbox" className="mx-auto" />
-                  </div>
-                </td>
-                <td className='d-flex'>
-                  <i className="mx-auto fas fa-minus-circle"></i>
-                </td>
-              </tr>
-              <tr>
-                <td colSpan='10'>Interdum et malesuada fames ac ante ipsum primis in faucibus. Aliquam nec ex eget metus malesuada tristique. Donec quis suscipit ligula, mattis condimentum lectus. Quisque sollicitudin quis elit non viverra.</td>
-              </tr>
-            </tbody>
-            <tbody>
-              <tr>
-                <td>Cindy</td>
-                <td>
-                  <div className="d-flex">
-                    <input type="checkbox" className="mx-auto" />
-                  </div>
-                </td>
-                <td className='d-flex'>
-                  <i className="mx-auto fas fa-minus-circle"></i>
-                </td>
-              </tr>
-              <tr>
-                <td colSpan='10'>Interdum et malesuada fames ac ante ipsum primis in faucibus. Aliquam nec ex eget metus malesuada tristique. Donec quis suscipit ligula, mattis condimentum lectus. Quisque sollicitudin quis elit non viverra.</td>
-              </tr>
-            </tbody>
 
+            {questionState.table.map((v, i) => {
+              return (
+                <tbody key={i}>
+                  <tr>
+                    <td>{v.player}</td>
+                    <td>
+                      <div className="d-flex">
+                        <input type="checkbox" className="mx-auto" />
+                      </div>
+                    </td>
+                    <td className='d-flex'>
+                      <i className="mx-auto fas fa-minus-circle"></i>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colSpan='10'>{v.answer}</td>
+                  </tr>
+                </tbody>)
+            })}
           </table>
         </Row>
         <div className='px-3'>
