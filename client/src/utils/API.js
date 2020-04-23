@@ -15,6 +15,17 @@ export default {
 
   // Saves a answer to the database
   saveAnswer: function(answerData) {
-    return axios.put('/api/rooms/answer', answerData);
+    return axios.put("/api/rooms/answer", answerData);
+  },
+  // Register User
+  register: function(userRegData) {
+    return axios.post(`/api/users/register`, userRegData);
+  },
+  // Login User
+  login: function(userData) {
+    return axios.post(`/api/users/login`, userData);
+  },
+  isAuthenticated: function() {
+    return axios.get(`api/users/auth`);
   }
 };

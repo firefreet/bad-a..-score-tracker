@@ -1,9 +1,9 @@
-import React, { useRef, useEffect, useContext } from 'react';
-import { Container, Row } from '../../components/Grid'
-import SubmitModal from '../../components/SubmitModal';
-import RoomContext from '../../utils/RoomContext';
-import API from '../../utils/API';
+import React, { useContext, useEffect, useRef } from 'react';
+import { Container, Row } from '../../components/Grid';
 import RoomNav from '../../components/RoomNav';
+import SubmitModal from '../../components/SubmitModal';
+import API from '../../utils/API';
+import RoomContext from '../../utils/RoomContext';
 
 function UserRoom() {
   const answer = useRef();
@@ -14,8 +14,8 @@ function UserRoom() {
 
   function submitAnswer() {
     const respData = {
-      roomId: '5ea07a52782c6a0f40cc67a4',
-      userName: 'gorgon',
+      roomId: roomData._id, /* to be made dynamic */
+      userName: 'gorgon',/* to be made dynamic */
       answer: answer.current.value,
       questionNumber: parseInt(questionNumber.current.value.slice(9)),
       roundNumber: parseInt(roundNumber.current.value.slice(6)),
