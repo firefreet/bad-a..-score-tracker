@@ -2,33 +2,23 @@ import React, { useState, useEffect, useRef } from "react";
 import { Col, Row, Container } from "../../components/Grid";
 import API from '../../utils/API';
 import cookies from '../../utils/cookie';
+import auth from '../../utils/auth';
 
-function Register() {
-  const [firstName, setfirstName] = useState('');
-  const [lastName, setlastName] = useState('');
+function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [validation, setValidation] = useState('');
   const [user, setUser] = useState('');
 
-  const firstNameRef = useRef();
-  const lastNameRef = useRef();
   const emailRef = useRef();
   const passwordRef = useRef();
 
   useEffect(() => {
-    console.log(user);
 
-  }, [user]);
+  }, []);
 
   function handleInput(e) {
     switch (e.target.id) {
-      case 'fname':
-        setfirstName(e.target.value);
-        break;
-      case 'lname':
-        setlastName(e.target.value);
-        break;
       case 'email':
         setEmail(e.target.value);
         break;
@@ -43,14 +33,12 @@ function Register() {
   function handleSubmit(e) {
     e.preventDefault();
 
-    let userRegData = {
-      firstName: firstName,
-      lastName: lastName,
+    let userData = {
       email: email,
       password: password
     }
 
-    API.register(userRegData)
+    API.login(userData)
       .then(res => {
         setValidation('');
         setUser(res.data.user._doc);
@@ -59,11 +47,11 @@ function Register() {
         cookies.setCookie('user', userCookie, 1);
 
         // set for later
-        // window.location='/userroom';
+        window.location='/userroom';
 
       })
       .catch(err => {
-        console.log('inside catch on react function');
+        console.log('inside catch on react function / no login for you');
         console.log(err.response);
         setValidation(err.response.data.error);
       });
@@ -74,33 +62,9 @@ function Register() {
     <Container classes="container mt-5">
       <Row>
         <Col>
-          <h3>Register</h3>
+          <h3>Login</h3>
           <hr />
           <form>
-            <div className="form-row">
-              <div className="form-group col-md-6">
-                <label htmlFor="firstName">First Name</label>
-                <input
-                  onChange={handleInput}
-                  ref={firstNameRef}
-                  type="text"
-                  className="form-control"
-                  id="fname"
-                  aria-describedby="firstName"
-                  placeholder="Enter First Name" />
-              </div>
-              <div className="form-group col-md-6">
-                <label htmlFor="lastName">Last Name</label>
-                <input
-                  onChange={handleInput}
-                  ref={lastNameRef}
-                  type="text"
-                  className="form-control"
-                  id="lname"
-                  aria-describedby="lastName"
-                  placeholder="Enter Last Name" />
-              </div>
-            </div>
             <div className="form-group">
               <label htmlFor="exampleInputEmail1">Email address</label>
               <input
@@ -128,7 +92,7 @@ function Register() {
               type="submit"
               className="btn btn-secondary"
             >
-              Submit</button>
+              Login</button>
           </form>
           {validation !== '' ?
             <div className="alert alert-danger alert-dismissible fade show mt-3" role="alert">
@@ -143,4 +107,4 @@ function Register() {
   )
 };
 
-export default Register;
+export default Login;

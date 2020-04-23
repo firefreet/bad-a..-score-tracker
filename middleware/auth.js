@@ -33,6 +33,7 @@ const isAuthenticated = async (req, res, next) => {
     req.token = userToken;
     req.user = user;
     next();
+    
   } catch (err) {
     console.log('error redirecting home');
     console.log(err);
