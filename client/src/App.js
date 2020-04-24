@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import io from 'socket.io-client'
+// import io from 'socket.io-client'
 import RoomContext from './utils/RoomContext.js';
 import API from './utils/API';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -15,36 +15,33 @@ import mockRoomData from './mockRoomData';
 
 function App() {
 
-  const socket = io();
+  // const socket = io();
   const [roomState, setRoomState] = useState({
     roomData: mockRoomData,
     loggedIn: decodeURIComponent(document.cookie) !== '',
     userData: null,
-    emit: (contentName, content) => { socket.emit(contentName, content) }
+    // emit: (contentName, content) => { socket.emit(contentName, content) }
   });
 
-  useEffect(() => {
-    API.getRoom(roomState.roomData._id).then((data) => {
-      console.log(data)
-      setRoomState({...roomState, roomData: data.data[0]});
-    }).catch(err => {
-      console.log('Room with id: ' + roomState.roomData._id + ' does not exist.');
-    })
-  },[])
-
-  socket.on('new update', function (content) {
-    console.log(content);
-    API.getRoom(roomState.roomData._id)
-      .then(({ data }) => {
-        setRoomState({ ...roomState, roomData: data[0] });
-      });
-  });
+  // socket.on('new update', function (content) {
+  //   console.log(content);
+  //   API.getRoom(roomState.roomData._id)
+  //     .then(({ data }) => {
+  //       setRoomState({ ...roomState, roomData: data[0] });
+  //     });
+  // });
 
   useEffect(() => {
     API.isAuthenticated()
       .then(res => {
         console.log(res);
-        setRoomState(currentState => ({...currentState, loggedIn: true, userData: {id: res.data.id}}));
+        // setRoomState(currentState => ({...currentState, loggedIn: true, userData: {id: res.data.id}}));
+        API.getRoom(roomState.roomData._id).then((data) => {
+          console.log(data)
+          setRoomState({...roomState, roomData: data.data[0], loggedIn: true, userData: {id: res.data.id}});
+        }).catch(err => {
+          console.log('Room with id: ' + roomState.roomData._id + ' does not exist.');
+        })    
       })
       .catch(err => {
         console.log(err.response)
@@ -60,7 +57,7 @@ function App() {
         <RoomContext.Provider value={roomState}>
           <Switch>
             <Route exact path="/"><p>HELLOOOO WORLD!!!!</p></Route>
-            <ProtectedRoute exact path="/chat" component={Chat} />
+            <Route exact path="/chat" component={Chat} />
             <ProtectedRoute exact path='/userroom' component={UserRoom} />
             <ProtectedRoute exact path='/adminroom' component={AdminRoom} />
             <Route exact path="/register" component={Register} />
