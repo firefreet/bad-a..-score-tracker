@@ -9,7 +9,7 @@ export function Container(props) {
 
 // This Row component lets us use a bootstrap row without having to think about class names
 export function Row(props) {
-  return <div className={`${props.classes ? props.classes : 'row'}`}>{props.children}</div>;;
+  return <div className={`${props.classes ? + props.classes : 'row'}`}>{props.children}</div>;;
 }
 
 // This Col component lets us size bootstrap columns with less syntax

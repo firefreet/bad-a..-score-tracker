@@ -1,10 +1,10 @@
 import React from 'react';
 
-function RoomNav() {
+function RoomNav(props) {
   return (
     <div>
       <nav className=" w navbar navbar-expand-lg navbar-light bg-light">
-        <a className="navbar-brand" href="#">Room: </a>
+        <a className="navbar-brand" href="#">Room: {props.room} [Current Round: {props.round} - Question: {props.question}]</a>
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>

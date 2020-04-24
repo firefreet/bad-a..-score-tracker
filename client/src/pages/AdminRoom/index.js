@@ -31,28 +31,30 @@ function AdminRoom() {
   }, [questionState.selectedQuestion, questionState.selectedRound])
 
   const setTable = () => {
-    roomData.participants.forEach((player, i) => {
-      const currentResponse = player.responses.filter(resp => {
-        if (resp.roundNumber === questionState.selectedRound
-          && resp.questionNumber === questionState.selectedQuestion) {
-          return true
-        } else return false
+    if (roomData.participants) {
+      roomData.participants.forEach((player, i) => {
+        const currentResponse = player.responses.filter(resp => {
+          if (resp.roundNumber === questionState.selectedRound
+            && resp.questionNumber === questionState.selectedQuestion) {
+            return true
+          } else return false
+        })
+        if (currentResponse.length) {
+          table.push(
+            {
+              player: player.name,
+              answer: currentResponse[0].answer
+            }
+          )
+        }
       })
-      if (currentResponse.length) {
-        table.push(
-          {
-            player: player.name,
-            answer: currentResponse[0].answer
-          }
-        )
-      }
-    })
-    setQuestionState({ ...questionState, table })
+      setQuestionState({ ...questionState, table })
+    }
   }
 
   return (
     <div>
-      <RoomNav />
+      <RoomNav room={roomData.roomId} round={roomData.rounds.length} question={roomData.rounds[roomData.rounds.length -1].numberOfQuestions}/>
       <Container>
         <Row>
           <textarea rows='6' className='mx-auto mb-2 mb-2 w-75' placeholder='...type or paste content here to BROADCAST to players ...'></textarea>
