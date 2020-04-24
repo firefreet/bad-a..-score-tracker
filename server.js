@@ -31,4 +31,4 @@ const io = require('socket.io').listen(server);
 socketEvents(io).attachEventHandlers();
 
 // const db = require('./models');
-// db.RoomModel.create({active:true})
+// db.RoomModel.create({active:true, rounds:[{numberOfQuestions: 3},{numberOfQuestions: 3},{numberOfQuestions: 3}]})

@@ -9,13 +9,13 @@ function UserRoom() {
   const answer = useRef();
   let roundNumber = useRef();
   let questionNumber = useRef();
-  const { roomData, emit } = useContext(RoomContext)
+  const { roomData, emit } = useContext(RoomContext);
 
 
   function submitAnswer() {
     const respData = {
       roomId: roomData._id, /* to be made dynamic */
-      userName: 'gorgon',/* to be made dynamic */
+      userName: 'Clotho',/* to be made dynamic */
       answer: answer.current.value,
       questionNumber: parseInt(questionNumber.current.value.slice(9)),
       roundNumber: parseInt(roundNumber.current.value.slice(6)),
@@ -23,14 +23,58 @@ function UserRoom() {
     };
 
     API.saveAnswer(respData).then(() => {
-      emit('new update', 'time to refresh room from DB')
+      // emit('new update', 'time to refresh room from DB')
     });
     answer.current.value = '';
   };
 
+  function changeRound(e) {
+    let rN = parseInt(e.target.value.slice(6));
+    questionNumber.current.innerHTML = "";
+    for (var i = 1; i <= roomData.rounds[rN - 1].numberOfQuestions; i++) {
+      let optionEl = document.createElement('option');
+      optionEl.innerText = `Question ${i}`;
+      questionNumber.current.append(optionEl)
+      showResponse();
+    }
+  }
+
+  function showResponse() {
+    let qN = parseInt(questionNumber.current.value.slice(9));
+    let rN = parseInt(roundNumber.current.value.slice(6));
+    let userIndex = roomData.participants.findIndex(element => {
+      return element.name === 'Clotho' /* to be made dynamic */
+    })
+    console.log(userIndex);
+    if (userIndex !== -1) {
+      let answerIndex = roomData.participants[userIndex].responses.findIndex(element => {
+        return (element.questionNumber === qN && element.roundNumber === rN)
+      })
+      if (answerIndex !== -1) {
+        answer.current.innerText = roomData.participants[userIndex].responses[answerIndex].answer
+      } else {
+        answer.current.innerText = ""
+      }
+    } else {
+      answer.current.innerText = ""
+    }
+  }
+
   useEffect(() => {
-    console.log(roomData);
-  })
+    roomData.rounds.forEach((v, i) => {
+      let optionEl = document.createElement('option');
+      optionEl.innerHTML = `Round ${i + 1}`
+      roundNumber.current.append(optionEl);
+    });
+    questionNumber.current.innerHTML = "";
+    let rN = parseInt(roundNumber.current.value.slice(6));
+    for (var i = 1; i <= roomData.rounds[rN - 1].numberOfQuestions; i++) {
+      let optionEl = document.createElement('option');
+      optionEl.innerText = `Question ${i}`;
+      questionNumber.current.append(optionEl)
+    }
+    showResponse();
+  });
 
 
   return (
@@ -51,15 +95,12 @@ function UserRoom() {
         </Row>
         <br />
         <Row>
-          <select ref={roundNumber} className='mx-auto w-50 mb-2'>
-            <option>Round 1</option>
-            <option>Round 2</option>
+          <select ref={roundNumber} onChange={changeRound} className='mx-auto w-50 mb-2'>
           </select>
         </Row>
         <Row>
-          <select ref={questionNumber} className='mx-auto mb-2 w-50'>
+          <select ref={questionNumber} onChange={showResponse} className='mx-auto mb-2 w-50'>
             <option>Question 1</option>
-            <option>Question 2</option>
           </select>
         </Row>
         <Row>

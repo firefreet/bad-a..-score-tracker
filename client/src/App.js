@@ -22,7 +22,6 @@ function App() {
     userData: null,
     // emit: (contentName, content) => { socket.emit(contentName, content) }
   });
-
   // socket.on('new update', function (content) {
   //   console.log(content);
   //   API.getRoom(roomState.roomData._id)
@@ -37,10 +36,11 @@ function App() {
         console.log(res);
         // setRoomState(currentState => ({...currentState, loggedIn: true, userData: {id: res.data.id}}));
         API.getRoom(roomState.roomData._id).then((data) => {
-          console.log(data)
-          setRoomState({...roomState, roomData: data.data[0], loggedIn: true, userData: {id: res.data.id}});
+          // 
+          var roomData = data.data.length === 0 ? roomState.roomData : data.data[0];
+          setRoomState({...roomState, roomData, loggedIn: true, userData: {id: res.data.id}});
         }).catch(err => {
-          console.log('Room with id: ' + roomState.roomData._id + ' does not exist.');
+          console.log(err);
         })    
       })
       .catch(err => {

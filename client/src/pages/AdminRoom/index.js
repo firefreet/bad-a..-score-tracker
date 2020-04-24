@@ -31,23 +31,25 @@ function AdminRoom() {
   }, [questionState.selectedQuestion, questionState.selectedRound])
 
   const setTable = () => {
-    roomData.participants.forEach((player, i) => {
-      const currentResponse = player.responses.filter(resp => {
-        if (resp.roundNumber === questionState.selectedRound
-          && resp.questionNumber === questionState.selectedQuestion) {
-          return true
-        } else return false
+    if (roomData.participants) {
+      roomData.participants.forEach((player, i) => {
+        const currentResponse = player.responses.filter(resp => {
+          if (resp.roundNumber === questionState.selectedRound
+            && resp.questionNumber === questionState.selectedQuestion) {
+            return true
+          } else return false
+        })
+        if (currentResponse.length) {
+          table.push(
+            {
+              player: player.name,
+              answer: currentResponse[0].answer
+            }
+          )
+        }
       })
-      if (currentResponse.length) {
-        table.push(
-          {
-            player: player.name,
-            answer: currentResponse[0].answer
-          }
-        )
-      }
-    })
-    setQuestionState({ ...questionState, table })
+      setQuestionState({ ...questionState, table })
+    }
   }
 
   return (
