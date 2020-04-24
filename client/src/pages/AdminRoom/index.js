@@ -54,7 +54,7 @@ function AdminRoom() {
 
   return (
     <div>
-      <RoomNav />
+      <RoomNav room={roomData.roomId} round={roomData.rounds.length} question={roomData.rounds[roomData.rounds.length -1].numberOfQuestions}/>
       <Container>
         <Row>
           <textarea rows='6' className='mx-auto mb-2 mb-2 w-75' placeholder='...type or paste content here to BROADCAST to players ...'></textarea>
