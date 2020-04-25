@@ -13,7 +13,8 @@ function UserRoom() {
   const { roomData, /* emit, */ 
     selectedQuestion,
     selectedRound,
-    updateGoToCurr
+    updateGoToCurr,
+    goToCurrent
    } = useContext(RoomContext);
    const roomState = useContext(RoomContext);
   const [showGoTo, setShowGoTo] = useState(false);
@@ -88,10 +89,15 @@ function UserRoom() {
   }
 
   // looks for previously answered questions and displays if exists
-  function showResponse() {
+  function showResponse(goTo) {
     let ans = answer.current;
     let qN = selectedQuestion;
     let rN = selectedRound;
+    console.log(goTo);
+    if(goTo) {
+      rN = roomData.rounds.length;
+      qN =roomData.rounds[rN -1].numberOfQuestions;
+    }
     // get index of user from the Room's participant list array
     let userIndex = roomData.participants.findIndex(element => {
       return element.name === 'Giorgio' /* to be made dynamic */
@@ -126,10 +132,15 @@ function UserRoom() {
       toggleReadonly(false);
     }
   }
-
   useEffect(()=>{
-    showResponse();
-  })
+    showResponse(true);
+  },[goToCurrent])
+  
+  useEffect(()=>{
+    showResponse(false);
+  },[selectedQuestion,selectedRound])
+
+
 
   return (
     <div>

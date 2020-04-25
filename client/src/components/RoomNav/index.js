@@ -5,10 +5,12 @@ function RoomNav(props) {
     <div>
       <nav className=" w navbar navbar-expand-lg navbar-light bg-light">
         <p className="navbar-brand">Room: {props.room} [Current Round: {props.round} - Question: {props.question}]</p>
-{props.admin === "true" ? (        <div>
+        {props.admin === "true" ? (
           <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
           </button>
+        ) : ""}
+        {props.admin === "true" ? (
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav w-100 d-flex justify-content-around">
               <li className="nav-item active">
@@ -28,7 +30,7 @@ function RoomNav(props) {
               </li>
             </ul>
           </div>
-        </div>) : ""}
+        ) : ""}
       </nav>
     </div>
   )
