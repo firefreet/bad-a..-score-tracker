@@ -6,41 +6,22 @@ import RndQstSelectors from '../../components/RndQstSelectors';
 
 
 function AdminRoom() {
-  const { roomData, /* emit */ } = useContext(RoomContext);
-  const table = [];
-  // to store the state of the admin's selection of round/answer to view table
-  const [questionState, setQuestionState] = useState(
-    {
-      selectedRound: 1,
-      selectedQuestion: 1,
-      table: []
-    }
-  );
-  
-  // get selected round and set state (in order to display answers table)
-  const chooseRound = (e) => {
-    const round = parseInt(e.target.value.slice(6));
-    console.log()
-    setQuestionState({ ...questionState, selectedRound: round });
-  };
-
-  // get selected question  and set state (in order to display answers table)
-  const chooseQuestion = (e) => {
-    const question = parseInt(e.target.value.slice(9));
-    setQuestionState({ ...questionState, selectedQuestion: question });
-  }
+  const { roomData, /* emit, */ selectedQuestion, selectedRound } = useContext(RoomContext);
+  const [tableState, setTableState] = useState([]);
+  var table = [];
 
   // on new questions or rounds, display user answers
   useEffect(() => {
     setTable();
-  }, [questionState.selectedQuestion, questionState.selectedRound])
+  }, [selectedQuestion, selectedRound])
 
   const setTable = () => {
+    table = [];
     if (roomData.participants) {
-      roomData.participants.forEach((player, i) => {
+      roomData.participants.forEach((player) => {
         const currentResponse = player.responses.filter(resp => {
-          if (resp.roundNumber === questionState.selectedRound
-            && resp.questionNumber === questionState.selectedQuestion) {
+          if (resp.roundNumber === selectedRound
+            && resp.questionNumber === selectedQuestion) {
             return true
           } else return false
         })
@@ -53,13 +34,13 @@ function AdminRoom() {
           )
         }
       })
-      setQuestionState({ ...questionState, table })
     }
+    setTableState(table)
   }
 
   return (
     <div>
-      <RoomNav room={roomData.roomId} round={roomData.rounds.length} question={roomData.rounds[roomData.rounds.length -1].numberOfQuestions}/>
+      <RoomNav admin="true" room={roomData.roomId} round={roomData.rounds.length} question={roomData.rounds[roomData.rounds.length - 1].numberOfQuestions} />
       <Container>
         <Row>
           <textarea rows='6' className='mx-auto mb-2 mb-2 w-75' placeholder='...type or paste content here to BROADCAST to players ...'></textarea>
@@ -77,7 +58,7 @@ function AdminRoom() {
         <Row>
           <p className='text-center mx-auto mt-2 border w-75'>See Player Responses: </p>
         </Row>
-          <RndQstSelectors chooseRound={chooseRound} chooseQuestion={chooseQuestion} />
+        <RndQstSelectors />
         <Row>
           <table className="table table-striped border">
             <thead>
@@ -87,7 +68,7 @@ function AdminRoom() {
                 <th scope="col" className='text-center'>Delete</th>
               </tr>
             </thead>
-            {questionState.table.map((v, i) => {
+            {tableState.map((v, i) => {
               return (
                 <tbody key={i}>
                   <tr>

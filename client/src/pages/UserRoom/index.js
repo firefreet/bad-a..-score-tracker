@@ -167,7 +167,7 @@ function UserRoom() {
 
   return (
     <div>
-      <RoomNav room={roomData.roomId} round={roomData.rounds.length} question={roomData.rounds[roomData.rounds.length - 1].numberOfQuestions} />
+      <RoomNav admin="false" room={roomData.roomId} round={roomData.rounds.length} question={roomData.rounds[roomData.rounds.length - 1].numberOfQuestions} />
       <Container>
         <Row>
           <label className='w-100 text-center'>Current Broadcast</label>
