@@ -22,6 +22,16 @@ function App() {
     loggedIn: decodeURIComponent(document.cookie) !== '',
     userData: null,
     // emit: (contentName, content) => { socket.emit(contentName, content) }
+    selectedQuestion: 1,
+    selectedRound: 1,
+    updateSelectedQuestion: (selectedQuestion, currentRoomState) => {
+      setRoomState({ ...currentRoomState, selectedQuestion })
+    },
+    updateSelectedRound: (selectedRound, currentRoomState) => {
+      setRoomState({ ...currentRoomState, selectedRound })
+    },
+    goToCurrent: false,
+    updateGoToCurr: (val,currRoomState)=>{setRoomState({...currRoomState, goToCurrent: val})}
   });
   // socket.on('new update', function (content) {
   //   console.log(content);
@@ -35,20 +45,21 @@ function App() {
     API.isAuthenticated()
       .then(res => {
         // setRoomState(currentState => ({...currentState, loggedIn: true, userData: {id: res.data.id}}));
-        API.getRoom(roomState.roomData._id).then((data) => {
-          // 
-          var roomData = data.data.length === 0 ? roomState.roomData : data.data[0];
-          setRoomState({...roomState, roomData, loggedIn: true, userData: {id: res.data.id}});
+        API.getFirstRoom(roomState.roomData._id).then((data) => {
+          var roomData = data.data.length === 0 ? roomState.roomData : data.data;
+          setRoomState({ ...roomState, roomData, loggedIn: true, userData: { id: res.data.id } });
         }).catch(err => {
           console.log(err);
-        })    
+        })
       })
       .catch(err => {
         console.log(err.response)
-        setRoomState(currentState => ({...currentState, loggedIn: false, userData: null}));
+        setRoomState(currentState => ({ ...currentState, loggedIn: false, userData: null }));
       });
   }, []);
-  
+
+  // console.log(roomState);
+
   return (
     <Router>
       <div>
@@ -60,7 +71,7 @@ function App() {
             <ProtectedRoute exact path='/adminroom' component={AdminRoom} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
-            <Route component ={NoMatch} />
+            <Route component={NoMatch} />
           </Switch>
         </RoomContext.Provider>
       </div>

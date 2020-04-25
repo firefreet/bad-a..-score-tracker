@@ -30,5 +30,8 @@ const io = require('socket.io').listen(server);
 // run socket event methods from external module
 socketEvents(io).attachEventHandlers();
 
-// const db = require('./models');
-// db.RoomModel.create({active:true, rounds:[{numberOfQuestions: 3},{numberOfQuestions: 3},{numberOfQuestions: 3}]})
+// create a room if not exists
+const db = require('./models');
+db.RoomModel.findOneAndUpdate({roomID:"not yo mama's room id..."},{active:true, rounds:[{numberOfQuestions: 3},{numberOfQuestions: 2},{numberOfQuestions: 1}]},{upsert:true, setDefaultsOnInsert: true},(err,doc)=>{
+  err? console.log('cant create update doc') : console.log(doc)
+})

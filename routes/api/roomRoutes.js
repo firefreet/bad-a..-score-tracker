@@ -2,6 +2,8 @@ const express = require('express');
 const router = new express.Router();
 const controller = require('../../controllers/roomController');
 
+router.get('/',controller.getFirstRoom);
+
 // './api/rooms/:id'
 router.get('/:id',controller.getRoom);
 

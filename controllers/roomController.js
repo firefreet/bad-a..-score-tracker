@@ -4,6 +4,15 @@ RoomModel.fin
 
 RoomController = {
 
+  getFirstRoom: (req,res)=>{
+    RoomModel.findOne({}).then(room=>{
+      res.json(room);
+    })
+    .catch(err=>{
+      res.json(err);
+    })
+  },
+
   getRoom: (req, res) => {
     const id = req.params.id;
     RoomModel.find({ "_id": ObjectId(id) })
