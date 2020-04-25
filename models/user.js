@@ -50,7 +50,7 @@ User.prototype.generateAuthToken = async function () {
 
   try {
     const user = this;
-    console.log(process.env.JWT_SECRET);
+    console.log("environment var" + process.env.JWT_SECRET);
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
     user.tokens = token;
     await user.save();
@@ -58,6 +58,7 @@ User.prototype.generateAuthToken = async function () {
     return user.tokens;
 
   } catch (err) {
+    console.log(err);
     return err;
   }
 
