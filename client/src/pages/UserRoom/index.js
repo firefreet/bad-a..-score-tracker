@@ -35,7 +35,7 @@ function UserRoom() {
   function submitAnswer() {
     const respData = {
       roomId: roomData._id, /* to be made dynamic */
-      userName: 'Clotho',/* to be made dynamic */
+      userName: 'Giorgio',/* to be made dynamic */
       answer: answer.current.value,
       questionNumber: parseInt(questionNumber.current.value.slice(9)),
       roundNumber: parseInt(roundNumber.current.value.slice(6)),
@@ -91,7 +91,7 @@ function UserRoom() {
     let rN = parseInt(roundNumber.current.value.slice(6));
     // get index of user from the Room's participant list array
     let userIndex = roomData.participants.findIndex(element => {
-      return element.name === 'Clotho' /* to be made dynamic */
+      return element.name === 'Giorgio' /* to be made dynamic */
     })
     // if the user was found...
     if (userIndex !== -1) {
