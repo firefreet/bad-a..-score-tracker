@@ -12,6 +12,10 @@ export default {
   //   return axios.delete(`/api/rooms/answer?roomId=${roomId}&user=${user}&round=${round}&question=${question}`);
   // },
 
+  // add for testing
+  getFirstRoom: ()=>{
+    return axios.get('/api/rooms/')
+  },
 
   // Saves a answer to the database
   saveAnswer: function(answerData) {

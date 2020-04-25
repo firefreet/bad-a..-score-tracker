@@ -11,9 +11,9 @@ function UserRoom() {
   const roundNumber = useRef();
   const questionNumber = useRef();
   const submit = useRef();
-  const { roomData, emit } = useContext(RoomContext);
+  const { roomData, /* emit */ } = useContext(RoomContext);
   const [showGoTo, setShowGoTo] = useState(false);
-  const [ goToState, setGoToState ] = useState(false);
+  const [goToState, setGoToState] = useState(false);
 
   // hide GoToQMOdal
   const handleClose = () => {
@@ -129,7 +129,7 @@ function UserRoom() {
     // get the selected round #
     let selRN = parseInt(roundNumber.current.value.slice(6));
     let currRN = roomData.rounds.length
-    let currQN = "Question " +roomData.rounds[currRN - 1].numberOfQuestions;
+    let currQN = "Question " + roomData.rounds[currRN - 1].numberOfQuestions;
     // clear out the list of Question options
     questionNumber.current.innerHTML = "";
     // create and append Question options for all questions in the round
@@ -138,7 +138,7 @@ function UserRoom() {
       optionEl.innerText = `Question ${i}`;
       questionNumber.current.append(optionEl)
     }
-    if(goToState){
+    if (goToState) {
       questionNumber.current.value = currQN
       setGoToState(goToState);
     }
@@ -153,10 +153,10 @@ function UserRoom() {
     roomData.rounds.forEach((v, i) => {
       let optionEl = document.createElement('option');
       optionEl.innerHTML = `Round ${i + 1}`
-      optionEl.setAttribute('value',`Round ${i + 1}`);
+      optionEl.setAttribute('value', `Round ${i + 1}`);
       roundNumber.current.append(optionEl);
     });
-    if(goToState){
+    if (goToState) {
       roundNumber.current.value = currRN
     }
     // go update the list of Question selections

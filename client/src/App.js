@@ -33,11 +33,9 @@ function App() {
   useEffect(() => {
     API.isAuthenticated()
       .then(res => {
-        console.log(res);
         // setRoomState(currentState => ({...currentState, loggedIn: true, userData: {id: res.data.id}}));
-        API.getRoom(roomState.roomData._id).then((data) => {
-          // 
-          var roomData = data.data.length === 0 ? roomState.roomData : data.data[0];
+        API.getFirstRoom(roomState.roomData._id).then((data) => {
+          var roomData = data.data.length === 0 ? roomState.roomData : data.data;
           setRoomState({...roomState, roomData, loggedIn: true, userData: {id: res.data.id}});
         }).catch(err => {
           console.log(err);
@@ -49,7 +47,7 @@ function App() {
       });
   }, []);
 
-  console.log(roomState);
+  // console.log(roomState);
   
   return (
     <Router>

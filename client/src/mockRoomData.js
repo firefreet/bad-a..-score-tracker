@@ -3,8 +3,9 @@ export default {
       active: true,
       roomID: 'BxNtN3',
       admin: 'me',
-      currentRound: 1,
-      currentQuestionNumber: 1,
+      rounds: [{
+        numberOfQuestions: 1
+      }],
       participants: [
         {
           name: 'gorgon',

@@ -2,11 +2,13 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Container, Row } from '../../components/Grid';
 import RoomContext from '../..//utils/RoomContext';
 import RoomNav from '../../components/RoomNav';
+import RndQstSelectors from '../../components/RndQstSelectors';
 
 
 function AdminRoom() {
-  const { roomData, emit } = useContext(RoomContext);
+  const { roomData, /* emit */ } = useContext(RoomContext);
   const table = [];
+  // to store the state of the admin's selection of round/answer to view table
   const [questionState, setQuestionState] = useState(
     {
       selectedRound: 1,
@@ -14,19 +16,22 @@ function AdminRoom() {
       table: []
     }
   );
-
+  
+  // get selected round and set state (in order to display answers table)
   const chooseRound = (e) => {
     const round = parseInt(e.target.value.slice(6));
+    console.log()
     setQuestionState({ ...questionState, selectedRound: round });
   };
 
+  // get selected question  and set state (in order to display answers table)
   const chooseQuestion = (e) => {
     const question = parseInt(e.target.value.slice(9));
     setQuestionState({ ...questionState, selectedQuestion: question });
   }
 
+  // on new questions or rounds, display user answers
   useEffect(() => {
-    console.log(roomData)
     setTable();
   }, [questionState.selectedQuestion, questionState.selectedRound])
 
@@ -72,20 +77,7 @@ function AdminRoom() {
         <Row>
           <p className='text-center mx-auto mt-2 border w-75'>See Player Responses: </p>
         </Row>
-        <Row>
-          <div className='col-12 col-md-6 d-flex'>
-            <select className='mx-auto w-50 mb-2' onChange={chooseRound}>
-              <option>Round 1</option>
-              <option>Round 2</option>
-            </select>
-          </div>
-          <div className='col-12 col-md-6 d-flex'>
-            <select className='mx-auto ml-auto mb-2 w-50' onChange={chooseQuestion}>
-              <option>Question 1</option>
-              <option>Question 2</option>
-            </select>
-          </div>
-        </Row>
+          <RndQstSelectors chooseRound={chooseRound} chooseQuestion={chooseQuestion} />
         <Row>
           <table className="table table-striped border">
             <thead>
@@ -95,7 +87,6 @@ function AdminRoom() {
                 <th scope="col" className='text-center'>Delete</th>
               </tr>
             </thead>
-
             {questionState.table.map((v, i) => {
               return (
                 <tbody key={i}>
