@@ -16,9 +16,9 @@ const isAuthroizedRoute = async (req, res, next) => {
     const decoded = jwt.verify(cookie, process.env.JWT_SECRET);
     const userArray = await db.User.find({
       _id: mongojs.ObjectId(decoded.id),
-      tokens: cookie
+      tokens: cookie             
     });
-
+     
     const user = userArray[0];
 
     if (!user) {
@@ -30,9 +30,7 @@ const isAuthroizedRoute = async (req, res, next) => {
     next();  
     
   } catch (err) {
-    console.log('ERROR TRYING TO REDIRECT HOME');
-    console.log(err);
-    window.location = '/';
+    console.log('ACCESS TO ROUTE DENITED');
   }
 };
 

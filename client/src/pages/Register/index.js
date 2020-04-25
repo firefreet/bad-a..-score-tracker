@@ -3,7 +3,7 @@ import { Col, Row, Container } from "../../components/Grid";
 import API from '../../utils/API';
 import cookies from '../../utils/cookie';
 
-function Register() {
+function Register(props) {
   const [firstName, setfirstName] = useState('');
   const [lastName, setlastName] = useState('');
   const [email, setEmail] = useState('');
@@ -59,7 +59,7 @@ function Register() {
         cookies.setCookie('user', userCookie, 1);
 
         // set for later
-        // window.location='/userroom';
+        props.history.push('/userroom');
 
       })
       .catch(err => {
