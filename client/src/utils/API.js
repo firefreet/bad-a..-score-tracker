@@ -27,5 +27,8 @@ export default {
   },
   isAuthenticated: function() {
     return axios.get(`api/users/auth`);
+  },
+  test: function() {
+    return axios.get('api/users/test');
   }
 };

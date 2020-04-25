@@ -4,8 +4,6 @@ import RoomContext from '../utils/RoomContext';
 
 function ProtectedRoute({ component: Component, ...rest }) {
   const { loggedIn, userData } = useContext(RoomContext);
-  console.log(loggedIn);
-  console.log(rest);
 
   if (!loggedIn) {
     return (
