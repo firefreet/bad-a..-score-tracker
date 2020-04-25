@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
-import RoomContext from '../../utils/RoomContext';
+import React, { useState, useEffect, useRef } from "react";
 import { Col, Row, Container } from "../../components/Grid";
 import API from '../../utils/API';
 import cookies from '../../utils/cookie';
@@ -63,7 +62,7 @@ function Login(props) {
           <hr />
           <form>
             <div className="form-group">
-              <label htmlFor="exampleInputEmail1">Email address</label>
+              <label htmlFor="email">Email address</label>
               <input
                 onChange={handleInput}
                 ref={emailRef}
