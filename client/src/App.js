@@ -58,7 +58,7 @@ function App() {
             <Route exact path="/chat" component={Chat} />
             <ProtectedRoute exact path='/userroom' component={UserRoom} />
             <ProtectedRoute exact path='/adminroom' component={AdminRoom} />
-            <ProtectedRoute exact path='/test' component={Test} />
+            <Route exact path='/test' component={Test} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
             <Route component ={NoMatch} />
