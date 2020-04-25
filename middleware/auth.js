@@ -3,43 +3,37 @@ const db = require('../models');
 const mongojs = require("mongojs");
 
 
-function getCookie(req, name) {
-  var value = '; ' + req.headers.cookie;
-  var parts = value.split('; ' + name + '=');
-  if (parts.length === 2) {
-    return JSON.parse(parts.pop().split(';').shift());
-  }
-}
-
-const isAuthenticated = async (req, res, next) => {
+const isAuthroizedRoute = async (req, res, next) => {
   try {
-    let userToken = getCookie(req, 'user').token;
-    console.log(userToken);
-    // const token = req.header('Authorization').replace('Bearer ', '');
-    const decoded = jwt.verify(userToken, process.env.JWT_SECRET);
+    console.log('Authenticating User For Access to API Route');
+    let value = req.headers.cookie;
+
+    if(!value.includes('user=')) {
+      throw new Error ('USER NOT FOUND: NO COOKIE')
+    }
+
+    let cookie = value.split('user=').pop().split(';').shift();
+    const decoded = jwt.verify(cookie, process.env.JWT_SECRET);
     const userArray = await db.User.find({
-      where: {
-        _id: mongojs.ObjectId(decoded.id),
-        tokens: userToken
-      }
+      _id: mongojs.ObjectId(decoded.id),
+      tokens: cookie
     });
 
     const user = userArray[0];
-    
+
     if (!user) {
-      throw new Error('USER NOT FOUND');
+      throw new Error('USER NOT FOUND: NO RECORD IN DATABASE');
     }
 
-    req.token = userToken;
+    req.token = cookie;
     req.user = user;
-    next();
+    next();  
     
   } catch (err) {
-    console.log('error redirecting home');
+    console.log('ERROR TRYING TO REDIRECT HOME');
     console.log(err);
-    res.redirect(`/login?message=${err}`);
-    // res.status(401).send({ error: 'Please authenticate.' });
+    window.location = '/';
   }
 };
 
-module.exports = isAuthenticated;
+module.exports = isAuthroizedRoute;

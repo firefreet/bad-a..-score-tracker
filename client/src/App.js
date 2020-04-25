@@ -10,6 +10,7 @@ import UserRoom from './pages/UserRoom';
 import AdminRoom from './pages/AdminRoom';
 import Chat from './pages/Chat';
 import NoMatch from './pages/NoMatch';
+import Test from './pages/Test';
 import './global.css';
 import mockRoomData from './mockRoomData';
 
@@ -33,7 +34,6 @@ function App() {
   useEffect(() => {
     API.isAuthenticated()
       .then(res => {
-        console.log(res);
         // setRoomState(currentState => ({...currentState, loggedIn: true, userData: {id: res.data.id}}));
         API.getRoom(roomState.roomData._id).then((data) => {
           // 
@@ -48,8 +48,6 @@ function App() {
         setRoomState(currentState => ({...currentState, loggedIn: false, userData: null}));
       });
   }, []);
-
-  console.log(roomState);
   
   return (
     <Router>
@@ -60,6 +58,7 @@ function App() {
             <Route exact path="/chat" component={Chat} />
             <ProtectedRoute exact path='/userroom' component={UserRoom} />
             <ProtectedRoute exact path='/adminroom' component={AdminRoom} />
+            <ProtectedRoute exact path='/test' component={Test} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
             <Route component ={NoMatch} />
