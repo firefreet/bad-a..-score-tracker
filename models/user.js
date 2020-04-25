@@ -47,20 +47,20 @@ const User = mongoose.model("User", UserSchema);
 ///////////////////////////
 
 User.prototype.generateAuthToken = async function () {
-  
+
   try {
     const user = this;
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
     console.log(process.env.JWT_SECRET);
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
     user.tokens = token;
     await user.save();
 
     return user.tokens;
-  
-  } catch(err) {
+
+  } catch (err) {
     return err;
   }
-  
+
 };
 
 User.prototype.toJSON = function () {
