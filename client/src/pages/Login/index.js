@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
-import RoomContext from '../../utils/RoomContext';
+import React, { useState, useEffect, useRef } from "react";
 import { Col, Row, Container } from "../../components/Grid";
 import API from '../../utils/API';
 import cookies from '../../utils/cookie';
@@ -8,15 +7,13 @@ function Login(props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [validation, setValidation] = useState('');
-  const { loggedIn } = useContext(RoomContext);
 
   const emailRef = useRef();
   const passwordRef = useRef();
 
   useEffect(() => {
-    console.log(loggedIn);
     console.log(props);
-  }, [loggedIn]);
+  }, []);
 
   function handleInput(e) {
     switch (e.target.id) {
@@ -45,13 +42,12 @@ function Login(props) {
         console.log(res.data.user._doc);
         let userCookie = res.data.user._doc.tokens;
         cookies.setCookie('user', userCookie, 1);
-
         // set for later
-        props.history.push('/userroom');
+        props.history.push('/');
 
       })
       .catch(err => {
-        console.log('inside catch on react function / no login for you');
+        console.log('ERROR INSIDE CATCH ON LOGIN PAGE');
         console.log(err.response);
         setValidation(err.response.data.error);
       });
@@ -66,7 +62,7 @@ function Login(props) {
           <hr />
           <form>
             <div className="form-group">
-              <label htmlFor="exampleInputEmail1">Email address</label>
+              <label htmlFor="email">Email address</label>
               <input
                 onChange={handleInput}
                 ref={emailRef}

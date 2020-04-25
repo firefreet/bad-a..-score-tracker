@@ -10,6 +10,7 @@ import UserRoom from './pages/UserRoom';
 import AdminRoom from './pages/AdminRoom';
 import Chat from './pages/Chat';
 import NoMatch from './pages/NoMatch';
+import Home from './pages/Home';
 import './global.css';
 import mockRoomData from './mockRoomData';
 
@@ -54,7 +55,7 @@ function App() {
       <div>
         <RoomContext.Provider value={roomState}>
           <Switch>
-            <Route exact path="/"><p>HELLOOOO WORLD!!!!</p></Route>
+            <Route exact path='/' component={Home} />
             <Route exact path="/chat" component={Chat} />
             <ProtectedRoute exact path='/userroom' component={UserRoom} />
             <ProtectedRoute exact path='/adminroom' component={AdminRoom} />
