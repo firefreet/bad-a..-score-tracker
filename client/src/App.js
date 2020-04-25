@@ -29,7 +29,9 @@ function App() {
     },
     updateSelectedRound: (selectedRound, currentRoomState) => {
       setRoomState({ ...currentRoomState, selectedRound })
-    }
+    },
+    goToCurrent: false,
+    updateGoToCurr: (val,currRoomState)=>{setRoomState({...currRoomState, goToCurrent: val})}
   });
   // socket.on('new update', function (content) {
   //   console.log(content);

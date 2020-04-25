@@ -5,15 +5,18 @@ import SubmitModal from '../../components/SubmitModal';
 import API from '../../utils/API';
 import RoomContext from '../../utils/RoomContext';
 import GoToQModal from '../../components/GoToQModal';
+import RndQstSelectors from '../../components/RndQstSelectors';
 
 function UserRoom() {
   const answer = useRef();
-  const roundNumber = useRef();
-  const questionNumber = useRef();
   const submit = useRef();
-  const { roomData, /* emit */ } = useContext(RoomContext);
+  const { roomData, /* emit, */ 
+    selectedQuestion,
+    selectedRound,
+    updateGoToCurr
+   } = useContext(RoomContext);
+   const roomState = useContext(RoomContext);
   const [showGoTo, setShowGoTo] = useState(false);
-  const [goToState, setGoToState] = useState(false);
 
   // hide GoToQMOdal
   const handleClose = () => {
@@ -22,7 +25,7 @@ function UserRoom() {
 
   // set flag to allow changing <select>'s option to Current Round & Q
   const goToQ = () => {
-    setGoToState(true);
+    updateGoToCurr(true,roomState);
     setShowGoTo(false);
   }
 
@@ -34,11 +37,11 @@ function UserRoom() {
 
   function submitAnswer() {
     const respData = {
-      roomId: roomData._id, /* to be made dynamic */
+      roomId: roomData._id,
       userName: 'Giorgio',/* to be made dynamic */
       answer: answer.current.value,
-      questionNumber: parseInt(questionNumber.current.value.slice(9)),
-      roundNumber: parseInt(roundNumber.current.value.slice(6)),
+      questionNumber: selectedQuestion,
+      roundNumber: selectedRound,
       points: 3
     };
     API.saveAnswer(respData).then(() => {
@@ -87,8 +90,8 @@ function UserRoom() {
   // looks for previously answered questions and displays if exists
   function showResponse() {
     let ans = answer.current;
-    let qN = parseInt(questionNumber.current.value.slice(9));
-    let rN = parseInt(roundNumber.current.value.slice(6));
+    let qN = selectedQuestion;
+    let rN = selectedRound;
     // get index of user from the Room's participant list array
     let userIndex = roomData.participants.findIndex(element => {
       return element.name === 'Giorgio' /* to be made dynamic */
@@ -124,46 +127,9 @@ function UserRoom() {
     }
   }
 
-  // populates the Question options based on the numberOfQuestions in the selected Round
-  function changeRound() {
-    // get the selected round #
-    let selRN = parseInt(roundNumber.current.value.slice(6));
-    let currRN = roomData.rounds.length
-    let currQN = "Question " + roomData.rounds[currRN - 1].numberOfQuestions;
-    // clear out the list of Question options
-    questionNumber.current.innerHTML = "";
-    // create and append Question options for all questions in the round
-    for (var i = 1; i <= roomData.rounds[selRN - 1].numberOfQuestions; i++) {
-      let optionEl = document.createElement('option');
-      optionEl.innerText = `Question ${i}`;
-      questionNumber.current.append(optionEl)
-    }
-    if (goToState) {
-      questionNumber.current.value = currQN
-      setGoToState(goToState);
-    }
-    // search and show previous answer if exists
+  useEffect(()=>{
     showResponse();
-  }
-
-  useEffect(() => {
-    let currRN = "Round " + roomData.rounds.length
-    // create and append Round options for all Rounds in the room
-    roundNumber.current.innerHTML = "";
-    roomData.rounds.forEach((v, i) => {
-      let optionEl = document.createElement('option');
-      optionEl.innerHTML = `Round ${i + 1}`
-      optionEl.setAttribute('value', `Round ${i + 1}`);
-      roundNumber.current.append(optionEl);
-    });
-    if (goToState) {
-      roundNumber.current.value = currRN
-    }
-    // go update the list of Question selections
-    changeRound();
-  });
-
-
+  })
 
   return (
     <div>
@@ -182,15 +148,7 @@ function UserRoom() {
           <textarea ref={answer} onChange={allowSubmit} rows='6' className='mx-auto w-75' placeholder=' .... enter your answers here'></textarea>
         </Row>
         <br />
-        <Row>
-          <select ref={roundNumber} onChange={changeRound} className='mx-auto w-50 mb-2'>
-          </select>
-        </Row>
-        <Row>
-          <select ref={questionNumber} onChange={showResponse} className='mx-auto mb-2 w-50'>
-            <option>Question 1</option>
-          </select>
-        </Row>
+        <RndQstSelectors />
         <Row>
           <button className="px-0" style={{ width: '150px' }} onClick={() => { document.location.replace('/gamesummary') }}>
             Score Board
