@@ -36,28 +36,23 @@ module.exports = {
       res.status(400).send('ERROR FROM LOGIN FUNCTION');
     }
   },
-  isAuthenticated: async function (req, res) {
+  getAuthorizedUser: async function (req, res) {
     try {
-      console.log('Authenticating Protected Route');
-      let value = req.headers.cookie;
-      if (value.includes('user=')){
-        let cookie = value.split('user=').pop().split(';').shift();
-        const decoded = jwt.verify(cookie, process.env.JWT_SECRET);
-        res.status(200).send(decoded);
-      } else {
-        res.status(400).send('USER IS NOT LOGGED IN');
+      console.log('Gathering User Data');
+      let userData = req.user;
+      let user = {
+        _id: userData._id,
+        tokens: userData.tokens,
+        rooms: userData.rooms,
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        email: userData.email
       }
+      if (userData) {
+        res.status(200).send(user);
+      } 
     } catch (err) {
       res.status(400).send("USER IS NOT LOGGED IN");
     }
   },
-  test: function (req, res) { // NEED TO REMOVE IN FUTURE
-    try {
-      console.log('in test function');
-      res.status(200).send(req.user);
-    } catch (err) {
-      res.status(400).send(err);
-    }
-    
-  }
 }

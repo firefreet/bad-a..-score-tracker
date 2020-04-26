@@ -12,10 +12,7 @@ router.route("/login")
 
   // MATCHES -> "/api/users/auth"
 router.route('/auth')
-  .get(userController.isAuthenticated);
+  .get(isAuthroizedRoute, userController.getAuthorizedUser);
 
-// MATCHES -> "/api/users/test"
-router.route('/test')
-.get(isAuthroizedRoute, userController.test);
 
 module.exports = router;
