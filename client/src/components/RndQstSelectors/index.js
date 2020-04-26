@@ -29,7 +29,7 @@ function RndQstSelectors() {
   // create array of Question <options>
   const questionSelectOptions = [];
   // based on the number of questions in the selected round
-  for (var i = 1; i <= roomData.rounds[selectedRound - 1].numberOfQuestions; i++) {
+  for (var i = 1; i <= roomData.rounds[selectedRound - 1]; i++) {
     questionSelectOptions.push(
       <option value={i} key={i}>
         Question {i}
@@ -39,12 +39,10 @@ function RndQstSelectors() {
 
   useEffect(() => {
     if (goToCurrent) {
-      console.log('before set state func')
       updateGoToCurr(false, roomState);
-      console.log('after')
       let rounds = roomData.rounds.length;
       roundSelect.current.value = rounds
-      questionSelect.current.value = roomData.rounds[rounds - 1].numberOfQuestions
+      questionSelect.current.value = roomData.rounds[rounds - 1]
     }
   }, [goToCurrent])
 

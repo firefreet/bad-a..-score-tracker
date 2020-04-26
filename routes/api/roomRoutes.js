@@ -7,6 +7,9 @@ router.get('/',controller.getFirstRoom);
 // './api/rooms/:id'
 router.get('/:id',controller.getRoom);
 
+// './api/rooms/:id/question
+router.put('/:id/:roundNum/question',controller.newQuestion);
+
 // './api/rooms/answer'
 router.put('/answer',controller.saveAnswer);
 

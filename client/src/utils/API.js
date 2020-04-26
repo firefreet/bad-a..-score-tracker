@@ -23,7 +23,6 @@ export default {
   getFirstRoom: ()=>{
     return axios.get('/api/rooms/')
   },
-
   // Saves a answer to the database
   saveAnswer: function(answerData) {
     return axios.put("/api/rooms/answer", answerData);
@@ -41,5 +40,8 @@ export default {
   },
   test: function() {
     return axios.get('api/users/test');
+  },
+  newQuestion: (roomId,roundNum)=>{
+    return axios.put(`/api/rooms/${roomId}/${roundNum}/question`)
   }
 };

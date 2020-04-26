@@ -31,7 +31,7 @@ function UserRoom() {
   }
 
   useEffect(() => {
-    if (roomData.rounds.length > 1 || roomData.rounds[0].numberOfQuestions > 1) {
+    if (roomData.rounds.length > 1 || roomData.rounds[0] > 1) {
       setShowGoTo(true)
     };
   }, [roomData.rounds])
@@ -39,7 +39,7 @@ function UserRoom() {
   function submitAnswer() {
     const respData = {
       roomId: roomData._id,
-      userName: 'Giorgio',/* to be made dynamic */
+      userName: 'Cindy',/* to be made dynamic */
       answer: answer.current.value,
       questionNumber: selectedQuestion,
       roundNumber: selectedRound,
@@ -95,14 +95,17 @@ function UserRoom() {
     let rN = selectedRound;
     if (goTo) {
       rN = roomData.rounds.length;
-      qN = roomData.rounds[rN - 1].numberOfQuestions;
+      qN = roomData.rounds[rN - 1];
     }
     // get index of user from the Room's participant list array
     let userIndex = roomData.participants.findIndex(element => {
-      return element.name === 'Giorgio' /* to be made dynamic */
+      console.log(element)
+      return element.name === 'Cindy' /* to be made dynamic */
     })
     // if the user was found...
     if (userIndex !== -1) {
+      console.log(ans)
+
       // get the index of the user's answer to the selected Round & Question
       let answerIndex = roomData.participants[userIndex].responses.findIndex(element => {
         return (element.questionNumber === qN && element.roundNumber === rN)
@@ -123,7 +126,7 @@ function UserRoom() {
     // get the current round
     let currRound = roomData.rounds.length;
     // if selected a previous round or question
-    if (rN < currRound || (rN === currRound && qN < roomData.rounds[currRound - 1].numberOfQuestions)) {
+    if (rN < currRound || (rN === currRound && qN < roomData.rounds[currRound - 1])) {
       // set to read only
       toggleReadonly(true);
     } else {
@@ -137,6 +140,7 @@ function UserRoom() {
   }, [goToCurrent])
 
   useEffect(() => {
+    console.log('useEffect, selectedQ / R')
     showResponse(false);
   }, [selectedQuestion, selectedRound])
 
@@ -144,7 +148,7 @@ function UserRoom() {
 
   return (
     <div>
-      <RoomNav admin="false" room={roomData.roomId} round={roomData.rounds.length} question={roomData.rounds[roomData.rounds.length - 1].numberOfQuestions} />
+      <RoomNav admin="false" room={roomData.roomId} round={roomData.rounds.length} question={roomData.rounds[roomData.rounds.length - 1]} />
       <Container>
         <Row>
           <label className='w-100 text-center'>Current Broadcast</label>

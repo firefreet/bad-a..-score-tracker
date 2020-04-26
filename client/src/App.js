@@ -46,8 +46,8 @@ function App() {
   useEffect(() => {
     API.isAuthenticated()
       .then(res => {
-        // setRoomState(currentState => ({...currentState, loggedIn: true, userData: {id: res.data.id}}));
         API.getFirstRoom(roomState.roomData._id).then((data) => {
+          console.log(data)
           var roomData = data.data.length === 0 ? roomState.roomData : data.data;
           setRoomState({ ...roomState, roomData, loggedIn: true, userData: { id: res.data.id } });
         }).catch(err => {
@@ -69,7 +69,7 @@ function App() {
           <Switch>
             <Route exact path='/' component={Home} />
             <Route exact path="/chat" component={Chat} />
-            <ProtectedRoute exact path='/userroom' component={UserRoom} />
+            <Route exact path='/userroom' component={UserRoom} />
             <ProtectedRoute exact path='/adminroom' component={AdminRoom} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />

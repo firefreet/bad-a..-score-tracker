@@ -42,7 +42,6 @@ function AdminRoom() {
         }
       })
     }
-    console.log(table);
     setTableState(table)
   }
 
@@ -64,10 +63,10 @@ function AdminRoom() {
 
   return (
     <div>
-      <RoomNav admin="true" room={roomData.roomId} round={roomData.rounds.length} question={roomData.rounds[roomData.rounds.length - 1].numberOfQuestions} />
+      <RoomNav admin="true" room={roomData.roomId} round={roomData.rounds.length} question={roomData.rounds[roomData.rounds.length - 1]} />
       <Container>
         <Row>
-          <textarea rows='6' className='mx-auto mb-2 mb-2 w-75' placeholder='...type or paste content here to BROADCAST to players ...'></textarea>
+          <textarea rows='6' className='mt-2 mx-auto mb-2 mb-2 w-75' placeholder='...type or paste content here to BROADCAST to players ...'></textarea>
         </Row>
         <Row>
           <div className='mb-2 container-fluid d-flex w-75 p-0'>
@@ -100,8 +99,8 @@ function AdminRoom() {
                     <td>{v.player}</td>
                     <td>
                       <div className='d-flex'>
-                        {v.correctInd ? <i datanum={i} databool='true' onClick={toggleCorrect} className='far fa-check-square'></i> :
-                          <i datanum={i} databool='false' onClick={toggleCorrect} className='far fa-square'></i>}
+                        {v.correctInd ? <i datanum={i} databool='true' onClick={toggleCorrect} className='mx-auto text-center far fa-check-square'></i> :
+                          <i datanum={i} databool='false' onClick={toggleCorrect} className='mx-auto far fa-square'></i>}
                       </div>
                     </td>
                     <td>

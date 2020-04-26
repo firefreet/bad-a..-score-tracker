@@ -1,14 +1,12 @@
 export default {
-      _id: '5ea253369d8e7b68da16572b',
+      _id: '5ea3a95371043c28111d2ab4',
       active: true,
       roomID: 'BxNtN3',
       admin: 'me',
-      rounds: [{
-        numberOfQuestions: 1
-      }],
+      rounds: [1],
       participants: [
         {
-          name: 'gorgon',
+          name: 'Gorgon',
           responses: [
             {
               roundNumber: 1,
@@ -29,7 +27,7 @@ export default {
           ]
         },
         {
-          name: 'cindy',
+          name: 'Cindy',
           responses: [
             {
               roundNumber: 1,

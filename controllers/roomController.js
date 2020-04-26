@@ -1,6 +1,6 @@
 const { RoomModel } = require('../models');
 const { Types: { ObjectId } } = require('mongoose');
-RoomModel.fin
+// RoomModel.fin
 
 RoomController = {
 
@@ -86,15 +86,26 @@ RoomController = {
         }]
       }
       )
-      
       res.send(update);
     } catch (err) {
       console.log(err)
       res.send(err)
     }
 
-  }
-  ,
+  },
+
+  newQuestion: async (req,res)=>{
+    const { id, roundNum } = req.params;
+    console.log('before updateOne')
+    const update = await RoomModel.updateOne({ '_id': ObjectId(id)}, {$set: {'rounds.[i]': 5}}, {'arrayFilters': [{'i': roundNum}]}
+    // function (err, doc){
+    //   doc.rounds[roundNum].$inc(); // increases value by 1
+    //   doc.save();
+    //   err ? console.log(err) : false;
+    // }
+    );
+    res.send(update);
+  },
 
   saveAnswer: (req, res) => {
     const answerData = req.body;
