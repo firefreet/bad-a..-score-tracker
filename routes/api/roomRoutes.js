@@ -12,4 +12,7 @@ router.put('/answer',controller.saveAnswer);
 
 // router.delete('/answer',controller.deleteAnswer);
 
+// './api/rooms/create'
+router.put('/create', controller.createRoom);
+
 module.exports = router;
