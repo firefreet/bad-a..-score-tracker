@@ -11,6 +11,7 @@ import AdminRoom from './pages/AdminRoom';
 import Chat from './pages/Chat';
 import NoMatch from './pages/NoMatch';
 import Home from './pages/Home';
+import GenerateRoom from './pages/GenerateRoom';
 import './global.css';
 import mockRoomData from './mockRoomData';
 
@@ -71,6 +72,10 @@ function App() {
             <ProtectedRoute exact path='/adminroom' component={AdminRoom} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
+            
+            {/* Temp route for room generation */}
+            <Route exact path="/genroom" component={GenerateRoom} />
+
             <Route component={NoMatch} />
           </Switch>
         </RoomContext.Provider>
