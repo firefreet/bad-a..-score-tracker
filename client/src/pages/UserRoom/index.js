@@ -10,13 +10,13 @@ import RndQstSelectors from '../../components/RndQstSelectors';
 function UserRoom() {
   const answer = useRef();
   const submit = useRef();
-  const { roomData, /* emit, */ 
+  const { roomState: { roomData, /* emit, */
     selectedQuestion,
     selectedRound,
     updateGoToCurr,
     goToCurrent
-   } = useContext(RoomContext);
-   const roomState = useContext(RoomContext);
+  } } = useContext(RoomContext);
+  const { roomState } = useContext(RoomContext);
   const [showGoTo, setShowGoTo] = useState(false);
 
   // hide GoToQMOdal
@@ -26,7 +26,7 @@ function UserRoom() {
 
   // set flag to allow changing <select>'s option to Current Round & Q
   const goToQ = () => {
-    updateGoToCurr(true,roomState);
+    updateGoToCurr(true, roomState);
     setShowGoTo(false);
   }
 
@@ -93,10 +93,9 @@ function UserRoom() {
     let ans = answer.current;
     let qN = selectedQuestion;
     let rN = selectedRound;
-    console.log(goTo);
-    if(goTo) {
+    if (goTo) {
       rN = roomData.rounds.length;
-      qN =roomData.rounds[rN -1].numberOfQuestions;
+      qN = roomData.rounds[rN - 1].numberOfQuestions;
     }
     // get index of user from the Room's participant list array
     let userIndex = roomData.participants.findIndex(element => {
@@ -132,13 +131,14 @@ function UserRoom() {
       toggleReadonly(false);
     }
   }
-  useEffect(()=>{
+  // will run twice for since it gets goToCurrent is getting toggled immediately back by another component
+  useEffect(() => {
     showResponse(true);
-  },[goToCurrent])
-  
-  useEffect(()=>{
+  }, [goToCurrent])
+
+  useEffect(() => {
     showResponse(false);
-  },[selectedQuestion,selectedRound])
+  }, [selectedQuestion, selectedRound])
 
 
 

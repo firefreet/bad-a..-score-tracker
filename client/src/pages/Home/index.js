@@ -9,13 +9,13 @@ import API from '../../utils/API';
 
 function Test(props) {
   const [roomNumber, setRoomNumber] = useState('');
-  const { loggedIn } = useContext(RoomContext);
+  const {roomState: { loggedIn }} = useContext(RoomContext);
   const roomNumberRef = useRef();
 
   useEffect(() => {
-    console.log(props);
+    // console.log(props);
     API.test().then(res => {
-      console.log(res.data._doc);
+      // console.log(res.data._doc);
     })
 
   }, []);

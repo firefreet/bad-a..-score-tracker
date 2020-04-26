@@ -1,19 +1,21 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { Container, Row } from '../../components/Grid';
 import RoomContext from '../..//utils/RoomContext';
 import RoomNav from '../../components/RoomNav';
 import RndQstSelectors from '../../components/RndQstSelectors';
+import API from '../../utils/API';
 
 
 function AdminRoom() {
-  const { roomData, /* emit, */ selectedQuestion, selectedRound } = useContext(RoomContext);
+  const {roomState: { roomData, /* emit, */ selectedQuestion, selectedRound }} = useContext(RoomContext);
   const [tableState, setTableState] = useState([]);
   var table = [];
+  const score = useRef();
 
   // on new questions or rounds, display user answers
   useEffect(() => {
     setTable();
-  }, [selectedQuestion, selectedRound])
+  }, [roomData, selectedQuestion, selectedRound])
 
   const setTable = () => {
     table = [];
@@ -26,16 +28,40 @@ function AdminRoom() {
           } else return false
         })
         if (currentResponse.length) {
+          const { answer, points, correctInd, _id } = currentResponse[0];
           table.push(
             {
               player: player.name,
-              answer: currentResponse[0].answer
+              answer,
+              score: correctInd ? points : 0,
+              userId: player._id,
+              questionId: _id,
+              correctInd
             }
           )
         }
       })
     }
     setTableState(table)
+  }
+
+  const toggleCorrect = async (e)=>{
+    let i = e.target.getAttribute('datanum');
+    let value = e.target.value;
+    value = value === 'true' ? 'false' : 'true'; 
+    e.target.value = value;
+    let playerResp = document.getElementById('playerId'+i)
+    let userId =  playerResp.getAttribute('userid');
+    let questionId = playerResp.getAttribute('questionid');
+    try {
+    await API.toggleCorrect(roomData._id, userId, questionId, value).catch(err=>{console.log(err)});
+    console.log(score.current.innerText)
+    console.log(score)
+    console.log(value);
+    score.current.innerText = value === 'false' ? score.current.getAttribute('datascore') : "0"
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   return (
@@ -65,18 +91,22 @@ function AdminRoom() {
               <tr>
                 <th width="70%" scope="col">Player</th>
                 <th scope="col" className='text-center'>Correct</th>
+                <th scope="col" className='text-center'>Score</th>
                 <th scope="col" className='text-center'>Delete</th>
               </tr>
             </thead>
             {tableState.map((v, i) => {
               return (
-                <tbody key={i}>
+                <tbody id={'playerId'+i} questionid={v.questionId} userid={v.userId} key={i}>
                   <tr>
                     <td>{v.player}</td>
                     <td>
                       <div className="d-flex">
-                        <input type="checkbox" className="mx-auto" />
+                        <input datanum={i} onChange={toggleCorrect} type="checkbox" className="mx-auto" defaultChecked={v.correctInd}/>
                       </div>
+                    </td>
+                    <td>
+                      <div ref={score} datascore={v.score} className='text-center'>{v.score}</div>
                     </td>
                     <td className='d-flex'>
                       <i className="mx-auto fas fa-minus-circle"></i>
@@ -92,7 +122,6 @@ function AdminRoom() {
         <div className='px-3'>
           <Row>
             <div className="col-12 col-md-4 mb-1 d-flex">
-
             </div>
             <div className="col-12 col-md-4 mb-1 d-flex">
             </div>

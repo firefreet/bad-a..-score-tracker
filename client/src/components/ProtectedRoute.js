@@ -3,7 +3,7 @@ import { Route, Redirect } from 'react-router-dom';
 import RoomContext from '../utils/RoomContext';
 
 function ProtectedRoute({ component: Component, ...rest }) {
-  const { loggedIn, userData } = useContext(RoomContext);
+  const {roomState: { loggedIn, userData }} = useContext(RoomContext);
   // console.log(loggedIn);
   // console.log(rest);
 

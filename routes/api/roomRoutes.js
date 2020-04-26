@@ -12,4 +12,6 @@ router.put('/answer',controller.saveAnswer);
 
 // router.delete('/answer',controller.deleteAnswer);
 
+router.put('/correct',controller.toggleCorrect);
+
 module.exports = router;

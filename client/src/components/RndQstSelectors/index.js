@@ -4,14 +4,15 @@ import RoomContext from '../../utils/RoomContext';
 
 function RndQstSelectors() {
   const {
-    roomData,
-    selectedRound,
-    updateSelectedQuestion,
-    updateSelectedRound,
-    updateGoToCurr,
-    goToCurrent
-  } = useContext(RoomContext);
-  const roomState = useContext(RoomContext);
+    roomState: {
+      roomData,
+      selectedRound,
+      updateSelectedQuestion,
+      updateSelectedRound,
+      updateGoToCurr,
+      goToCurrent
+    } } = useContext(RoomContext);
+  const { roomState } = useContext(RoomContext);
   const questionSelect = useRef();
   const roundSelect = useRef();
 
@@ -36,14 +37,16 @@ function RndQstSelectors() {
     )
   }
 
-  useEffect(()=>{
-    if(goToCurrent) {
-      updateGoToCurr(false,roomState);
+  useEffect(() => {
+    if (goToCurrent) {
+      console.log('before set state func')
+      updateGoToCurr(false, roomState);
+      console.log('after')
       let rounds = roomData.rounds.length;
       roundSelect.current.value = rounds
-      questionSelect.current.value = roomData.rounds[rounds -1].numberOfQuestions
+      questionSelect.current.value = roomData.rounds[rounds - 1].numberOfQuestions
     }
-  },[goToCurrent])
+  }, [goToCurrent])
 
   return (
     <Row>

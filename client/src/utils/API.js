@@ -6,7 +6,9 @@ export default {
   getRoom: function(roomId) {
     return axios.get('/api/rooms/' + roomId);
   },
-
+  toggleCorrect: (roomId,userId,questionId,value)=>{
+    return axios.put(`/api/rooms/correct?roomId=${roomId}&userId=${userId}&questionId=${questionId}&value=${value}` );
+  },
   // Deletes the answer with the given id
   // deleteAnswer: function(roomId,user,round,question) {
   //   return axios.delete(`/api/rooms/answer?roomId=${roomId}&user=${user}&round=${round}&question=${question}`);

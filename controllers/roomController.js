@@ -4,13 +4,13 @@ RoomModel.fin
 
 RoomController = {
 
-  getFirstRoom: (req,res)=>{
-    RoomModel.findOne({}).then(room=>{
+  getFirstRoom: (req, res) => {
+    RoomModel.findOne({}).then(room => {
       res.json(room);
     })
-    .catch(err=>{
-      res.json(err);
-    })
+      .catch(err => {
+        res.json(err);
+      })
   },
 
   getRoom: (req, res) => {
@@ -23,6 +23,33 @@ RoomController = {
         res.json(err);
       })
   },
+  toggleCorrect: async (req, res) => {
+    let { roomId, userId, questionId, value } = req.query
+    value = value === 'true' ? true : false
+    try {
+      const update = await RoomModel.updateOne({
+        '_id': ObjectId(roomId)
+      }, {
+        $set: {
+          'participants.$[i].responses.$[j].correctInd': value
+        }
+      },
+      {
+       'arrayFilters': [{
+          'i._id': ObjectId(userId)
+        },{
+          'j._id': ObjectId(questionId)
+        }]
+      }
+      )
+      res.send(update);
+    } catch (err) {
+      console.log(err)
+      res.send(err)
+    }
+
+  }
+  ,
 
   saveAnswer: (req, res) => {
     const answerData = req.body;

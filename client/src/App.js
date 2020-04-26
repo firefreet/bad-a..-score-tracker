@@ -31,7 +31,8 @@ function App() {
       setRoomState({ ...currentRoomState, selectedRound })
     },
     goToCurrent: false,
-    updateGoToCurr: (val,currRoomState)=>{setRoomState({...currRoomState, goToCurrent: val})}
+    updateGoToCurr: async (val,currRoomState)=>{
+      setRoomState({...currRoomState, goToCurrent: val})}
   });
   // socket.on('new update', function (content) {
   //   console.log(content);
@@ -63,7 +64,7 @@ function App() {
   return (
     <Router>
       <div>
-        <RoomContext.Provider value={roomState}>
+        <RoomContext.Provider value={{roomState, setRoomState}}>
           <Switch>
             <Route exact path='/' component={Home} />
             <Route exact path="/chat" component={Chat} />
