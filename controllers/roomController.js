@@ -13,6 +13,50 @@ RoomController = {
       })
   },
 
+  // creates a randomly generated 4 digit room number
+  createRoom: (req, res) => {
+    // if letters stay lowercase it reduces some confusion
+    // also, 0, o, 1, i , and l aren't used due to possible text confusion
+    // 4 digit room numbers with 31 possible characters:
+    // 31 * 31 * 31 * 31 = 923,521 possible room numbers
+    const chars = '23456789abcdefghjkmnpqrstuvwxyz';
+
+    // get all rooms
+    RoomModel.find({})
+      .then(results => {
+
+        // variable to exit while loop
+        let duplicateRoom = true;
+        let roomNumber = '';
+        while (duplicateRoom) {
+
+          // generate a new 4 digit random room number
+          roomNumber = '';
+          for (let i = 0; i < 4; i++) {
+            const rand = Math.floor(Math.random() * chars.length);
+            roomNumber += chars.charAt(rand);
+          }
+
+          duplicateRoom = false;
+          // loop through all current room numbers to verify
+          // that the new room number is unique
+          for (let i = 0; i < results.length; i++) {
+            if (results[i].roomID === roomNumber) {
+              // if the room number happens to exist already,
+              // restart the while loop to generate a new number
+              duplicateRoom = true;
+              console.log('duplicate room found');
+              break;
+            }
+          }
+        }
+        res.send(roomNumber);
+      })
+      .catch(err => {
+        res.json(err);
+      });
+  },
+
   getRoom: (req, res) => {
     const id = req.params.id;
     RoomModel.find({ "_id": ObjectId(id) })

@@ -14,4 +14,7 @@ router.put('/answer',controller.saveAnswer);
 
 router.put('/correct',controller.toggleCorrect);
 
+// './api/rooms/create'
+router.put('/create', controller.createRoom);
+
 module.exports = router;
