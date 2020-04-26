@@ -7,7 +7,7 @@ import API from '../../utils/API';
 
 
 function AdminRoom() {
-  const {roomState: { roomData, /* emit, */ selectedQuestion, selectedRound }} = useContext(RoomContext);
+  const { roomState: { roomData, /* emit, */ selectedQuestion, selectedRound }, setRoomState, roomState } = useContext(RoomContext);
   const [tableState, setTableState] = useState([]);
   var table = [];
   const score = useRef();
@@ -42,23 +42,21 @@ function AdminRoom() {
         }
       })
     }
+    console.log(table);
     setTableState(table)
   }
 
-  const toggleCorrect = async (e)=>{
+  const toggleCorrect = async (e) => {
     let i = e.target.getAttribute('datanum');
-    let value = e.target.value;
-    value = value === 'true' ? 'false' : 'true'; 
-    e.target.value = value;
-    let playerResp = document.getElementById('playerId'+i)
-    let userId =  playerResp.getAttribute('userid');
+    let value = e.target.getAttribute('databool');
+    value = value === 'true' ? 'false' : 'true';
+    let playerResp = document.getElementById('playerId' + i)
+    let userId = playerResp.getAttribute('userid');
     let questionId = playerResp.getAttribute('questionid');
     try {
-    await API.toggleCorrect(roomData._id, userId, questionId, value).catch(err=>{console.log(err)});
-    console.log(score.current.innerText)
-    console.log(score)
-    console.log(value);
-    score.current.innerText = value === 'false' ? score.current.getAttribute('datascore') : "0"
+      await API.toggleCorrect(roomData._id, userId, questionId, value).catch(err => { console.log(err) });
+      const { data } = await API.getRoom(roomData._id);
+      await setRoomState({ ...roomState, roomData: data[0] });
     } catch (err) {
       console.log(err);
     }
@@ -97,12 +95,13 @@ function AdminRoom() {
             </thead>
             {tableState.map((v, i) => {
               return (
-                <tbody id={'playerId'+i} questionid={v.questionId} userid={v.userId} key={i}>
+                <tbody id={'playerId' + i} questionid={v.questionId} userid={v.userId} key={i}>
                   <tr>
                     <td>{v.player}</td>
                     <td>
-                      <div className="d-flex">
-                        <input datanum={i} onChange={toggleCorrect} type="checkbox" className="mx-auto" defaultChecked={v.correctInd}/>
+                      <div className='d-flex'>
+                        {v.correctInd ? <i datanum={i} databool='true' onClick={toggleCorrect} className='far fa-check-square'></i> :
+                          <i datanum={i} databool='false' onClick={toggleCorrect} className='far fa-square'></i>}
                       </div>
                     </td>
                     <td>

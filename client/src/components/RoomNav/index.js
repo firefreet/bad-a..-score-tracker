@@ -4,7 +4,7 @@ function RoomNav(props) {
   return (
     <div>
       <nav className=" w navbar navbar-expand-lg navbar-light bg-light">
-        <p className="navbar-brand">Room: {props.room} [Current Round: {props.round} - Question: {props.question}]</p>
+        <p className="navbar-brand">[Room: ####] {props.room} [Current Round: {props.round} - Question: {props.question}]</p>
         {props.admin === "true" ? (
           <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>

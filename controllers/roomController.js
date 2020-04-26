@@ -42,6 +42,7 @@ RoomController = {
         }]
       }
       )
+      
       res.send(update);
     } catch (err) {
       console.log(err)
