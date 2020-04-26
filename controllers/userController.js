@@ -1,7 +1,5 @@
 const db = require('../models');
 const bcrypt = require("bcryptjs");
-const jwt = require('jsonwebtoken');
-const mongojs = require("mongojs");
 
 
 module.exports = {
@@ -31,6 +29,7 @@ module.exports = {
         req.body.password
       );
       const token = await user.generateAuthToken();
+
       res.status(200).send({ user, token });
     } catch (err) {
       res.status(400).send('ERROR FROM LOGIN FUNCTION');
@@ -49,6 +48,7 @@ module.exports = {
         email: userData.email
       }
       if (userData) {
+        console.log('successfully gathered');
         res.status(200).send(user);
       } 
     } catch (err) {

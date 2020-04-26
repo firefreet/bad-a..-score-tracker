@@ -27,6 +27,7 @@ const isAuthroizedRoute = async (req, res, next) => {
 
     req.token = cookie;
     req.user = user;
+    console.log('success');
     next();  
     
   } catch (err) {

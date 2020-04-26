@@ -22,6 +22,9 @@ function App() {
     roomData: mockRoomData,
     loggedIn: decodeURIComponent(document.cookie) !== '',
     userData: null,
+    setUserData: (userObj) => {
+      setRoomState({...roomState, loggedIn: true, userData: userObj})
+    },
     // emit: (contentName, content) => { socket.emit(contentName, content) }
     selectedQuestion: 1,
     selectedRound: 1,

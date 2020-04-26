@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import RoomContext from '../../utils/RoomContext';
 import { Col, Row, Container } from "../../components/Grid";
-import API from '../../utils/API';
 
 function Home() {
   const [roomNumber, setRoomNumber] = useState('');

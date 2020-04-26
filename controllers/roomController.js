@@ -1,8 +1,57 @@
-const { RoomModel } = require('../models');
+const { RoomModel, User } = require('../models');
 const { Types: { ObjectId } } = require('mongoose');
 RoomModel.fin
 
-RoomController = {
+module.exports = {
+
+  createRoom: (req, res) => {
+    console.log('inside create room function')
+    console.log(req.body);
+    let room = req.body;
+    room.admin = ObjectId(req.user.id);
+
+    RoomModel.create(room)
+      .then(( { _id } ) => User.findOneAndUpdate({ 
+        "_id": ObjectId(req.user.id) 
+      }, {$push: { rooms: _id } }, { new: true }))
+        .then(user => {
+          User.findById(user._id)
+            .populate('rooms')
+            .then(user => {
+              let userObj = {
+                _id: user._id,
+                tokens: user.tokens,
+                rooms: user.rooms,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email
+              }
+              res.status(200).json(userObj);
+            })
+            .catch(err => {console.log(err)})
+        })
+        .catch(err => {res.status(400).json(err);})
+  },
+
+  populateRooms: (req, res) => {
+    console.log('in populate function');
+    User.findById(req.user._id)
+      .populate('rooms')
+      .then(user => {
+        let userObj = {
+          _id: user._id,
+          tokens: user.tokens,
+          rooms: user.rooms,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email
+        }
+        res.status(200).json(userObj);
+      })
+      .catch(err => {
+        res.status(400).json(err);
+      })
+  },
 
   getFirstRoom: (req,res)=>{
     RoomModel.findOne({}).then(room=>{
@@ -60,6 +109,3 @@ RoomController = {
     })
   }
 }
-
-
-module.exports = RoomController;
