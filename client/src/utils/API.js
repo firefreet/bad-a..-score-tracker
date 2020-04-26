@@ -9,19 +9,22 @@ export default {
   
   // Gets the room with the given id
   getRoom: function(roomId) {
-    return axios.get('/api/rooms/' + roomId);
+    return axios.get('/api/rooms/id/' + roomId);
   },
-
   // Deletes the answer with the given id
   // deleteAnswer: function(roomId,user,round,question) {
   //   return axios.delete(`/api/rooms/answer?roomId=${roomId}&user=${user}&round=${round}&question=${question}`);
   // },
-
+  createRoom: function(roomData) {
+    return axios.post('/api/rooms/create', roomData);
+  },
+  populateRooms: function() {
+    return axios.get('/api/rooms/populate');
+  },
   // add for testing
   getFirstRoom: ()=>{
     return axios.get('/api/rooms/')
   },
-
   // Saves a answer to the database
   saveAnswer: function(answerData) {
     return axios.put("/api/rooms/answer", answerData);
@@ -37,7 +40,4 @@ export default {
   isAuthenticated: function() {
     return axios.get(`api/users/auth`);
   },
-  test: function() {
-    return axios.get('api/users/test');
-  }
 };

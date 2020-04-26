@@ -8,6 +8,7 @@ import Register from './pages/Register';
 import Login from './pages/Login';
 import UserRoom from './pages/UserRoom';
 import AdminRoom from './pages/AdminRoom';
+import RoomManager from './pages/RoomManager';
 import Chat from './pages/Chat';
 import NoMatch from './pages/NoMatch';
 import Home from './pages/Home';
@@ -22,6 +23,9 @@ function App() {
     roomData: mockRoomData,
     loggedIn: decodeURIComponent(document.cookie) !== '',
     userData: null,
+    setUserData: (userObj) => {
+      setRoomState({...roomState, loggedIn: true, userData: userObj})
+    },
     // emit: (contentName, content) => { socket.emit(contentName, content) }
     selectedQuestion: 1,
     selectedRound: 1,
@@ -48,7 +52,7 @@ function App() {
         // setRoomState(currentState => ({...currentState, loggedIn: true, userData: {id: res.data.id}}));
         API.getFirstRoom(roomState.roomData._id).then((data) => {
           var roomData = data.data.length === 0 ? roomState.roomData : data.data;
-          setRoomState({ ...roomState, roomData, loggedIn: true, userData: { id: res.data.id } });
+          setRoomState({ ...roomState, roomData, loggedIn: true, userData: res.data });
         }).catch(err => {
           console.log(err);
         })
@@ -70,6 +74,7 @@ function App() {
             <Route exact path="/chat" component={Chat} />
             <ProtectedRoute exact path='/userroom' component={UserRoom} />
             <ProtectedRoute exact path='/adminroom' component={AdminRoom} />
+            <ProtectedRoute exact path='/rooms' component={RoomManager} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
             

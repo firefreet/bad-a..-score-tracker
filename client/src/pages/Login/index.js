@@ -1,19 +1,23 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { Col, Row, Container } from "../../components/Grid";
+import RoomContext from '../../utils/RoomContext';
 import API from '../../utils/API';
 import cookies from '../../utils/cookie';
 
 function Login(props) {
+  const roomState = useContext(RoomContext);
+  const { setUserData } = useContext(RoomContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [validation, setValidation] = useState('');
+
 
   const emailRef = useRef();
   const passwordRef = useRef();
 
   useEffect(() => {
-    console.log(props);
-  }, []);
+    console.log(roomState);
+  }, [roomState]);
 
   function handleInput(e) {
     switch (e.target.id) {
@@ -39,11 +43,21 @@ function Login(props) {
     API.login(userData)
       .then(res => {
         setValidation('');
-        console.log(res.data.user._doc);
-        let userCookie = res.data.user._doc.tokens;
+        let matchedUser = res.data.user._doc;
+        let userCookie = matchedUser.tokens;
+        let user = {
+          _id: matchedUser._id,
+          tokens: matchedUser.tokens,
+          rooms: matchedUser.rooms,
+          firstName: matchedUser.firstName,
+          lastName: matchedUser.lastName,
+          email: matchedUser.email
+        }
         cookies.setCookie('user', userCookie, 1);
+        setUserData(user);
+
         // set for later
-        props.history.push('/');
+        props.history.push('/rooms');
 
       })
       .catch(err => {

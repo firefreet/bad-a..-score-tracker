@@ -5,7 +5,7 @@ const mongojs = require("mongojs");
 
 const isAuthroizedRoute = async (req, res, next) => {
   try {
-    console.log('Authenticating User For Access to API Route');
+    console.log('Authenticating User For Access');
     let value = req.headers.cookie;
 
     if(!value.includes('user=')) {
@@ -27,6 +27,7 @@ const isAuthroizedRoute = async (req, res, next) => {
 
     req.token = cookie;
     req.user = user;
+    console.log('success');
     next();  
     
   } catch (err) {
