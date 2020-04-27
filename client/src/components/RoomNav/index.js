@@ -8,28 +8,35 @@ function RoomNav(props) {
   const newQuestion = async (e) => {
     const { roomData } = roomState
     const { _id } = roomData
-    const { rounds } = roomData
+    var { rounds } = roomData
     const roundNum = rounds.length - 1
-    const { questionsNum } = rounds[roundNum];
-    rounds[roundNum] = questionsNum + 1
-
     try {
-      await API.newQuestion(_id,roundNum);
-      console.log(roomState.rounds[roundNum]);
-      await setRoomState({ ...roomState, roomData: {...roomData, rounds } })
-      console.log(roomState.rounds[roundNum]);
+      var {data} = await API.newQuestion(_id, roundNum);
+      rounds[roundNum] = parseInt(data);
+      await setRoomState({ ...roomState, roomData: { ...roomData, rounds } })
     } catch (err) {
       console.log(err);
     }
   }
-  const newRound = (e) => {
 
+  const newRound = async (e) => {
+    const { roomData } = roomState
+    const { _id } = roomData
+    var { rounds } = roomData
+    try {
+      var {data} = await API.newRound(_id);
+      await setRoomState({ ...roomState, roomData: { ...roomData, rounds: data } })
+    } catch (err) {
+      console.log(err);
+    }
   }
+
+  
 
   return (
     <div>
       <nav className=" w navbar navbar-expand-lg navbar-light bg-light">
-        <p className="navbar-brand">[Room: ####] {props.room} [Current Round: {props.round} - Question: {props.question}]</p>
+        <p className="navbar-brand">[Room: {props.room}] [Current Round: {props.round} - Question: {props.question}]</p>
         {props.admin === "true" ? (
           <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>

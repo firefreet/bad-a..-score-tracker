@@ -15,9 +15,15 @@ function UserRoom() {
     selectedRound,
     updateGoToCurr,
     goToCurrent
-  } } = useContext(RoomContext);
-  const { roomState } = useContext(RoomContext);
+  },
+    roomState,
+    setRoomState
+  } = useContext(RoomContext);
   const [showGoTo, setShowGoTo] = useState(false);
+
+  useEffect(() => {
+      showResponse(false);
+  }, [roomData, selectedQuestion, selectedRound]);
 
   // hide GoToQMOdal
   const handleClose = () => {
@@ -34,12 +40,12 @@ function UserRoom() {
     if (roomData.rounds.length > 1 || roomData.rounds[0] > 1) {
       setShowGoTo(true)
     };
-  }, [roomData.rounds])
+  }, [roomData._id, roomData.rounds])
 
   function submitAnswer() {
     const respData = {
       roomId: roomData._id,
-      userName: 'Cindy',/* to be made dynamic */
+      userName: 'Maleficent',/* to be made dynamic */
       answer: answer.current.value,
       questionNumber: selectedQuestion,
       roundNumber: selectedRound,
@@ -53,7 +59,7 @@ function UserRoom() {
   };
 
   const allowSubmit = () => {
-    // onChange of textarea if there is text allow sumbit, otherwise disable 
+    // onChange of textarea if there is text allow sumbit, otherwise disable
     answer.current.value !== '' ? toggleSubmit(true) : toggleSubmit(false);
   }
 
@@ -72,7 +78,7 @@ function UserRoom() {
     }
   }
 
-  // set classes and enables or disables editing of the textarea 
+  // set classes and enables or disables editing of the textarea
   const toggleReadonly = (readOnly) => {
     let ans = answer.current;
     if (readOnly) {
@@ -96,16 +102,14 @@ function UserRoom() {
     if (goTo) {
       rN = roomData.rounds.length;
       qN = roomData.rounds[rN - 1];
+      setRoomState({...roomState, roomData: {...roomData, selectedQuestion: qN, selectedRound: rN}})
     }
     // get index of user from the Room's participant list array
     let userIndex = roomData.participants.findIndex(element => {
-      console.log(element)
-      return element.name === 'Cindy' /* to be made dynamic */
+      return element.name === 'Maleficent' /* to be made dynamic */
     })
     // if the user was found...
     if (userIndex !== -1) {
-      console.log(ans)
-
       // get the index of the user's answer to the selected Round & Question
       let answerIndex = roomData.participants[userIndex].responses.findIndex(element => {
         return (element.questionNumber === qN && element.roundNumber === rN)
@@ -139,16 +143,9 @@ function UserRoom() {
     showResponse(true);
   }, [goToCurrent])
 
-  useEffect(() => {
-    console.log('useEffect, selectedQ / R')
-    showResponse(false);
-  }, [selectedQuestion, selectedRound])
-
-
-
   return (
     <div>
-      <RoomNav admin="false" room={roomData.roomId} round={roomData.rounds.length} question={roomData.rounds[roomData.rounds.length - 1]} />
+      <RoomNav admin="false" room={roomData.roomID} round={roomData.rounds.length} question={roomData.rounds[roomData.rounds.length - 1]} />
       <Container>
         <Row>
           <label className='w-100 text-center'>Current Broadcast</label>

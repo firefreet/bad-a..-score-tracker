@@ -1,11 +1,6 @@
 import axios from 'axios';
 
 export default {
-
-  // Creates a new random 4 digit room number
-  createRoom: () => {
-    return axios.put('/api/rooms/create');
-  },
   
   // Gets the room with the given id
   getRoom: function(roomId) {
@@ -45,5 +40,8 @@ export default {
   },
   newQuestion: (roomId,roundNum)=>{
     return axios.put(`/api/rooms/${roomId}/${roundNum}/question`)
+  },
+  newRound: (roomId)=>{
+    return axios.put(`/api/rooms/${roomId}/round`)
   }
 };

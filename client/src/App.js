@@ -13,18 +13,18 @@ import Chat from './pages/Chat';
 import NoMatch from './pages/NoMatch';
 import Home from './pages/Home';
 import GenerateRoom from './pages/GenerateRoom';
+import modelRoom from './utils/modelRoom';
 import './global.css';
-import mockRoomData from './mockRoomData';
 
 function App() {
 
   // const socket = io();
   const [roomState, setRoomState] = useState({
-    roomData: mockRoomData,
+    roomData: modelRoom,
     loggedIn: decodeURIComponent(document.cookie) !== '',
     userData: null,
-    setUserData: (userObj) => {
-      setRoomState({...roomState, loggedIn: true, userData: userObj})
+    setUserData: (userObj, currentRoomState) => {
+      setRoomState({ ...currentRoomState, loggedIn: true, userData: userObj })
     },
     // emit: (contentName, content) => { socket.emit(contentName, content) }
     selectedQuestion: 1,
@@ -36,8 +36,9 @@ function App() {
       setRoomState({ ...currentRoomState, selectedRound })
     },
     goToCurrent: false,
-    updateGoToCurr: async (val,currRoomState)=>{
-      setRoomState({...currRoomState, goToCurrent: val})}
+    updateGoToCurr: async (val, currRoomState) => {
+      setRoomState({ ...currRoomState, goToCurrent: val })
+    }
   });
   // socket.on('new update', function (content) {
   //   console.log(content);
@@ -50,10 +51,8 @@ function App() {
   useEffect(() => {
     API.isAuthenticated()
       .then(res => {
-        API.getFirstRoom(roomState.roomData._id).then((data) => {
-          console.log(data)
-          var roomData = data.data.length === 0 ? roomState.roomData : data.data;
-          setRoomState({ ...roomState, roomData, loggedIn: true, userData: res.data });
+        API.getFirstRoom().then(data => {
+          setRoomState({ ...roomState, loggedIn: true, userData: res.data, roomData: data.data });
         }).catch(err => {
           console.log(err);
         })
@@ -69,7 +68,7 @@ function App() {
   return (
     <Router>
       <div>
-        <RoomContext.Provider value={{roomState, setRoomState}}>
+        <RoomContext.Provider value={{ roomState, setRoomState }}>
           <Switch>
             <Route exact path='/' component={Home} />
             <Route exact path="/chat" component={Chat} />
@@ -78,7 +77,7 @@ function App() {
             <ProtectedRoute exact path='/rooms' component={RoomManager} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
-            
+
             {/* Temp route for room generation */}
             <Route exact path="/genroom" component={GenerateRoom} />
 

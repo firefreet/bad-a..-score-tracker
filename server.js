@@ -29,9 +29,3 @@ const server = app.listen(PORT, function() {
 const io = require('socket.io').listen(server);
 // run socket event methods from external module
 socketEvents(io).attachEventHandlers();
-
-// create a room if not exists
-const db = require('./models');
-db.RoomModel.findOneAndUpdate({roomID:"not yo mama's room id..."},{},{upsert:true, setDefaultsOnInsert: true},(err,doc)=>{
-  err? console.log('cant create update doc') : console.log(doc)
-})
