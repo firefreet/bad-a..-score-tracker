@@ -8,9 +8,12 @@ const roomSchema = new mongoose.Schema({
  
   admin: { type: String },
 
-  rounds: [{
-    numberOfQuestions: { type: Number, default: 1}
-  }],
+  broadcast: {type: String, default: ''},
+
+  rounds:{
+    type: Array,
+    default: [1]
+  },
 
   participants: [{
     name: { type: String },

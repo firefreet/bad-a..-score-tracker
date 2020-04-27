@@ -10,13 +10,20 @@ import RndQstSelectors from '../../components/RndQstSelectors';
 function UserRoom() {
   const answer = useRef();
   const submit = useRef();
-  const { roomData, /* emit, */ 
+  const { roomState: { roomData, /* emit, */
     selectedQuestion,
     selectedRound,
-    updateGoToCurr
-   } = useContext(RoomContext);
-   const roomState = useContext(RoomContext);
+    updateGoToCurr,
+    goToCurrent
+  },
+    roomState,
+    setRoomState
+  } = useContext(RoomContext);
   const [showGoTo, setShowGoTo] = useState(false);
+
+  useEffect(() => {
+      showResponse(false);
+  }, [roomData, selectedQuestion, selectedRound]);
 
   // hide GoToQMOdal
   const handleClose = () => {
@@ -25,20 +32,20 @@ function UserRoom() {
 
   // set flag to allow changing <select>'s option to Current Round & Q
   const goToQ = () => {
-    updateGoToCurr(true,roomState);
+    updateGoToCurr(true, roomState);
     setShowGoTo(false);
   }
 
   useEffect(() => {
-    if (roomData.rounds.length > 1 || roomData.rounds[0].numberOfQuestions > 1) {
+    if (roomData.rounds.length > 1 || roomData.rounds[0] > 1) {
       setShowGoTo(true)
     };
-  }, [roomData.rounds])
+  }, [roomData._id, roomData.rounds])
 
   function submitAnswer() {
     const respData = {
       roomId: roomData._id,
-      userName: 'Giorgio',/* to be made dynamic */
+      userName: 'Maleficent',/* to be made dynamic */
       answer: answer.current.value,
       questionNumber: selectedQuestion,
       roundNumber: selectedRound,
@@ -52,7 +59,7 @@ function UserRoom() {
   };
 
   const allowSubmit = () => {
-    // onChange of textarea if there is text allow sumbit, otherwise disable 
+    // onChange of textarea if there is text allow sumbit, otherwise disable
     answer.current.value !== '' ? toggleSubmit(true) : toggleSubmit(false);
   }
 
@@ -71,7 +78,7 @@ function UserRoom() {
     }
   }
 
-  // set classes and enables or disables editing of the textarea 
+  // set classes and enables or disables editing of the textarea
   const toggleReadonly = (readOnly) => {
     let ans = answer.current;
     if (readOnly) {
@@ -88,13 +95,18 @@ function UserRoom() {
   }
 
   // looks for previously answered questions and displays if exists
-  function showResponse() {
+  function showResponse(goTo) {
     let ans = answer.current;
     let qN = selectedQuestion;
     let rN = selectedRound;
+    if (goTo) {
+      rN = roomData.rounds.length;
+      qN = roomData.rounds[rN - 1];
+      setRoomState({...roomState, roomData: {...roomData, selectedQuestion: qN, selectedRound: rN}})
+    }
     // get index of user from the Room's participant list array
     let userIndex = roomData.participants.findIndex(element => {
-      return element.name === 'Giorgio' /* to be made dynamic */
+      return element.name === 'Maleficent' /* to be made dynamic */
     })
     // if the user was found...
     if (userIndex !== -1) {
@@ -118,7 +130,7 @@ function UserRoom() {
     // get the current round
     let currRound = roomData.rounds.length;
     // if selected a previous round or question
-    if (rN < currRound || (rN === currRound && qN < roomData.rounds[currRound - 1].numberOfQuestions)) {
+    if (rN < currRound || (rN === currRound && qN < roomData.rounds[currRound - 1])) {
       // set to read only
       toggleReadonly(true);
     } else {
@@ -126,14 +138,14 @@ function UserRoom() {
       toggleReadonly(false);
     }
   }
-
-  useEffect(()=>{
-    showResponse();
-  })
+  // will run twice for since it gets goToCurrent is getting toggled immediately back by another component
+  useEffect(() => {
+    showResponse(true);
+  }, [goToCurrent])
 
   return (
     <div>
-      <RoomNav admin="false" room={roomData.roomId} round={roomData.rounds.length} question={roomData.rounds[roomData.rounds.length - 1].numberOfQuestions} />
+      <RoomNav admin="false" room={roomData.roomID} round={roomData.rounds.length} question={roomData.rounds[roomData.rounds.length - 1]} />
       <Container>
         <Row>
           <label className='w-100 text-center'>Current Broadcast</label>

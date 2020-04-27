@@ -1,19 +1,21 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { Container, Row } from '../../components/Grid';
 import RoomContext from '../..//utils/RoomContext';
 import RoomNav from '../../components/RoomNav';
 import RndQstSelectors from '../../components/RndQstSelectors';
+import API from '../../utils/API';
 
 
 function AdminRoom() {
-  const { roomData, /* emit, */ selectedQuestion, selectedRound } = useContext(RoomContext);
+  const { roomState: { roomData, /* emit, */ selectedQuestion, selectedRound }, setRoomState, roomState } = useContext(RoomContext);
   const [tableState, setTableState] = useState([]);
   var table = [];
+  const score = useRef();
 
   // on new questions or rounds, display user answers
   useEffect(() => {
     setTable();
-  }, [selectedQuestion, selectedRound])
+  }, [roomData, selectedQuestion, selectedRound])
 
   const setTable = () => {
     table = [];
@@ -26,10 +28,15 @@ function AdminRoom() {
           } else return false
         })
         if (currentResponse.length) {
+          const { answer, points, correctInd, _id } = currentResponse[0];
           table.push(
             {
               player: player.name,
-              answer: currentResponse[0].answer
+              answer,
+              score: correctInd ? points : 0,
+              userId: player._id,
+              questionId: _id,
+              correctInd
             }
           )
         }
@@ -38,12 +45,28 @@ function AdminRoom() {
     setTableState(table)
   }
 
+  const toggleCorrect = async (e) => {
+    let i = e.target.getAttribute('datanum');
+    let value = e.target.getAttribute('databool');
+    value = value === 'true' ? 'false' : 'true';
+    let playerResp = document.getElementById('playerId' + i)
+    let userId = playerResp.getAttribute('userid');
+    let questionId = playerResp.getAttribute('questionid');
+    try {
+      await API.toggleCorrect(roomData._id, userId, questionId, value).catch(err => { console.log(err) });
+      const { data } = await API.getRoom(roomData._id);
+      await setRoomState({ ...roomState, roomData: data[0] });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   return (
     <div>
-      <RoomNav admin="true" room={roomData.roomId} round={roomData.rounds.length} question={roomData.rounds[roomData.rounds.length - 1].numberOfQuestions} />
+      <RoomNav admin="true" room={roomData.roomID} round={roomData.rounds.length} question={roomData.rounds[roomData.rounds.length - 1]} />
       <Container>
         <Row>
-          <textarea rows='6' className='mx-auto mb-2 mb-2 w-75' placeholder='...type or paste content here to BROADCAST to players ...'></textarea>
+          <textarea rows='6' className='mt-2 mx-auto mb-2 mb-2 w-75' placeholder='...type or paste content here to BROADCAST to players ...'></textarea>
         </Row>
         <Row>
           <div className='mb-2 container-fluid d-flex w-75 p-0'>
@@ -65,18 +88,23 @@ function AdminRoom() {
               <tr>
                 <th width="70%" scope="col">Player</th>
                 <th scope="col" className='text-center'>Correct</th>
+                <th scope="col" className='text-center'>Score</th>
                 <th scope="col" className='text-center'>Delete</th>
               </tr>
             </thead>
             {tableState.map((v, i) => {
               return (
-                <tbody key={i}>
+                <tbody id={'playerId' + i} questionid={v.questionId} userid={v.userId} key={i}>
                   <tr>
                     <td>{v.player}</td>
                     <td>
-                      <div className="d-flex">
-                        <input type="checkbox" className="mx-auto" />
+                      <div className='d-flex'>
+                        {v.correctInd ? <i datanum={i} databool='true' onClick={toggleCorrect} className='mx-auto text-center far fa-check-square'></i> :
+                          <i datanum={i} databool='false' onClick={toggleCorrect} className='mx-auto far fa-square'></i>}
                       </div>
+                    </td>
+                    <td>
+                      <div ref={score} datascore={v.score} className='text-center'>{v.score}</div>
                     </td>
                     <td className='d-flex'>
                       <i className="mx-auto fas fa-minus-circle"></i>
@@ -92,7 +120,6 @@ function AdminRoom() {
         <div className='px-3'>
           <Row>
             <div className="col-12 col-md-4 mb-1 d-flex">
-
             </div>
             <div className="col-12 col-md-4 mb-1 d-flex">
             </div>

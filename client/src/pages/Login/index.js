@@ -5,8 +5,8 @@ import API from '../../utils/API';
 import cookies from '../../utils/cookie';
 
 function Login(props) {
-  const roomState = useContext(RoomContext);
-  const { setUserData } = useContext(RoomContext);
+  const {roomState} = useContext(RoomContext);
+  const { roomState: {setUserData} } = useContext(RoomContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [validation, setValidation] = useState('');

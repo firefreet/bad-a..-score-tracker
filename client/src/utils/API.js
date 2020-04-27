@@ -1,15 +1,13 @@
 import axios from 'axios';
 
 export default {
-
-  // Creates a new random 4 digit room number
-  createRoom: () => {
-    return axios.put('/api/rooms/create');
-  },
   
   // Gets the room with the given id
   getRoom: function(roomId) {
     return axios.get('/api/rooms/id/' + roomId);
+  },
+  toggleCorrect: (roomId,userId,questionId,value)=>{
+    return axios.put(`/api/rooms/correct?roomId=${roomId}&userId=${userId}&questionId=${questionId}&value=${value}` );
   },
   // Deletes the answer with the given id
   // deleteAnswer: function(roomId,user,round,question) {
@@ -40,4 +38,10 @@ export default {
   isAuthenticated: function() {
     return axios.get(`api/users/auth`);
   },
+  newQuestion: (roomId,roundNum)=>{
+    return axios.put(`/api/rooms/${roomId}/${roundNum}/question`)
+  },
+  newRound: (roomId)=>{
+    return axios.put(`/api/rooms/${roomId}/round`)
+  }
 };

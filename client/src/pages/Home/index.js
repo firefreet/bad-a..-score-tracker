@@ -5,7 +5,7 @@ import { Col, Row, Container } from "../../components/Grid";
 
 function Home() {
   const [roomNumber, setRoomNumber] = useState('');
-  const { loggedIn } = useContext(RoomContext);
+  const {roomState: { loggedIn }} = useContext(RoomContext);
   const roomNumberRef = useRef();
 
   useEffect(() => {

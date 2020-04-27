@@ -1,40 +1,37 @@
 const { RoomModel, User } = require('../models');
 const { Types: { ObjectId } } = require('mongoose');
-RoomModel.fin
+// RoomModel.fin
 
 module.exports = {
 
   createRoom: (req, res) => {
-    console.log('inside create room function')
-    console.log(req.body);
     let room = req.body;
     room.admin = ObjectId(req.user.id);
 
     RoomModel.create(room)
-      .then(( { _id } ) => User.findOneAndUpdate({ 
-        "_id": ObjectId(req.user.id) 
-      }, {$push: { rooms: _id } }, { new: true }))
-        .then(user => {
-          User.findById(user._id)
-            .populate('rooms')
-            .then(user => {
-              let userObj = {
-                _id: user._id,
-                tokens: user.tokens,
-                rooms: user.rooms,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                email: user.email
-              }
-              res.status(200).json(userObj);
-            })
-            .catch(err => {console.log(err)})
-        })
-        .catch(err => {res.status(400).json(err);})
+      .then(({ _id }) => User.findOneAndUpdate({
+        "_id": ObjectId(req.user.id)
+      }, { $push: { rooms: _id } }, { new: true }))
+      .then(user => {
+        User.findById(user._id)
+          .populate('rooms')
+          .then(user => {
+            let userObj = {
+              _id: user._id,
+              tokens: user.tokens,
+              rooms: user.rooms,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              email: user.email
+            }
+            res.status(200).json(userObj);
+          })
+          .catch(err => { console.log(err) })
+      })
+      .catch(err => { res.status(400).json(err); })
   },
 
   populateRooms: (req, res) => {
-    console.log('in populate function');
     User.findById(req.user._id)
       .populate('rooms')
       .then(user => {
@@ -53,58 +50,58 @@ module.exports = {
       })
   },
 
-  getFirstRoom: (req,res)=>{
-    RoomModel.findOne({}).then(room=>{
+  getFirstRoom: (req, res) => {
+    RoomModel.findOne({}).then(room => {
       res.json(room);
     })
-    .catch(err=>{
-      res.json(err);
-    })
-  },
-
-  // creates a randomly generated 4 digit room number
-  createRoom: (req, res) => {
-    // if letters stay lowercase it reduces some confusion
-    // also, 0, o, 1, i , and l aren't used due to possible text confusion
-    // 4 digit room numbers with 31 possible characters:
-    // 31 * 31 * 31 * 31 = 923,521 possible room numbers
-    const chars = '23456789abcdefghjkmnpqrstuvwxyz';
-
-    // get all rooms
-    RoomModel.find({})
-      .then(results => {
-
-        // variable to exit while loop
-        let duplicateRoom = true;
-        let roomNumber = '';
-        while (duplicateRoom) {
-
-          // generate a new 4 digit random room number
-          roomNumber = '';
-          for (let i = 0; i < 4; i++) {
-            const rand = Math.floor(Math.random() * chars.length);
-            roomNumber += chars.charAt(rand);
-          }
-
-          duplicateRoom = false;
-          // loop through all current room numbers to verify
-          // that the new room number is unique
-          for (let i = 0; i < results.length; i++) {
-            if (results[i].roomID === roomNumber) {
-              // if the room number happens to exist already,
-              // restart the while loop to generate a new number
-              duplicateRoom = true;
-              console.log('duplicate room found');
-              break;
-            }
-          }
-        }
-        res.send(roomNumber);
-      })
       .catch(err => {
         res.json(err);
-      });
+      })
   },
+
+  // // creates a randomly generated 4 digit room number
+  // createRoom: (req, res) => {
+  //   // if letters stay lowercase it reduces some confusion
+  //   // also, 0, o, 1, i , and l aren't used due to possible text confusion
+  //   // 4 digit room numbers with 31 possible characters:
+  //   // 31 * 31 * 31 * 31 = 923,521 possible room numbers
+  //   const chars = '23456789abcdefghjkmnpqrstuvwxyz';
+
+  //   // get all rooms
+  //   RoomModel.find({})
+  //     .then(results => {
+
+  //       // variable to exit while loop
+  //       let duplicateRoom = true;
+  //       let roomNumber = '';
+  //       while (duplicateRoom) {
+
+  //         // generate a new 4 digit random room number
+  //         roomNumber = '';
+  //         for (let i = 0; i < 4; i++) {
+  //           const rand = Math.floor(Math.random() * chars.length);
+  //           roomNumber += chars.charAt(rand);
+  //         }
+
+  //         duplicateRoom = false;
+  //         // loop through all current room numbers to verify
+  //         // that the new room number is unique
+  //         for (let i = 0; i < results.length; i++) {
+  //           if (results[i].roomID === roomNumber) {
+  //             // if the room number happens to exist already,
+  //             // restart the while loop to generate a new number
+  //             duplicateRoom = true;
+  //             console.log('duplicate room found');
+  //             break;
+  //           }
+  //         }
+  //       }
+  //       res.send(roomNumber);
+  //     })
+  //     .catch(err => {
+  //       res.json(err);
+  //     });
+  // },
 
   getRoom: (req, res) => {
     const id = req.params.id;
@@ -115,6 +112,63 @@ module.exports = {
       .catch(err => {
         res.json(err);
       })
+  },
+  toggleCorrect: async (req, res) => {
+    let { roomId, userId, questionId, value } = req.query
+    value = value === 'true' ? true : false
+    try {
+      const update = await RoomModel.updateOne({
+        '_id': ObjectId(roomId)
+      }, {
+        $set: {
+          'participants.$[i].responses.$[j].correctInd': value
+        }
+      },
+        {
+          'arrayFilters': [{
+            'i._id': ObjectId(userId)
+          }, {
+            'j._id': ObjectId(questionId)
+          }]
+        }
+      )
+      res.send(update);
+    } catch (err) {
+      console.log(err)
+      res.send(err)
+    }
+
+  },
+
+  newQuestion: async (req, res) => {
+    const { id, roundNum } = req.params;
+    try {
+      const update = await RoomModel.findOne(
+        { '_id': ObjectId(id) },
+        // { $set: { 'rounds.[i]': 5 } },
+        // { 'arrayFilters': [{ 'i': roundNum }] }
+        async function (err, doc) {
+          doc.rounds[roundNum] = doc.rounds[roundNum] + 1
+          const update = await RoomModel.updateOne({ '_id': ObjectId(id) }, { $set: { rounds: doc.rounds } });
+          err ? console.log(err) : false;
+          res.send(doc.rounds[roundNum] + "");
+        }
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  },
+
+  newRound: async (req, res) => {
+    try {
+      const { id } = req.params;
+      await RoomModel.updateOne({ '_id': ObjectId(id) }, { $push: { rounds: 1 } })
+      const updated = await RoomModel.findOne({ '_id': ObjectId(id) })
+      res.send(updated.rounds);
+    }
+    catch (err) {
+      console.log(err);
+    }
   },
 
   saveAnswer: (req, res) => {
@@ -143,7 +197,6 @@ module.exports = {
             // add their answer in
             update = await RoomModel.updateOne({ '_id': ObjectId(roomId), 'participants.name': userName }, { $push: { 'participants.$.responses': { 'answer': answer, 'questionNumber': questionNumber, 'roundNumber': roundNumber } } })
           }
-          console.log(update);
           res.json(update);
         }
       } catch (err) {
