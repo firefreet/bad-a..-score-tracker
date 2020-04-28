@@ -8,7 +8,7 @@ router.route("/register")
   .post(validator.registrationValidator, userController.register);
 // MATCHES -> "/api/users/login"
 router.route("/login")
-  .post(userController.login);
+  .post(validator.loginValidator, userController.login);
 
   // MATCHES -> "/api/users/auth"
 router.route('/auth')

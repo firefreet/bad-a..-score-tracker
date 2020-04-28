@@ -38,7 +38,6 @@ function RoomManager() {
       })
   }
 
-
   const joinRoom = async (e) => {
     const _id = e.target.getAttribute('id');
     const newRoom = await API.getRoom(_id)
