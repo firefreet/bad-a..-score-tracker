@@ -6,6 +6,10 @@ export default {
   getRoom: function(roomId) {
     return axios.get('/api/rooms/id/' + roomId);
   },
+  // Gets the room with the given Room Code
+  getRoomByCode: function(code) {
+    return axios.get('/api/rooms/code/' + code);
+  },
   toggleCorrect: (roomId,userId,questionId,value)=>{
     return axios.put(`/api/rooms/correct?roomId=${roomId}&userId=${userId}&questionId=${questionId}&value=${value}` );
   },

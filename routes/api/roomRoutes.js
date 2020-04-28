@@ -5,8 +5,12 @@ const isAuthorized = require('../../middleware/auth');
 
 router.get('/',controller.getFirstRoom);
 
-// './api/rooms/:id'
+// './api/rooms/id/:id'
 router.get('/id/:id',controller.getRoom);
+
+// './api/rooms/code/:code
+router.route('/code/:code')
+  .get(controller.getRoomByCode);
 
 // './api/rooms/:id/question
 router.put('/:id/:roundNum/question',controller.newQuestion);

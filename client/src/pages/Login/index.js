@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
+import { Link } from 'react-router-dom';
 import { Col, Row, Container } from "../../components/Grid";
 import RoomContext from '../../utils/RoomContext';
 import API from '../../utils/API';
@@ -10,7 +11,6 @@ function Login(props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [validation, setValidation] = useState('');
-
 
   const emailRef = useRef();
   const passwordRef = useRef();
@@ -42,8 +42,11 @@ function Login(props) {
 
     API.login(userData)
       .then(res => {
-        setValidation('');
+
         let matchedUser = res.data.user._doc;
+
+        if (matchedUser) { setValidation(''); }
+
         let userCookie = matchedUser.tokens;
         let user = {
           _id: matchedUser._id,
@@ -100,10 +103,11 @@ function Login(props) {
             <button
               onClick={handleSubmit}
               type="submit"
-              className="btn btn-secondary"
+              className="btn btn-warning"
             >
               Login</button>
           </form>
+
           {validation !== '' ?
             <div className="alert alert-danger alert-dismissible fade show mt-3" role="alert">
                 <strong>Warning: </strong> {validation}
@@ -111,6 +115,10 @@ function Login(props) {
                   <span aria-hidden="true">&times;</span>
                 </button>
             </div> : ''}
+
+          <div className="mt-4 border px-3 py-3 text-center">
+            Not a member? <Link to="/register">Register</Link>
+          </div>
         </Col>
       </Row>
     </Container>

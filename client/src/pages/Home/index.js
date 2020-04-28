@@ -1,34 +1,46 @@
 import React, { useEffect, useState, useRef, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import RoomContext from '../../utils/RoomContext';
+import API from '../../utils/API';
 import { Col, Row, Container } from "../../components/Grid";
 
-function Home() {
-  const [roomNumber, setRoomNumber] = useState('');
-  const {roomState: { loggedIn }} = useContext(RoomContext);
-  const roomNumberRef = useRef();
+function Home(props) {
+  const [roomCode, setRoomCode] = useState('');
+  const {roomState: { loggedIn }, roomState, setRoomState} = useContext(RoomContext);
+  const roomCodeRef = useRef();
 
   useEffect(() => {
     console.log('Homepage useEffect')
-    }, []);
+    console.log(roomState)
+    }, [roomState]);
 
   function handleInput(e) {
     switch (e.target.id) {
-      case 'roomNumber':
-        setRoomNumber(e.target.value.slice(0,4));
+      case 'roomCode':
+        setRoomCode(e.target.value.slice(0,4));
         break;
       default:
         break;
     }
-    console.log(roomNumber);
   }
 
 
-  function handleJoin(e) {
+  const joinRoomByCode = async (e) => {
     e.preventDefault();
-    console.log(roomNumber);
-  }
+    try {
+      if (!roomCode) throw new Error ('You Must Enter a Room Code');
+      console.log(roomCode);
+      const newRoom = await API.getRoomByCode(roomCode);
+      console.log(newRoom);
+      if (!newRoom.data[0]) throw new Error ('Room Does Not Exisit');
 
+      await setRoomState({ ...roomState, roomData: newRoom.data[0] })
+      // console.log(roomState)
+      props.history.push('./userroom')
+    } catch (err) {
+      console.log(err)
+    }
+  }
   
   return (
     <Container classes="container mt-5">
@@ -41,20 +53,20 @@ function Home() {
         <Col>
           <form className='mt-4'>
             <div className="form-group">
-              <label htmlFor="roomNumber">Enter 4-Digit Room Number</label>
+              <label htmlFor="roomCode">Enter 4-Digit Room Code</label>
               <input
                 onChange={handleInput}
-                ref={roomNumberRef}
-                value={roomNumber}
+                ref={roomCodeRef}
+                value={roomCode}
                 type="text"
                 className="form-control"
-                id="roomNumber"
-                aria-describedby="Room Number"
-                placeholder="Room Number" />
+                id="roomCode"
+                aria-describedby="Room Code"
+                placeholder="Room Code" />
             </div>
             <div className="d-flex justify-content-between">
               <button
-                onClick={handleJoin}
+                onClick={joinRoomByCode}
                 type="submit"
                 className="btn btn-warning btn-sm"
               >Join Room</button>

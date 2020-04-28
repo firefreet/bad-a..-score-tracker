@@ -113,6 +113,17 @@ module.exports = {
         res.json(err);
       })
   },
+  getRoomByCode: (req, res) => {
+    const code = req.params.code;
+    console.log(code);
+    RoomModel.find({'roomID': code, 'active': true})
+      .then(room => {
+        res.json(room);
+      })
+      .catch(err => {
+        res.json(err)
+      })
+  },
   toggleCorrect: async (req, res) => {
     let { roomId, userId, questionId, value } = req.query
     value = value === 'true' ? true : false

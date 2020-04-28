@@ -126,7 +126,7 @@ function Register(props) {
             <button
               onClick={handleSubmit}
               type="submit"
-              className="btn btn-secondary"
+              className="btn btn-warning"
             >
               Submit</button>
           </form>

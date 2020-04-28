@@ -25,8 +25,19 @@ const registrationSchema = Joi.object({
     .required()
 });
 
+const loginSchema = Joi.object({
+  email: Joi.string()
+    .email({ minDomainSegments: 2 })
+    .required(),
+  password: Joi.string()
+    .min(6)
+    .max(75)
+    .required()
+});
+
 
 module.exports = {
   contactSchema: contactSchema,
-  registrationSchema: registrationSchema
+  registrationSchema: registrationSchema,
+  loginSchema: loginSchema
 }
