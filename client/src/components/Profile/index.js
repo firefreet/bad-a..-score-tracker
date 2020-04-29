@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from "react";
 import { useHistory } from 'react-router-dom';
-import { Col, Row, Container } from "../Grid";
+import { Col, Row } from "../Grid";
 import RoomContext from '../../utils/RoomContext';
 import API from '../../utils/API';
 import cookies from '../../utils/cookie';
