@@ -11,8 +11,7 @@ function Profile() {
 
 
   useEffect(() => {
-    console.log(roomState.userData);
-  }, [roomState]);
+  }, []);
 
 
   const handleLogout = async (e) => {
