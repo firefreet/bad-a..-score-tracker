@@ -23,6 +23,10 @@ export default {
   populateRooms: function() {
     return axios.get('/api/rooms/populate');
   },
+  //toggle active room
+  toggleRoomActive: function(state, id) {
+    return axios.put(`/api/rooms/active/${state}/${id}`)
+  },
   // add for testing
   getFirstRoom: ()=>{
     return axios.get('/api/rooms/')

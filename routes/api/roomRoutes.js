@@ -28,6 +28,10 @@ router.route('/create')
 router.route('/populate')
   .get(isAuthorized, controller.populateRooms);
 
+// Mathces => /api/rooms/active/:state/:id
+router.route('/active/:state/:id')
+  .put(isAuthorized, controller.toggleRoomActive);
+
 // router.delete('/answer',controller.deleteAnswer);
 
 router.put('/correct',controller.toggleCorrect);
