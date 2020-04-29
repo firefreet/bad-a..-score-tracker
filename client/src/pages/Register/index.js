@@ -1,9 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { Col, Row, Container } from "../../components/Grid";
 import API from '../../utils/API';
 import cookies from '../../utils/cookie';
+import RoomContext from '../../utils/RoomContext';
 
 function Register(props) {
+  const { roomState, setRoomState, roomState: { userData, setUserData}} = useContext(RoomContext);
   const [firstName, setfirstName] = useState('');
   const [validFirstName, setValidFirstName] = useState(true);
   const [lastName, setlastName] = useState('');
@@ -126,13 +128,13 @@ function Register(props) {
     API.register(userRegData)
       .then(res => {
         setValidation('');
-        setUser(res.data.user._doc);
+        setUserData(res.data.user._doc,roomState);
 
         let userCookie = res.data.user._doc.tokens;
         cookies.setCookie('user', userCookie, 1);
 
         // set for later
-        props.history.push('/userroom');
+        props.history.push('/rooms');
 
       })
       .catch(err => {

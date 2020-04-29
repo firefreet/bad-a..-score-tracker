@@ -6,18 +6,19 @@ import { Col, Row, Container } from "../../components/Grid";
 
 function Home(props) {
   const [roomCode, setRoomCode] = useState('');
-  const {roomState: { loggedIn }, roomState, setRoomState} = useContext(RoomContext);
+  const { roomState: { loggedIn }, roomState, setRoomState } = useContext(RoomContext);
   const roomCodeRef = useRef();
+  const participantHandleRef = useRef();
 
   useEffect(() => {
     console.log('Homepage useEffect')
     console.log(roomState)
-    }, [roomState]);
+  }, [roomState]);
 
   function handleInput(e) {
     switch (e.target.id) {
       case 'roomCode':
-        setRoomCode(e.target.value.slice(0,4));
+        setRoomCode(e.target.value.slice(0, 4));
         break;
       default:
         break;
@@ -28,20 +29,20 @@ function Home(props) {
   const joinRoomByCode = async (e) => {
     e.preventDefault();
     try {
-      if (!roomCode) throw new Error ('You Must Enter a Room Code');
+      if (!roomCode) throw new Error('You Must Enter a Room Code');
       console.log(roomCode);
       const newRoom = await API.getRoomByCode(roomCode);
       console.log(newRoom);
-      if (!newRoom.data[0]) throw new Error ('Room Does Not Exisit');
+      if (!newRoom.data[0]) throw new Error('Room Does Not Exisit');
 
-      await setRoomState({ ...roomState, roomData: newRoom.data[0] })
+      await setRoomState({ ...roomState, participant: participantHandleRef.current.value ,roomData: newRoom.data[0] })
       // console.log(roomState)
       props.history.push('./userroom')
     } catch (err) {
       console.log(err)
     }
   }
-  
+
   return (
     <Container classes="container mt-5">
       <Row>
@@ -63,6 +64,15 @@ function Home(props) {
                 id="roomCode"
                 aria-describedby="Room Code"
                 placeholder="Room Code" />
+              {roomCode.length === 4 ? (
+                <input
+                  onChange={handleInput}
+                  ref={participantHandleRef}
+                  type="text"
+                  className="form-control"
+                  id="participantHandle"
+                  aria-describedby="User Handle"
+                  placeholder="User Handle" />) : ""}
             </div>
             <div className="d-flex justify-content-between">
               <button

@@ -45,7 +45,7 @@ function UserRoom() {
   function submitAnswer() {
     const respData = {
       roomId: roomData._id,
-      userName: 'Maleficent',/* to be made dynamic */
+      userName: roomState.participant,/* to be made dynamic */
       answer: answer.current.value,
       questionNumber: selectedQuestion,
       roundNumber: selectedRound,
@@ -148,13 +148,13 @@ function UserRoom() {
       <RoomNav admin="false" room={roomData.roomID} round={roomData.rounds.length} question={roomData.rounds[roomData.rounds.length - 1]} />
       <Container>
         <Row>
-          <label className='w-100 text-center'>Current Broadcast</label>
+  <label className='w-100 text-center'>Current Broadcast</label>
         </Row>
         <Row>
           <textarea rows='6' className='mx-auto w-75 bg-light' placeholder=' .... no content from game admin yet' readOnly>{roomData ? roomData.brodcast : ""}</textarea>
         </Row>
         <Row>
-          <label className='mx-auto'>Your Response</label>
+          <label className='mx-auto'>{roomState.participant}'s Response</label>
         </Row>
         <Row>
           <textarea ref={answer} onChange={allowSubmit} rows='6' className='mx-auto w-75' placeholder=' .... enter your answers here'></textarea>
