@@ -24,14 +24,12 @@ function RoomManager(props) {
 
   function handleNewRoom(e) {
     e.preventDefault();
-    console.log('Clicked Add New Room Button');
     let roomData = {
       active: true,
       roomID: Math.floor(Math.random() * 10000),
     }
     API.createRoom(roomData)
       .then(res => {
-        console.log(res);
         setUserData(true, res.data, roomState);
       })
       .catch(err => {
@@ -42,8 +40,7 @@ function RoomManager(props) {
   const joinRoom = async (e) => {
     const _id = e.target.getAttribute('id');
     const newRoom = await API.getRoom(_id)
-    await setRoomState({ ...roomState, roomData: newRoom.data[0] })
-    console.log(roomState)
+    setRoomState({ ...roomState, roomData: newRoom.data[0] })
     history.push('./adminroom')
   }
 
