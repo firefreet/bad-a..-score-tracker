@@ -5,10 +5,8 @@ const { Types: { ObjectId } } = require('mongoose');
 module.exports = {
 
   createRoom: (req, res) => {
-    console.log('inside create room function')
     let room = req.body;
     room.admin = ObjectId(req.user._id);
-    console.log(room);
 
     RoomModel.create(room)
       .then(({ _id }) => {
@@ -121,7 +119,6 @@ module.exports = {
   },
   getRoomByCode: (req, res) => {
     const code = req.params.code;
-    console.log(code);
     RoomModel.find({'roomID': code, 'active': true})
       .then(room => {
         res.json(room);
