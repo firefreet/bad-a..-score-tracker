@@ -100,5 +100,25 @@ User.findByCredentials = async (email, password) => {
   return user;
 };
 
+User.populateRooms = async(id) => {
+  console.log(id);
+  let user = await User.findById(id)
+  .populate('rooms')
+  .then(user => {
+    console.log('inside then function');
+    let userObj = {
+      _id: user._id,
+      tokens: user.tokens,
+      rooms: user.rooms,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email
+    }
+    return userObj;
+  });
+  return user;
+}
+
+
 
 module.exports = User;
