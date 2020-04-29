@@ -3,10 +3,11 @@ import { useHistory } from 'react-router-dom';
 import RoomContext from '../../utils/RoomContext';
 import API from '../../utils/API';
 import { Col, Row, Container } from "../../components/Grid";
+import Profile from '../../components/Logout';
 
 //ROOM MANAGER
 
-function RoomManager() {
+function RoomManager(props) {
   const { roomState: { userData, setUserData }, roomState, setRoomState } = useContext(RoomContext);
   const history = useHistory();
 
@@ -89,12 +90,11 @@ if (userData.rooms.length > 0) {
             <button
               className="btn btn-warning btn-sm mt-3"
               onClick={handleNewRoom}
-            >
-              Create New Room
-              </button>
+            >Create New Room</button>
           </div>
         </Col>
       </Row>
+      <Profile />
     </Container>
   )
 }

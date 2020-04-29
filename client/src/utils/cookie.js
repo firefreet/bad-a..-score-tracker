@@ -20,6 +20,10 @@ export default {
       }
     }
     return "";
+  },
+  deleteCookie: function(cname) {
+    var name = cname + "=; ";
+    document.cookie = name + 'expires=Thu, 01, Jan 1970 00:00:00 UTC; path=/;' 
   }
 }
 
