@@ -15,8 +15,8 @@ const isAuthroizedRoute = async (req, res, next) => {
     let cookie = value.split('user=').pop().split(';').shift();
     const decoded = jwt.verify(cookie, process.env.JWT_SECRET);
     const userArray = await db.User.find({
-      _id: mongojs.ObjectId(decoded.id),
-      tokens: cookie             
+      "_id": mongojs.ObjectId(decoded.id),
+      "tokens": cookie             
     });
      
     const user = userArray[0];
@@ -25,8 +25,11 @@ const isAuthroizedRoute = async (req, res, next) => {
       throw new Error('USER NOT FOUND: NO RECORD IN DATABASE');
     }
 
+    const populatedUser = await db.User.populateRooms(user._id);
+    console.log(populatedUser)
+
     req.token = cookie;
-    req.user = user;
+    req.user = populatedUser;
     console.log('success');
     next();  
     

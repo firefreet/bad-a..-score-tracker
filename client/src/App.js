@@ -23,6 +23,7 @@ function App() {
     roomData: modelRoom,
     loggedIn: decodeURIComponent(document.cookie) !== '',
     userData: null,
+    participant: "",
     setUserData: (userObj, currentRoomState) => {
       setRoomState({ ...currentRoomState, loggedIn: true, userData: userObj })
     },

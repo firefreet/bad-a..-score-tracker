@@ -42,8 +42,8 @@ function Login(props) {
 
     API.login(userData)
       .then(res => {
-
-        let matchedUser = res.data.user._doc;
+        console.log(res);
+        let matchedUser = res.data.populatedUser;
 
         if (matchedUser) { setValidation(''); }
 
@@ -57,7 +57,7 @@ function Login(props) {
           email: matchedUser.email
         }
         cookies.setCookie('user', userCookie, 1);
-        setUserData(user);
+        setUserData(user, roomState);
 
         // set for later
         props.history.push('/rooms');

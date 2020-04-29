@@ -29,8 +29,12 @@ module.exports = {
         req.body.password
       );
       const token = await user.generateAuthToken();
+      
+      const populatedUser = await db.User.populateRooms(user._id);
+      console.log('after populate rooms');
+      console.log(populatedUser);
 
-      res.status(200).send({ user, token });
+      res.status(200).send({ populatedUser, token });
     } catch (err) {
       res.status(400).send('ERROR FROM LOGIN FUNCTION');
     }
