@@ -59,4 +59,12 @@ module.exports = {
       res.status(400).send("USER IS NOT LOGGED IN");
     }
   },
+  logOut: async function (req, res) {
+    let user = await db.User.findByIdAndUpdate(req.user._id, {tokens: ''}, {new: true})
+    console.log(user);
+    req.user=null
+    req.token=null
+    res.status(200).send('LOGGED OUT');
+
+  }
 }

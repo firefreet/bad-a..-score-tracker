@@ -57,7 +57,7 @@ function Login(props) {
           email: matchedUser.email
         }
         cookies.setCookie('user', userCookie, 1);
-        setUserData(user, roomState);
+        setUserData(true, user, roomState);
 
         // set for later
         props.history.push('/rooms');

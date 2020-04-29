@@ -15,11 +15,14 @@ function Profile() {
   }, [roomState]);
 
 
-  function handleLogout(e) {
+  const handleLogout = async (e) => {
     e.preventDefault();
+    let res = await API.logout()
+    let user = null
+    setUserData(false, user, roomState)
     cookies.deleteCookie('user');
-    history.push('/')
-
+    console.log(res);
+    history.push('/');
   }
 
   return (

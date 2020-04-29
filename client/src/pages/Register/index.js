@@ -5,7 +5,7 @@ import cookies from '../../utils/cookie';
 import RoomContext from '../../utils/RoomContext';
 
 function Register(props) {
-  const { roomState, setRoomState, roomState: { userData, setUserData}} = useContext(RoomContext);
+  const { roomState, roomState: {setUserData}} = useContext(RoomContext);
   const [firstName, setfirstName] = useState('');
   const [validFirstName, setValidFirstName] = useState(true);
   const [lastName, setlastName] = useState('');
@@ -16,7 +16,6 @@ function Register(props) {
   const [validPassword, setValidPassword] = useState(true);
   const [validation, setValidation] = useState('');
   const [finishedForm, setFinishedForm] = useState(true);
-  const [user, setUser] = useState('');
 
   const firstNameRef = useRef();
   const lastNameRef = useRef();
@@ -128,7 +127,7 @@ function Register(props) {
     API.register(userRegData)
       .then(res => {
         setValidation('');
-        setUserData(res.data.user._doc,roomState);
+        setUserData(true, res.data.user._doc,roomState);
 
         let userCookie = res.data.user._doc.tokens;
         cookies.setCookie('user', userCookie, 1);

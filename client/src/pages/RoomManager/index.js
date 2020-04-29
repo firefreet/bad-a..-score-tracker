@@ -32,7 +32,7 @@ function RoomManager(props) {
     API.createRoom(roomData)
       .then(res => {
         console.log(res);
-        setUserData(res.data, roomState);
+        setUserData(true, res.data, roomState);
       })
       .catch(err => {
         console.log(err);
