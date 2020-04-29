@@ -11,13 +11,13 @@ function RoomManager() {
   const history = useHistory();
 
   useEffect(() => {
-    if (userData.rooms.length > 0) {
-      API.populateRooms()
-        .then(async (res) => {
-          await setUserData(res.data,roomState)
-        })
-        .catch(err => { console.log(err) })
-    }
+    // if (userData.rooms.length > 0) {
+    //   API.populateRooms()
+    //     .then(async (res) => {
+    //       await setUserData(res.data,roomState)
+    //     })
+    //     .catch(err => { console.log(err) })
+    // }
 
   }, []);
 

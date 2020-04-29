@@ -5,30 +5,36 @@ const { Types: { ObjectId } } = require('mongoose');
 module.exports = {
 
   createRoom: (req, res) => {
+    console.log('inside create room function')
     let room = req.body;
-    room.admin = ObjectId(req.user.id);
+    room.admin = ObjectId(req.user._id);
+    console.log(room);
 
     RoomModel.create(room)
-      .then(({ _id }) => User.findOneAndUpdate({
-        "_id": ObjectId(req.user.id)
-      }, { $push: { rooms: _id } }, { new: true }))
-      .then(user => {
-        User.findById(user._id)
-          .populate('rooms')
+      .then(({ _id }) => {
+        User.findOneAndUpdate(
+          {"_id": ObjectId(req.user._id)}, 
+          { $push: { rooms: _id } }, { new: true }
+        )
           .then(user => {
-            let userObj = {
-              _id: user._id,
-              tokens: user.tokens,
-              rooms: user.rooms,
-              firstName: user.firstName,
-              lastName: user.lastName,
-              email: user.email
-            }
-            res.status(200).json(userObj);
+            User.findById(user._id)
+              .populate('rooms')
+              .then(user => {
+                let userObj = {
+                  _id: user._id,
+                  tokens: user.tokens,
+                  rooms: user.rooms,
+                  firstName: user.firstName,
+                  lastName: user.lastName,
+                  email: user.email
+                }
+                res.status(200).json(userObj);
+              })
+              .catch(err => { res.status(400).send('FAILED TO POPULATE ROOMS')})
           })
-          .catch(err => { console.log(err) })
-      })
-      .catch(err => { res.status(400).json(err); })
+        .catch(err => { res.status(400).send('FAILED TO FIND AND UPDATE USER')})
+    })
+    .catch(err => {res.status(400).send('FAILED TO CREATE ROOM')})
   },
 
   populateRooms: (req, res) => {
