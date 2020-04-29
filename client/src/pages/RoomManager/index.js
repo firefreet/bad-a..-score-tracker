@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useRef, useReducer } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import RoomContext from '../../utils/RoomContext';
 import API from '../../utils/API';
@@ -14,7 +14,6 @@ function RoomManager(props) {
   useEffect(() => {
   }, []);
 
-  let stateRef = useRef();
 
   function handleNewRoom(e) {
     e.preventDefault();
@@ -95,7 +94,7 @@ if (userData.rooms.length > 0) {
                 {userData.rooms.map((room,i) => (
                   <tr key={i}>
                     <td>{room.roomID}</td>
-                    <td ref={stateRef}>
+                    <td>
                       <div className="custom-control custom-switch">
                         <input onChange={toggleRoomActive} type="checkbox" checked={room.active} data-state={room.active} className="custom-control-input" id={room._id} />
                         <label className="custom-control-label" htmlFor={room._id}></label>
