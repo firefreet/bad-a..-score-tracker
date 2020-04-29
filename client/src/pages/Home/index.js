@@ -11,9 +11,7 @@ function Home(props) {
   const participantHandleRef = useRef();
 
   useEffect(() => {
-    console.log('Homepage useEffect')
-    console.log(roomState)
-  }, [roomState]);
+  }, []);
 
   function handleInput(e) {
     switch (e.target.id) {
@@ -25,18 +23,14 @@ function Home(props) {
     }
   }
 
-
   const joinRoomByCode = async (e) => {
     e.preventDefault();
     try {
       if (!roomCode) throw new Error('You Must Enter a Room Code');
-      console.log(roomCode);
       const newRoom = await API.getRoomByCode(roomCode);
-      console.log(newRoom);
       if (!newRoom.data[0]) throw new Error('Room Does Not Exisit');
 
-      await setRoomState({ ...roomState, participant: participantHandleRef.current.value ,roomData: newRoom.data[0] })
-      // console.log(roomState)
+      setRoomState({ ...roomState, participant: participantHandleRef.current.value ,roomData: newRoom.data[0] })
       props.history.push('./userroom')
     } catch (err) {
       console.log(err)
