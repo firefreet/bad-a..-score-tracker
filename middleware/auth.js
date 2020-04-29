@@ -27,8 +27,17 @@ const isAuthroizedRoute = async (req, res, next) => {
 
     const populatedUser = await db.User.populateRooms(user._id);
 
+    let updatedUser = {
+      _id: populatedUser._id,
+      tokens: populatedUser.tokens,
+      rooms: populatedUser.rooms,
+      firstName: populatedUser.firstName,
+      lastName: populatedUser.lastName,
+      email: populatedUser.email
+    }
+
     req.token = cookie;
-    req.user = populatedUser;
+    req.user = updatedUser;
     console.log('success');
     next();  
     

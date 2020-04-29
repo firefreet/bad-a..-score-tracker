@@ -42,18 +42,9 @@ module.exports = {
   getAuthorizedUser: async function (req, res) {
     try {
       console.log('Gathering User Data');
-      let userData = req.user;
-      let user = {
-        _id: userData._id,
-        tokens: userData.tokens,
-        rooms: userData.rooms,
-        firstName: userData.firstName,
-        lastName: userData.lastName,
-        email: userData.email
-      }
-      if (userData) {
+      if (req.user) {
         console.log('successfully gathered');
-        res.status(200).send(user);
+        res.status(200).send(req.user);
       } 
     } catch (err) {
       res.status(400).send("USER IS NOT LOGGED IN");
