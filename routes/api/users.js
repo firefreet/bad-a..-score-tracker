@@ -9,8 +9,10 @@ router.route("/register")
 // MATCHES -> "/api/users/login"
 router.route("/login")
   .post(validator.loginValidator, userController.login);
-
-  // MATCHES -> "/api/users/auth"
+// MATCHES -> "/api/users/logout"
+router.route("/logout")
+  .post(isAuthroizedRoute, userController.logOut);
+// MATCHES -> "/api/users/auth"
 router.route('/auth')
   .get(isAuthroizedRoute, userController.getAuthorizedUser);
 

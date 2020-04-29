@@ -16,8 +16,7 @@ function Login(props) {
   const passwordRef = useRef();
 
   useEffect(() => {
-    console.log(roomState);
-  }, [roomState]);
+  }, []);
 
   function handleInput(e) {
     switch (e.target.id) {
@@ -57,7 +56,7 @@ function Login(props) {
           email: matchedUser.email
         }
         cookies.setCookie('user', userCookie, 1);
-        setUserData(user, roomState);
+        setUserData(true, user, roomState);
 
         // set for later
         props.history.push('/rooms');

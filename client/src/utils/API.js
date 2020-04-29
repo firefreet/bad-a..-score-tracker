@@ -23,6 +23,10 @@ export default {
   populateRooms: function() {
     return axios.get('/api/rooms/populate');
   },
+  //toggle active room
+  toggleRoomActive: function(state, id) {
+    return axios.put(`/api/rooms/active/${state}/${id}`)
+  },
   // add for testing
   getFirstRoom: ()=>{
     return axios.get('/api/rooms/')
@@ -38,6 +42,9 @@ export default {
   // Login User
   login: function(userData) {
     return axios.post(`/api/users/login`, userData);
+  },
+  logout: function() {
+    return axios.post('/api/users/logout');
   },
   isAuthenticated: function() {
     return axios.get(`api/users/auth`);

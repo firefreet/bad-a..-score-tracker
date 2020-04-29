@@ -74,7 +74,7 @@ User.prototype.toJSON = function () {
 };
 
 User.findByCredentials = async (email, password) => {
-  console.log('insde findByCredentialsFunction');
+
   const userArray = await User.find(
     {
       email: email,
@@ -82,15 +82,12 @@ User.findByCredentials = async (email, password) => {
   );
 
   let user = userArray[0];
-  console.log(user);
 
   if (!user) {
     throw new Error("Unable to login");
   }
 
   const isMatch = await bcrypt.compare(password, user.password);
-
-  console.log(isMatch);
 
   if (!isMatch) {
     console.log("Password mismatch");
@@ -101,11 +98,9 @@ User.findByCredentials = async (email, password) => {
 };
 
 User.populateRooms = async(id) => {
-  console.log(id);
   let user = await User.findById(id)
   .populate('rooms')
   .then(user => {
-    console.log('inside then function');
     let userObj = {
       _id: user._id,
       tokens: user.tokens,

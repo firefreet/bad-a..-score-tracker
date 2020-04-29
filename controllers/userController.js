@@ -29,10 +29,8 @@ module.exports = {
         req.body.password
       );
       const token = await user.generateAuthToken();
-      
+    
       const populatedUser = await db.User.populateRooms(user._id);
-      console.log('after populate rooms');
-      console.log(populatedUser);
 
       res.status(200).send({ populatedUser, token });
     } catch (err) {
@@ -41,22 +39,20 @@ module.exports = {
   },
   getAuthorizedUser: async function (req, res) {
     try {
-      console.log('Gathering User Data');
-      let userData = req.user;
-      let user = {
-        _id: userData._id,
-        tokens: userData.tokens,
-        rooms: userData.rooms,
-        firstName: userData.firstName,
-        lastName: userData.lastName,
-        email: userData.email
-      }
-      if (userData) {
-        console.log('successfully gathered');
-        res.status(200).send(user);
+      if (req.user) {
+        console.log('successfully gathered user data');
+        res.status(200).send(req.user);
       } 
     } catch (err) {
       res.status(400).send("USER IS NOT LOGGED IN");
     }
   },
+  logOut: async function (req, res) {
+    let user = await db.User.findByIdAndUpdate(req.user._id, {tokens: ''}, {new: true})
+    console.log(user);
+    req.user=null
+    req.token=null
+    res.status(200).send('LOGGED OUT');
+
+  }
 }

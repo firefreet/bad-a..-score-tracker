@@ -5,10 +5,8 @@ const { Types: { ObjectId } } = require('mongoose');
 module.exports = {
 
   createRoom: (req, res) => {
-    console.log('inside create room function')
     let room = req.body;
     room.admin = ObjectId(req.user._id);
-    console.log(room);
 
     RoomModel.create(room)
       .then(({ _id }) => {
@@ -121,7 +119,6 @@ module.exports = {
   },
   getRoomByCode: (req, res) => {
     const code = req.params.code;
-    console.log(code);
     RoomModel.find({'roomID': code, 'active': true})
       .then(room => {
         res.json(room);
@@ -129,6 +126,34 @@ module.exports = {
       .catch(err => {
         res.json(err)
       })
+  },
+  toggleRoomActive: async (req, res) => {
+    let state = req.params.state;
+    let id = req.params.id;
+    
+    try {
+      let updatedRoom = await RoomModel.findByIdAndUpdate(id, {active: state}, {new: true})
+    } catch (err) {
+      res.status(400).send('COULDNT UPDATE ROOM STATE')
+    }
+    try {
+      let updatedUser = await User.findById(req.user._id).populate('rooms')
+
+      let userObj = {
+        _id: updatedUser._id,
+        tokens: updatedUser.tokens,
+        rooms: updatedUser.rooms,
+        firstName: updatedUser.firstName,
+        lastName: updatedUser.lastName,
+        email: updatedUser.email
+      }
+
+      res.status(200).json(userObj)
+
+    } catch (err) {
+      res.status(400).send('COULDNT POPULATE ROOMS');
+    }
+
   },
   toggleCorrect: async (req, res) => {
     let { roomId, userId, questionId, value } = req.query

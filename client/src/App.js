@@ -24,8 +24,8 @@ function App() {
     loggedIn: decodeURIComponent(document.cookie) !== '',
     userData: null,
     participant: "",
-    setUserData: (userObj, currentRoomState) => {
-      setRoomState({ ...currentRoomState, loggedIn: true, userData: userObj })
+    setUserData: (loginStatus, userObj, currentRoomState) => {
+      setRoomState({ ...currentRoomState, loggedIn: loginStatus, userData: userObj })
     },
     // emit: (contentName, content) => { socket.emit(contentName, content) }
     selectedQuestion: 1,
