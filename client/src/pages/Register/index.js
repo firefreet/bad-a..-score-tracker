@@ -59,7 +59,7 @@ function Register(props) {
         cookies.setCookie('user', userCookie, 1);
 
         // set for later
-        props.history.push('/rooms');
+        props.history.push('/userroom');
 
       })
       .catch(err => {
