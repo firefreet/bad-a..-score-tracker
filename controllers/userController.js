@@ -40,7 +40,7 @@ module.exports = {
   getAuthorizedUser: async function (req, res) {
     try {
       if (req.user) {
-        console.log('successfully gathered');
+        console.log('successfully gathered user data');
         res.status(200).send(req.user);
       } 
     } catch (err) {
