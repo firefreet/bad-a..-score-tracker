@@ -29,10 +29,8 @@ module.exports = {
         req.body.password
       );
       const token = await user.generateAuthToken();
-      
+    
       const populatedUser = await db.User.populateRooms(user._id);
-      console.log('after populate rooms');
-      console.log(populatedUser);
 
       res.status(200).send({ populatedUser, token });
     } catch (err) {
@@ -41,7 +39,6 @@ module.exports = {
   },
   getAuthorizedUser: async function (req, res) {
     try {
-      console.log('Gathering User Data');
       if (req.user) {
         console.log('successfully gathered');
         res.status(200).send(req.user);
