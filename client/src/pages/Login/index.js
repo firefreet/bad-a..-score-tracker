@@ -16,8 +16,7 @@ function Login(props) {
   const passwordRef = useRef();
 
   useEffect(() => {
-    console.log(roomState);
-  }, [roomState]);
+  }, []);
 
   function handleInput(e) {
     switch (e.target.id) {
