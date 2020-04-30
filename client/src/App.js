@@ -19,8 +19,11 @@ import './global.scss';
 function App() {
 
   // const socket = io();
+  // const [roomData, setRoomData] = useState(modelRoom);
+  const [count, setCount] = useState(0);
   const [roomState, setRoomState] = useState({
     roomData: modelRoom,
+    currentRoomID: '',
     loggedIn: decodeURIComponent(document.cookie) !== '',
     userData: null,
     participant: "",
@@ -50,9 +53,30 @@ function App() {
   // });
 
   useEffect(() => {
+    const i = setInterval(async() => {
+      // console.log('in interval')
+      const loc = document.location.pathname;
+      setCount(count >= 1000 ? 0 : count + 1)
+      if(loc === '/userroom' || loc === '/adminroom') {
+        const newData = await API.getRoom(roomState.roomData._id);
+        console.log('new data =')
+        console.log(newData.data[0].rounds);
+        setRoomState({...roomState,roomData: newData.data[0]})
+      }      
+    }, 10000);
+    return ()=>clearInterval(i);
+  }, [count]);
+
+  useEffect(()=>{
+    console.log('roomstate');
+    console.log(roomState.roomData.rounds)
+  },[roomState])
+
+  useEffect(() => {
     API.isAuthenticated()
       .then(res => {
         API.getFirstRoom().then(data => {
+
           setRoomState({ ...roomState, loggedIn: true, userData: res.data, roomData: data.data });
         }).catch(err => {
           console.log(err);
