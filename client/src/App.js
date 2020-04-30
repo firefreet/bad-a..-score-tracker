@@ -59,7 +59,7 @@ function App() {
         })
       })
       .catch(err => {
-        console.log(err.response)
+        console.log('USER IS NOT LOGGED IN', err.response)
         setRoomState(currentState => ({ ...currentState, loggedIn: false, userData: null }));
       });
   }, []);
