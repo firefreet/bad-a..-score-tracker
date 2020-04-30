@@ -3,6 +3,7 @@ import { Col, Row, Container } from "../../components/Grid";
 import API from '../../utils/API';
 import cookies from '../../utils/cookie';
 import RoomContext from '../../utils/RoomContext';
+import TopBar from "../../components/TopBar";
 
 function Register(props) {
   const { roomState, roomState: {setUserData}} = useContext(RoomContext);
@@ -145,80 +146,83 @@ function Register(props) {
   }
 
   return (
-    <Container classes="container mt-5">
-      <Row>
-        <Col>
-          <h3>Register</h3>
-          <hr />
-          <form>
-            <div className="form-row">
-              <div className="form-group col-md-6">
-                <label htmlFor="firstName">First Name</label>
+    <div>
+      <TopBar />
+      <Container>
+        <Row>
+          <Col>
+            <h3>Register</h3>
+            <hr />
+            <form>
+              <div className="form-row">
+                <div className="form-group col-md-6">
+                  <label htmlFor="firstName">First Name</label>
+                  <input
+                    onChange={handleInput}
+                    ref={firstNameRef}
+                    type="text"
+                    className="form-control"
+                    id="fname"
+                    aria-describedby="firstName"
+                    placeholder="Enter First Name" />
+                    {!validFirstName ? invalidFirstName : null}
+                </div>
+                <div className="form-group col-md-6">
+                  <label htmlFor="lastName">Last Name</label>
+                  <input
+                    onChange={handleInput}
+                    ref={lastNameRef}
+                    type="text"
+                    className="form-control"
+                    id="lname"
+                    aria-describedby="lastName"
+                    placeholder="Enter Last Name" />
+                    {!validLastName ? invalidLastName : null}
+                </div>
+              </div>
+              <div className="form-group">
+                <label htmlFor="exampleInputEmail1">Email address</label>
                 <input
                   onChange={handleInput}
-                  ref={firstNameRef}
-                  type="text"
+                  ref={emailRef}
+                  type="email"
                   className="form-control"
-                  id="fname"
-                  aria-describedby="firstName"
-                  placeholder="Enter First Name" />
-                  {!validFirstName ? invalidFirstName : null}
+                  id="email"
+                  aria-describedby="email"
+                  placeholder="Enter Email" />
+                  {!validEmail ? invalidEmail : null}
               </div>
-              <div className="form-group col-md-6">
-                <label htmlFor="lastName">Last Name</label>
+              <div className="form-group">
+                <label htmlFor="password">Password</label>
                 <input
                   onChange={handleInput}
-                  ref={lastNameRef}
-                  type="text"
+                  ref={passwordRef}
+                  type="password"
                   className="form-control"
-                  id="lname"
-                  aria-describedby="lastName"
-                  placeholder="Enter Last Name" />
-                  {!validLastName ? invalidLastName : null}
+                  id="password"
+                  aria-describedby="password"
+                  placeholder="Enter Password" />
+                  {!validPassword ? invalidPassword : null}
               </div>
-            </div>
-            <div className="form-group">
-              <label htmlFor="exampleInputEmail1">Email address</label>
-              <input
-                onChange={handleInput}
-                ref={emailRef}
-                type="email"
-                className="form-control"
-                id="email"
-                aria-describedby="email"
-                placeholder="Enter Email" />
-                {!validEmail ? invalidEmail : null}
-            </div>
-            <div className="form-group">
-              <label htmlFor="password">Password</label>
-              <input
-                onChange={handleInput}
-                ref={passwordRef}
-                type="password"
-                className="form-control"
-                id="password"
-                aria-describedby="password"
-                placeholder="Enter Password" />
-                {!validPassword ? invalidPassword : null}
-            </div>
-            <button
-              onClick={handleSubmit}
-              type="submit"
-              className="btn btn-warning"
-            >
-              Submit</button>
-              {!finishedForm ? incompleteForm : null}
-          </form>
-          {validation !== '' ?
-            <div className="alert alert-danger alert-dismissible fade show mt-3" role="alert">
-                <strong>Warning: </strong> {validation}
-                <button type="button" className="close" data-dismiss="alert" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-            </div> : ''}
-        </Col>
-      </Row>
-    </Container>
+              <button
+                onClick={handleSubmit}
+                type="submit"
+                className="btn btn-warning"
+              >
+                Submit</button>
+                {!finishedForm ? incompleteForm : null}
+            </form>
+            {validation !== '' ?
+              <div className="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+                  <strong>Warning: </strong> {validation}
+                  <button type="button" className="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+              </div> : ''}
+          </Col>
+        </Row>
+      </Container>
+    </div>
   )
 };
 
