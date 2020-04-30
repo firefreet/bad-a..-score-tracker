@@ -42,7 +42,6 @@ function Login(props) {
 
     API.login(userData)
       .then(res => {
-        console.log(res);
         let matchedUser = res.data.populatedUser;
 
         if (matchedUser) { setValidation(''); }

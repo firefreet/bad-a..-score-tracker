@@ -1,11 +1,19 @@
 import React from 'react';
-import { Container } from '../Grid';
+import { Container, Row, Col } from '../Grid';
 import './style.scss';
 
-function TopBar(props) {
+function TopBar({ noTitle }) {
 
   return (
-  <Container classes="container-fluid topBar" />
+  <div className="topBar">
+    <Container>
+      <Row>
+        <Col>
+          {noTitle ? 'Ready for some trivia?' : 'Response.io!'}
+        </Col>
+      </Row>
+    </Container>
+  </div>
   )
 }
 

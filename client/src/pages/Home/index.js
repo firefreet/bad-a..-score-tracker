@@ -40,11 +40,12 @@ function Home(props) {
 
   return (
     <div>
-      <TopBar />
+      <TopBar noTitle />
       <Container>
         <Row>
           <Col>
             <h3>Response.io!</h3>
+            <hr />
           </Col>
         </Row>
         <Row>
