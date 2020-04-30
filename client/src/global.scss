@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Alegreya&family=Montserrat:wght@400;700&family=Sen:wght@400;700&display=swap');
+
+$theme-colors: (
+  "primary": #525f7f,
+  "danger": #f76C6C,
+  "warning": #F8E9A1,
+  "success": #3F8F77,
+  "info": #A8D0E6
+);
+
+@import '../node_modules/bootstrap/scss/bootstrap.scss';
+
+body, table, .navbar-light, .navbar-brand, select {
+  font-family: 'Sen', sans-serif;
+  font-weight: 400;
+  color: #525f7f!important;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.responseIoLink {
+  background: -webkit-gradient(linear,left top,right top,from(#ff8a00),to(#e52e71));
+  background: linear-gradient(45deg,#ff8a00,#e52e71);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  -webkit-text-decoration-color: #ff8a00!important;
+  text-decoration-color: #ff8a00!important;
+  font-weight: 700;
+  padding-bottom: .15rem;
+  cursor: pointer;
+}
+
+.responseIoLink:hover {
+  background: -webkit-gradient(linear,left top,right top,from(#525f7f),to(#e52e71));
+  background: linear-gradient(45deg,#525f7f,#e52e71);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+

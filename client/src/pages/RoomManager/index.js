@@ -1,9 +1,10 @@
 import React, { useEffect, useContext } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import RoomContext from '../../utils/RoomContext';
 import API from '../../utils/API';
 import { Col, Row, Container } from "../../components/Grid";
 import Profile from '../../components/Profile';
+import TopBar from '../../components/TopBar';
 
 //ROOM MANAGER
 
@@ -34,46 +35,52 @@ function RoomManager(props) {
     const _id = e.target.getAttribute('id');
     const newRoom = await API.getRoom(_id)
     setRoomState({ ...roomState, roomData: newRoom.data[0] })
-    history.push('./adminroom')
+    // history.push('./adminroom')
   }
 
   const toggleRoomActive = async (e) => {
-    // console.log(e.target);
     let id = e.target.id;
     let state = e.target.dataset.state === 'true' ? false : true;
-    // console.log(id, state);
     let res = await API.toggleRoomActive(state, id);
     setUserData(true, res.data, roomState);    
   }
 
 if (userData.rooms.length === 0) {
   return (
-    <Container classes="container mt-5">
-      <Row>
-        <Col>
-          <h3>{userData.firstName}'s Rooms</h3>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <div className='mt-3'>
-            <button
-              className="btn btn-warning btn-sm mt-3"
-              onClick={handleNewRoom}
-            >
-              Create First Room
-              </button>
-          </div>
-        </Col>
-      </Row>
-    </Container>
+    <div>
+      <TopBar />
+      <Container>
+        <Row>
+          <Col>
+            <h3>{userData.firstName}'s Rooms</h3>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <div className="mt-4 border px-3 py-3 text-center">
+              Looks Like you Don't Have Any Open Rooms! <a role="button" className="responseIoLink" onClick={handleNewRoom}>Open Your First Room</a>
+            </div>
+            <div className='mt-3'>
+              <button
+                className="btn btn-warning btn-sm mt-3"
+                onClick={handleNewRoom}
+              >
+                Create First Room
+            </button>
+            </div>
+          </Col>
+        </Row>
+      </Container>
+    </div>
   )
 }
 
 if (userData.rooms.length > 0) {
 
   return (
-    <Container classes="container mt-5">
+    <div>
+    <TopBar />
+    <Container>
       <Row>
         <Col>
           <h3>{userData.firstName}'s Rooms</h3>
@@ -85,22 +92,22 @@ if (userData.rooms.length > 0) {
             <table className='table table-striped table-sm'>
               <thead>
                 <tr>
-                  <th scope='col'>Room #</th>
-                  <th scope='col'>Active</th>
-                  <th scope='col'>Action</th>
+                  <th scope='col' className="pl-3">Room #</th>
+                  <th scope='col' className="text-center">Active</th>
+                  <th scope='col' className="text-right pr-3">Action</th>
                 </tr>
               </thead>
               <tbody>
                 {userData.rooms.map((room,i) => (
                   <tr key={i}>
-                    <td>{room.roomID}</td>
-                    <td>
+                    <td className="pl-3">{room.roomID}</td>
+                    <td className="text-center">
                       <div className="custom-control custom-switch">
                         <input onChange={toggleRoomActive} type="checkbox" checked={room.active} data-state={room.active} className="custom-control-input" id={room._id} />
                         <label className="custom-control-label" htmlFor={room._id}></label>
                       </div>
                     </td>
-                    <td><button className='btn btn-outline-success btn-sm' onClick={joinRoom} id={room._id}>Enter</button></td>
+                    <td className="text-right pr-3"><Link to="/adminroom" className="responseIoLink" onClick={joinRoom} id={room._id}>Enter</Link></td>
                   </tr>
                 ))}
               </tbody>
@@ -114,6 +121,7 @@ if (userData.rooms.length > 0) {
       </Row>
       <Profile />
     </Container>
+    </div>
   )
 }
 

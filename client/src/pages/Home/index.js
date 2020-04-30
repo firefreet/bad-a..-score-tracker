@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import RoomContext from '../../utils/RoomContext';
 import API from '../../utils/API';
 import { Col, Row, Container } from "../../components/Grid";
+import TopBar from '../../components/TopBar';
 
 function Home(props) {
   const [roomCode, setRoomCode] = useState('');
@@ -38,53 +39,56 @@ function Home(props) {
   }
 
   return (
-    <Container classes="container mt-5">
-      <Row>
-        <Col>
-          <h1>Response.io!</h1>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <form className='mt-4'>
-            <div className="form-group">
-              <label htmlFor="roomCode">Enter 4-Digit Room Code</label>
-              <input
-                onChange={handleInput}
-                ref={roomCodeRef}
-                value={roomCode}
-                type="text"
-                className="form-control"
-                id="roomCode"
-                aria-describedby="Room Code"
-                placeholder="Room Code" />
-              {roomCode.length === 4 ? (
+    <div>
+      <TopBar />
+      <Container>
+        <Row>
+          <Col>
+            <h3>Response.io!</h3>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <form className='mt-3'>
+              <div className="form-group">
+                <label htmlFor="roomCode">Enter 4-Digit Room Code</label>
                 <input
                   onChange={handleInput}
-                  ref={participantHandleRef}
+                  ref={roomCodeRef}
+                  value={roomCode}
                   type="text"
                   className="form-control"
-                  id="participantHandle"
-                  aria-describedby="User Handle"
-                  placeholder="User Handle" />) : ""}
-            </div>
-            <div className="d-flex justify-content-between">
-              <button
-                onClick={joinRoomByCode}
-                type="submit"
-                className="btn btn-warning btn-sm"
-              >Join Room</button>
-              <Link to={loggedIn ? '/rooms' : '/login'}>
+                  id="roomCode"
+                  aria-describedby="Room Code"
+                  placeholder="Room Code" />
+                {roomCode.length === 4 ? (
+                  <input
+                    onChange={handleInput}
+                    ref={participantHandleRef}
+                    type="text"
+                    className="form-control mt-2"
+                    id="participantHandle"
+                    aria-describedby="User Handle"
+                    placeholder="User Handle" />) : ""}
+              </div>
+              <div className="d-flex justify-content-between">
                 <button
-                  className="btn btn-outline-primary btn-sm login-link ml-2">
-                  Open New Room
-                </button>
-              </Link>
-            </div>
-          </form>
-        </Col>
-      </Row>
-    </Container>
+                  onClick={joinRoomByCode}
+                  type="submit"
+                  className="btn btn-warning btn-sm"
+                >Join Room</button>
+                <Link to={loggedIn ? '/rooms' : '/login'}>
+                  <button
+                    className="btn btn-outline-primary btn-sm login-link ml-2">
+                    Open New Room
+                  </button>
+                </Link>
+              </div>
+            </form>
+          </Col>
+        </Row>
+      </Container>
+    </div>
   )
 
 };

@@ -14,7 +14,7 @@ import NoMatch from './pages/NoMatch';
 import Home from './pages/Home';
 import GenerateRoom from './pages/GenerateRoom';
 import modelRoom from './utils/modelRoom';
-import './global.css';
+import './global.scss';
 
 function App() {
 
