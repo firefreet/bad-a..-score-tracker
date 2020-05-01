@@ -1,10 +1,10 @@
 import React from 'react';
 
 const RoomContext = React.createContext({
+  roomData: {},
   loggedIn: false,
   userData: {},
   setUserData: ()=>{},
-  roomData: {},
   emit: ()=>{},
   selectedQuestion: 1,
   selectedRound: 1,

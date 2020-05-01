@@ -20,6 +20,9 @@ router.put('/:id/round',controller.newRound);
 // './api/rooms/answer'
 router.put('/answer',controller.saveAnswer);
 
+// /api/room/:_id/broadcast
+router.put('/:_id/broadcast',controller.sendBroadcast);
+
 // Matches => /api/rooms/create
 router.route('/create') 
   .post(isAuthorized, controller.createRoom);

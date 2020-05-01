@@ -7,6 +7,15 @@ import RoomContext from '../../utils/RoomContext';
 import GoToQModal from '../../components/GoToQModal';
 import RndQstSelectors from '../../components/RndQstSelectors';
 
+// function to establish current state references to check against as previous when state changes
+function usePrevious(value) {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = value;
+  })
+  return ref.current;
+}
+
 function UserRoom() {
   const answer = useRef();
   const submit = useRef();
@@ -20,24 +29,31 @@ function UserRoom() {
     setRoomState
   } = useContext(RoomContext);
   const [showGoTo, setShowGoTo] = useState(false);
+  const prevRoundQuestion = usePrevious(roomData.rounds);
+  const prevRoom_Id = usePrevious(roomData._id);
 
   useEffect(() => {
-      showResponse(false);
+    showResponse(false);
   }, [roomData, selectedQuestion, selectedRound]);
 
-  // hide GoToQMOdal
+  // hide GoToQModal
   const handleClose = () => {
     setShowGoTo(false);
   }
 
   // set flag to allow changing <select>'s option to Current Round & Q
   const goToQ = () => {
+    // console.log('gotoQ function')
     updateGoToCurr(true, roomState);
     setShowGoTo(false);
   }
 
   useEffect(() => {
-    if (roomData.rounds.length > 1 || roomData.rounds[0] > 1) {
+    const currRound = roomData.rounds.length;
+    if (
+      (roomData.rounds.length > 1 || roomData.rounds[0] > 1) &&
+      (roomData._id !== prevRoom_Id || prevRoundQuestion.length !== currRound || prevRoundQuestion[currRound - 1] !== roomData.rounds[currRound - 1])
+    ) {
       setShowGoTo(true)
     };
   }, [roomData._id, roomData.rounds])
@@ -100,32 +116,50 @@ function UserRoom() {
     let qN = selectedQuestion;
     let rN = selectedRound;
     if (goTo) {
+      // console.log('go to inside show response')
       rN = roomData.rounds.length;
       qN = roomData.rounds[rN - 1];
-      setRoomState({...roomState, roomData: {...roomData, selectedQuestion: qN, selectedRound: rN}})
+      setRoomState({ ...roomState, selectedQuestion: qN, selectedRound: rN })
     }
+    // console.log(roomState.roomData.participants);
     // get index of user from the Room's participant list array
     let userIndex = roomData.participants.findIndex(element => {
-      return element.name === 'Maleficent' /* to be made dynamic */
+      return element.name === roomState.participant
     })
     // if the user was found...
     if (userIndex !== -1) {
       // get the index of the user's answer to the selected Round & Question
       let answerIndex = roomData.participants[userIndex].responses.findIndex(element => {
+        console.log('response Question Number' +element.questionNumber)
+        console.log('response Round Number ' + element.roundNumber)
+        console.log('selected Question ' + qN)
+        console.log('selected Round ' + rN)
         return (element.questionNumber === qN && element.roundNumber === rN)
       })
       // if the answer was found...
       if (answerIndex !== -1) {
         // display the answer
-        ans.value = '';
         ans.value = roomData.participants[userIndex].responses[answerIndex].answer;
-      } else {
-        // answer not found for selected Round/Question
-        ans.value = '';
       }
-    } else {
+      else {
+        // answer not found for selected Round/Question
+        // if also not the current round & question
+        console.log('answer not found')
+        console.log(roomState);
+        // if (selectedRound !== roomData.rounds.length && selectedQuestion !== roomData.rounds[roomData.rounds.length - 1])
+        // // blank the answer
+        // {
+          ans.value = '';
+        // }
+
+      }
+    }
+    else {
       // user not found (so no answers yet)
-      ans.value = '';
+      // also confirm that the this is not the current round/question
+      if (selectedRound !== roomData.rounds.length && selectedQuestion !== roomData.rounds[roomData.rounds.length - 1]) 
+      // then blank it.
+      { ans.value = ''; }
     }
     // get the current round
     let currRound = roomData.rounds.length;
@@ -140,7 +174,10 @@ function UserRoom() {
   }
   // will run twice for since it gets goToCurrent is getting toggled immediately back by another component
   useEffect(() => {
-    showResponse(true);
+    // console.log('goTo current?:' + goToCurrent);
+    if(goToCurrent) {
+      showResponse(true);
+    }
   }, [goToCurrent])
 
   return (
@@ -148,10 +185,10 @@ function UserRoom() {
       <RoomNav admin="false" room={roomData.roomID} round={roomData.rounds.length} question={roomData.rounds[roomData.rounds.length - 1]} />
       <Container>
         <Row>
-  <label className='w-100 text-center'>Current Broadcast</label>
+          <label className='w-100 text-center'>Current Broadcast</label>
         </Row>
         <Row>
-          <textarea rows='6' className='mx-auto w-75 bg-light' placeholder=' .... no content from game admin yet' readOnly>{roomData ? roomData.brodcast : ""}</textarea>
+          <textarea rows='6' className='mx-auto w-75 bg-light' placeholder=' .... no content from game admin yet' readOnly value={roomData ? roomData.broadcast : ""}></textarea>
         </Row>
         <Row>
           <label className='mx-auto'>{roomState.participant}'s Response</label>

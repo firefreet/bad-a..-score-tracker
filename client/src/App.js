@@ -20,6 +20,8 @@ import './global.scss';
 function App() {
 
   // const socket = io();
+  // const [roomData, setRoomData] = useState(modelRoom);
+  const [count, setCount] = useState(0);
   const [roomState, setRoomState] = useState({
     roomData: modelRoom,
     loggedIn: decodeURIComponent(document.cookie) !== '',
@@ -32,13 +34,16 @@ function App() {
     selectedQuestion: 1,
     selectedRound: 1,
     updateSelectedQuestion: (selectedQuestion, currentRoomState) => {
+      // console.log('update selected Question called')
       setRoomState({ ...currentRoomState, selectedQuestion })
     },
     updateSelectedRound: (selectedRound, currentRoomState) => {
+      // console.log('update selected round called')
       setRoomState({ ...currentRoomState, selectedRound })
     },
     goToCurrent: false,
     updateGoToCurr: async (val, currRoomState) => {
+      // console.log('update go to called')
       setRoomState({ ...currRoomState, goToCurrent: val })
     }
   });
@@ -51,9 +56,39 @@ function App() {
   // });
 
   useEffect(() => {
+    const i = setInterval(async () => {
+      // console.log('in interval')
+      const loc = document.location.pathname;
+      setCount(count >= 1000 ? 0 : count + 1)
+      if (loc === '/userroom' || loc === '/adminroom') {
+        try {        // console.log(new Date())
+          // console.log('before set state')
+          // console.log(roomState.roomData._id)
+          const newData = await API.getRoom(roomState.roomData._id);
+          // console.log('new data =')
+          // console.log(newData.data[0].participant);
+          setRoomState({ ...roomState, roomData: newData.data[0] })
+        }
+
+        catch (err) {
+          console.log('unable to get room: ' + roomState.roomData._id)
+        }
+      }
+    }, 1000);
+    return () => clearInterval(i);
+  }, [count, roomState.selectedRound, roomState.selectedQuestion, roomState.roomData._id]);
+
+  useEffect(() => {
+    // console.log('roomstate in use effect of App');
+    // console.log(roomState.roomData._id)
+    // console.log(roomState)
+  }, [roomState])
+
+  useEffect(() => {
     API.isAuthenticated()
       .then(res => {
         API.getFirstRoom().then(data => {
+          // console.log('initial App use effect after auth & get room')
           setRoomState({ ...roomState, loggedIn: true, userData: res.data, roomData: data.data });
         }).catch(err => {
           console.log(err);
@@ -65,7 +100,6 @@ function App() {
       });
   }, []);
 
-  // console.log(roomState);
 
   return (
     <Router>

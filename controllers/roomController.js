@@ -206,7 +206,23 @@ module.exports = {
       console.log(err);
     }
   },
+  sendBroadcast: (req, res) => {
+    // console.log('inside roomController -> sendBroadcast');
+    const { _id } = req.params;
+    // console.log(req.body);
+    const { broadcast } = req.body;
+    // console.log(broadcast);
 
+    RoomModel.updateOne({ '_id': ObjectId(_id) }, { $set: { 'broadcast': broadcast } })
+      .then(update => {
+        res.status(200).send(update);
+      })
+      .catch(err => {
+        console.log('Error on room update inside roomController-> sendBroadcast')
+        console.log(err);
+        res.send(err);
+      })
+  },
   saveAnswer: (req, res) => {
     const answerData = req.body;
     const { roomId, userName, answer, roundNumber, questionNumber } = answerData;
@@ -241,10 +257,9 @@ module.exports = {
       }
     })
   },
-  
   getGameSummary: async (req, res) => {
     let roomCode = req.params.roomCode;
-    let participantNames = await RoomModel.find({roomID: roomCode}).distinct('name');
+    let participantNames = await RoomModel.find({ roomID: roomCode }).distinct('name');
     console.log(participantNames);
   }
 }
