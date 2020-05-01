@@ -15,9 +15,10 @@ module.exports = {
       }
 
       let newUser = await db.User.create(userData)
-        .then(response => {
-          mailer.sendWelcomeEmail(response.email);
-        });
+        // .then(response => {
+          console.log(newUser.email);
+          mailer.sendWelcomeEmail(newUser.email);
+        // });
       let token = await newUser.generateAuthToken();
       res.status(200).send({user: newUser, token});
 
