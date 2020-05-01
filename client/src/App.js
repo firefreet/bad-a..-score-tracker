@@ -60,8 +60,9 @@ function App() {
       // console.log('in interval')
       const loc = document.location.pathname;
       setCount(count >= 1000 ? 0 : count + 1)
-      if (loc === '/userroom' || loc === '/adminroom') {
-        try {        // console.log(new Date())
+      if (loc === '/userroom' || loc === '/adminroom' || loc === '/gamesummary') {
+        try {        
+          // console.log(new Date())
           // console.log('before set state')
           // console.log(roomState.roomData._id)
           const newData = await API.getRoom(roomState.roomData._id);

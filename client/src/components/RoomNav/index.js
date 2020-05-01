@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import {Link} from 'react-router-dom';
 import API from '../../utils/API';
 import RoomContext from '../../utils/RoomContext';
 
@@ -55,9 +56,11 @@ function RoomNav(props) {
             </button>
               </li>
               <li className="nav-item">
-                <button onClick={() => { document.location.replace('/gamesummary') }} className="mx-auto px-0 mb-2" style={{ width: '150px' }} >
-                  Score Board
-            </button>
+                <Link to='gamesummary'>
+                  <button className="mx-auto px-0 mb-2" style={{ width: '150px' }} >
+                    Score Board
+              </button>
+                </Link>
               </li>
             </ul>
           </div>

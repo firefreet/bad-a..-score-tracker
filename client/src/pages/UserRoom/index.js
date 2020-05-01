@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
+import {Link} from 'react-router-dom';
 import { Container, Row } from '../../components/Grid';
 import RoomNav from '../../components/RoomNav';
 import SubmitModal from '../../components/SubmitModal';
@@ -199,9 +200,11 @@ function UserRoom() {
         <br />
         <RndQstSelectors />
         <Row>
-          <button className="px-0" style={{ width: '150px' }} onClick={() => { document.location.replace('/gamesummary') }}>
-            Score Board
-          </button>
+          <Link to='gamesummary'>
+            <button className="px-0" style={{ width: '150px' }}>
+              Score Board
+            </button>
+          </Link>
           <button ref={submit} className='ml-auto btn-disabled' data-toggle='modal' data-target='#submitModal' style={{ width: '150px' }}>
             Submit Answer
           </button>
