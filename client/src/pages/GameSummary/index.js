@@ -9,20 +9,41 @@ import GameSummaryMessage from '../../components/GameSummaryMessage';
 
 //Score Summary
 function GameSummary(props) {
-  const { roomState, setRoomState } = useContext(RoomContext);
-  const [gameSummary, setGameSummary] = useState({});
-  const history = useHistory();
+  const { roomState } = useContext(RoomContext);
+  const [pointSummary, setPointSummary] = useState({});
+  // const history = useHistory();
   let participants = roomState.roomData.participants;
   let roomData = roomState.roomData;
 
   useEffect(() => {
-    console.log(roomState);
-    console.log(participants);
-    console.log(participants.length);
-    console.log(gameSummary);
-  }, [gameSummary]);
+    scoreKeeper();
+  }, []);
 
-  API.gameSummary().then(res => setGameSummary(res)).catch(err => console.log(err));
+  const scoreKeeper = () => {
+    console.log('Tabulating Scores');
+    let participantArr = [];
+    let pointsObj = {};
+    participants.forEach(participant => {
+      participantArr.push(participant.name);
+    })
+    console.log(participantArr);
+
+    participantArr.forEach(name => {
+      let $pointEls = document.getElementsByClassName(`${name}-points`);
+      pointsObj[name] = 0
+      for (let points of $pointEls ) {
+        pointsObj[name] += parseInt(points.innerText)
+      }
+    })
+
+    console.log(pointsObj);
+    setPointSummary(pointsObj);
+
+
+    // setPointSummary('name')
+  }
+
+  // API.gameSummary().then(res => setGameSummary(res)).catch(err => console.log(err));
 
   // If Room Data is empty render this message
   if (!roomState.roomData) {
@@ -62,12 +83,54 @@ function GameSummary(props) {
         </Row>
         <Row>
           <Col>
-            <div>
+            <div className="mt-3">
+
+
+
+
               {participants.map((participant, i) => (
-                <div key={i}>
-                  <div>{participant.name}</div>
+                <div className="mb-2" key={i}>
+
+                  <div className="accordion mt-3 mb-3" id={participant.name + i}>
+                    <div className="card">
+                      <div className="card-header px-2 py-2" id="headingOne">
+                        <div className="d-flex justify-content-between align-items-center">
+                          <div><strong>{participant.name}</strong></div>
+                          <button className="btn btn-link responseIoLink my-0 px-0" type="button" data-toggle="collapse" data-target={'#'+participant.name} aria-expanded="false" aria-controls="collapseOne">
+                            Show {participant.name}'s Details
+                          </button>
+                          <div className='scoreDiv'>Score: <span className="badge badge-light">{pointSummary[participant.name]}</span></div>
+                        </div>
+                      </div>
+
+                      <div id={participant.name} className="collapse" aria-labelledby="score Summary" data-parent={'#'+participant.name + i}>
+                        <div className="card-body">
+                          <table className="table table-striped table-sm">
+                            <thead>
+                              <tr className="text-center">
+                                <th>Correct</th>
+                                <th>Round</th>
+                                <th>Question</th>
+                                <th>Points</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {participant.responses.map((response, i) => (
+                                <tr className="text-center" key={i}>
+                                  <td>{response.correctInd ? (<i className="fas fa-check-circle text-success mr-2"></i>) : (<i className="fas fa-times-circle text-danger mr-2"></i>)}</td>
+                                  <td>{response.roundNumber}</td>
+                                  <td>{response.questionNumber}</td>
+                                  <td className={participant.name + '-points'}>{response.correctInd ? response.points : 0}</td>
+                                </tr>
+                              ))}{/* End Response Loop */}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              ))}
+              ))}{/* End Participant Loop */}
             </div>
           </Col>
         </Row>
