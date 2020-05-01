@@ -1,6 +1,6 @@
 const db = require('../models');
 const bcrypt = require("bcryptjs");
-
+const mailer = require('./mailer');
 
 module.exports = {
   register: async function (req, res) {
@@ -14,7 +14,11 @@ module.exports = {
         password: hashedPassword,
       }
 
-      let newUser = await db.User.create(userData);
+      let newUser = await db.User.create(userData)
+        // .then(response => {
+          console.log(newUser.email);
+          mailer.sendWelcomeEmail(newUser.email);
+        // });
       let token = await newUser.generateAuthToken();
       res.status(200).send({user: newUser, token});
 

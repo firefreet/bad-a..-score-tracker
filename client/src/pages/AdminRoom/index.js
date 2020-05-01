@@ -11,6 +11,7 @@ function AdminRoom() {
   const [tableState, setTableState] = useState([]);
   var table = [];
   const score = useRef();
+  const broadcastField = useRef();
 
   // on new questions or rounds, display user answers
   useEffect(() => {
@@ -45,6 +46,10 @@ function AdminRoom() {
     setTableState(table)
   }
 
+  const clearBroadcast = async (e) => {
+    broadcastField.current.value = '';
+  }
+
   const toggleCorrect = async (e) => {
     let i = e.target.getAttribute('datanum');
     let value = e.target.getAttribute('databool');
@@ -66,14 +71,18 @@ function AdminRoom() {
       <RoomNav admin="true" room={roomData.roomID} round={roomData.rounds.length} question={roomData.rounds[roomData.rounds.length - 1]} />
       <Container>
         <Row>
-          <textarea rows='6' className='mt-2 mx-auto mb-2 mb-2 w-75' placeholder='...type or paste content here to BROADCAST to players ...'></textarea>
+          <textarea rows='6' ref={broadcastField} className='mt-2 mx-auto mb-2 mb-2 w-75' placeholder='...type or paste content here to BROADCAST to players ...'></textarea>
         </Row>
         <Row>
           <div className='mb-2 container-fluid d-flex w-75 p-0'>
-            <button className="btn btn-success btn-sm px-0 mr-auto" style={{ width: '50px' }}>
-              Save
+            <button className="btn btn-success btn-sm px-0 mr-auto" 
+            style={{ width: '50px' }}
+            onClick={sendBroadCast}>
+              Send
               </button>
-            <button className='btn btn-info btn-sm ml-auto mr-0' style={{ width: '50px' }}>
+            <button className='btn btn-info btn-sm ml-auto mr-0'
+              style={{ width: '50px' }}
+              onClick={clearBroadcast}>
               Clear
               </button>
           </div>

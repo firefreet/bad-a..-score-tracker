@@ -33,16 +33,16 @@ function App() {
     selectedQuestion: 1,
     selectedRound: 1,
     updateSelectedQuestion: (selectedQuestion, currentRoomState) => {
-      console.log('update selected Question called')
+      // console.log('update selected Question called')
       setRoomState({ ...currentRoomState, selectedQuestion })
     },
     updateSelectedRound: (selectedRound, currentRoomState) => {
-      console.log('update selected round called')
+      // console.log('update selected round called')
       setRoomState({ ...currentRoomState, selectedRound })
     },
     goToCurrent: false,
     updateGoToCurr: async (val, currRoomState) => {
-      console.log('update go to called')
+      // console.log('update go to called')
       setRoomState({ ...currRoomState, goToCurrent: val })
     }
   });
@@ -60,9 +60,9 @@ function App() {
       const loc = document.location.pathname;
       setCount(count >= 1000 ? 0 : count + 1)
       if(loc === '/userroom' || loc === '/adminroom') {
-        console.log(new Date())
-        console.log('before set statue')
-        console.log(roomState.selectedRound)
+        // // console.log(new Date())
+        // console.log('before set state')
+        // console.log(roomState.selectedRound)
         const newData = await API.getRoom(roomState.roomData._id);
         // console.log('new data =')
         // console.log(newData.data[0].participant);
@@ -73,9 +73,9 @@ function App() {
   }, [count,roomState.selectedRound,roomState.selectedQuestion]);
 
   useEffect(()=>{
-    console.log('roomstate in use effect');
-    console.log(roomState.selectedRound)
-    console.log(roomState)
+    // console.log('roomstate in use effect of App');
+    // console.log(roomState.selectedRound)
+    // console.log(roomState)
   },[roomState])
 
   useEffect(() => {
