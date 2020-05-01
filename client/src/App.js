@@ -40,11 +40,6 @@ function App() {
     updateSelectedRound: (selectedRound, currentRoomState) => {
       // console.log('update selected round called')
       setRoomState({ ...currentRoomState, selectedRound })
-    },
-    goToCurrent: false,
-    updateGoToCurr: async (val, currRoomState) => {
-      // console.log('update go to called')
-      setRoomState({ ...currRoomState, goToCurrent: val })
     }
   });
   // socket.on('new update', function (content) {
@@ -75,13 +70,13 @@ function App() {
           console.log('unable to get room: ' + roomState.roomData._id)
         }
       }
-    }, 1000);
+    }, 500);
     return () => clearInterval(i);
-  }, [count, roomState.selectedRound, roomState.selectedQuestion, roomState.roomData._id]);
+  }, [count, roomState]);
 
   useEffect(() => {
     // console.log('roomstate in use effect of App');
-    // console.log(roomState.roomData._id)
+    // console.log(roomState.selectedRound);
     // console.log(roomState)
   }, [roomState])
 
