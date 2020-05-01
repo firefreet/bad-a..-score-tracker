@@ -257,6 +257,25 @@ module.exports = {
       }
     })
   },
+  deleteAnswer: (req,res)=>{
+    const {roomId,userId,questionId}= req.query;
+    RoomModel.updateOne({'_id': ObjectId(roomId)},
+    {
+      $pull: {
+        'participants.$[i].responses': {'_id': ObjectId(questionId)}
+      }
+    },
+    {'arrayFilters': [
+      {'i._id': ObjectId(userId)}
+    ]}
+    )
+    .then(delRes=>{res.status(200).send(delRes)})
+    .catch(err=>{
+      console.log('Error from deleteAnswer inside roomController');
+      console.log(err);
+      res.status(409).send(err);
+    })
+  },
   getGameSummary: async (req, res) => {
     let roomCode = req.params.roomCode;
     let participantNames = await RoomModel.find({ roomID: roomCode }).distinct('name');
