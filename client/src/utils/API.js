@@ -54,5 +54,8 @@ export default {
   },
   newRound: (roomId)=>{
     return axios.put(`/api/rooms/${roomId}/round`)
+  },
+  gameSummary: (roomCode) => {
+    return axios.get(`/api/rooms/${roomCode}/summary`)
   }
 };
