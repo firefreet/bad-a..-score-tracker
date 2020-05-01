@@ -299,5 +299,22 @@ module.exports = {
                         res.json(err);
                       }
                     })
+                  },
+                  sendBroadcast: (req,res)=>{
+                    // console.log('inside roomController -> sendBroadcast');
+                    const {_id} = req.params;
+                    // console.log(req.body);
+                    const {broadcast} = req.body;
+                    // console.log(broadcast);
+                  
+                    RoomModel.updateOne({'_id': ObjectId(_id)},{$set: {'broadcast': broadcast}})
+                    .then(update=>{
+                      res.status(200).send(update);
+                    })
+                    .catch(err=>{
+                      console.log('Error on room update inside roomController-> sendBroadcast')
+                      console.log(err);
+                      res.send(err);
+                    })
                   }
 }

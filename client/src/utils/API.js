@@ -35,6 +35,9 @@ export default {
   saveAnswer: function(answerData) {
     return axios.put("/api/rooms/answer", answerData);
   },
+  sendBroadcast: (_id,broadcast)=>{
+    return axios.put(`/api/rooms/${_id}/broadcast/`,broadcast);
+  },
   // Register User
   register: function(userRegData) {
     return axios.post(`/api/users/register`, userRegData);

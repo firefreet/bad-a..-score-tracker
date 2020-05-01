@@ -188,7 +188,7 @@ function UserRoom() {
           <label className='w-100 text-center'>Current Broadcast</label>
         </Row>
         <Row>
-          <textarea rows='6' className='mx-auto w-75 bg-light' placeholder=' .... no content from game admin yet' readOnly>{roomData ? roomData.broadcast : ""}</textarea>
+          <textarea rows='6' className='mx-auto w-75 bg-light' placeholder=' .... no content from game admin yet' readOnly value={roomData ? roomData.broadcast : ""}></textarea>
         </Row>
         <Row>
           <label className='mx-auto'>{roomState.participant}'s Response</label>

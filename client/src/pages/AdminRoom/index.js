@@ -46,6 +46,10 @@ function AdminRoom() {
     setTableState(table)
   }
 
+  const sendBroadcast = ()=>{
+    API.sendBroadcast(roomData._id, {broadcast: broadcastField.current.value});
+  }
+
   const clearBroadcast = async (e) => {
     broadcastField.current.value = '';
   }
@@ -77,7 +81,7 @@ function AdminRoom() {
           <div className='mb-2 container-fluid d-flex w-75 p-0'>
             <button className="btn btn-success btn-sm px-0 mr-auto" 
             style={{ width: '50px' }}
-            onClick={sendBroadCast}>
+            onClick={sendBroadcast}>
               Send
               </button>
             <button className='btn btn-info btn-sm ml-auto mr-0'
