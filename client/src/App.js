@@ -56,34 +56,39 @@ function App() {
   // });
 
   useEffect(() => {
-    const i = setInterval(async() => {
+    const i = setInterval(async () => {
       // console.log('in interval')
       const loc = document.location.pathname;
       setCount(count >= 1000 ? 0 : count + 1)
-      if(loc === '/userroom' || loc === '/adminroom') {
-        // // console.log(new Date())
-        // console.log('before set state')
-        // console.log(roomState.selectedRound)
-        const newData = await API.getRoom(roomState.roomData._id);
-        // console.log('new data =')
-        // console.log(newData.data[0].participant);
-        setRoomState({...roomState,roomData: newData.data[0]})
-      }      
-    }, 5000);
-    return ()=>clearInterval(i);
-  }, [count,roomState.selectedRound,roomState.selectedQuestion]);
+      if (loc === '/userroom' || loc === '/adminroom') {
+        try {        // console.log(new Date())
+          // console.log('before set state')
+          // console.log(roomState.roomData._id)
+          const newData = await API.getRoom(roomState.roomData._id);
+          // console.log('new data =')
+          // console.log(newData.data[0].participant);
+          setRoomState({ ...roomState, roomData: newData.data[0] })
+        }
 
-  useEffect(()=>{
+        catch (err) {
+          console.log('unable to get room: ' + roomState.roomData._id)
+        }
+      }
+    }, 1000);
+    return () => clearInterval(i);
+  }, [count, roomState.selectedRound, roomState.selectedQuestion, roomState.roomData._id]);
+
+  useEffect(() => {
     // console.log('roomstate in use effect of App');
-    // console.log(roomState.selectedRound)
+    // console.log(roomState.roomData._id)
     // console.log(roomState)
-  },[roomState])
+  }, [roomState])
 
   useEffect(() => {
     API.isAuthenticated()
       .then(res => {
         API.getFirstRoom().then(data => {
-          console.log('initial App use effect after auth & get room')
+          // console.log('initial App use effect after auth & get room')
           setRoomState({ ...roomState, loggedIn: true, userData: res.data, roomData: data.data });
         }).catch(err => {
           console.log(err);

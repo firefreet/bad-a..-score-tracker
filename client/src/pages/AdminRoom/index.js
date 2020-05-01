@@ -50,8 +50,9 @@ function AdminRoom() {
     API.sendBroadcast(roomData._id, {broadcast: broadcastField.current.value});
   }
 
-  const clearBroadcast = async (e) => {
+  const clearBroadcast = () => {
     broadcastField.current.value = '';
+    API.sendBroadcast(roomData._id,{broadcast: ''})
   }
 
   const toggleCorrect = async (e) => {

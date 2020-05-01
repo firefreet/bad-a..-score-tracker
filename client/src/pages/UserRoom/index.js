@@ -43,7 +43,7 @@ function UserRoom() {
 
   // set flag to allow changing <select>'s option to Current Round & Q
   const goToQ = () => {
-    console.log('gotoQ function')
+    // console.log('gotoQ function')
     updateGoToCurr(true, roomState);
     setShowGoTo(false);
   }
@@ -116,7 +116,7 @@ function UserRoom() {
     let qN = selectedQuestion;
     let rN = selectedRound;
     if (goTo) {
-      console.log('go to inside show response')
+      // console.log('go to inside show response')
       rN = roomData.rounds.length;
       qN = roomData.rounds[rN - 1];
       setRoomState({ ...roomState, selectedQuestion: qN, selectedRound: rN })
@@ -174,7 +174,7 @@ function UserRoom() {
   }
   // will run twice for since it gets goToCurrent is getting toggled immediately back by another component
   useEffect(() => {
-    console.log(goToCurrent);
+    // console.log('goTo current?:' + goToCurrent);
     if(goToCurrent) {
       showResponse(true);
     }
