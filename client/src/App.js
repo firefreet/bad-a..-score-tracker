@@ -13,6 +13,7 @@ import Chat from './pages/Chat';
 import NoMatch from './pages/NoMatch';
 import Home from './pages/Home';
 import GenerateRoom from './pages/GenerateRoom';
+import ScoreSummary from './pages/GameSummary/index.js';
 import modelRoom from './utils/modelRoom';
 import './global.scss';
 
@@ -76,6 +77,7 @@ function App() {
             <Route exact path='/userroom' component={UserRoom} />
             <ProtectedRoute exact path='/adminroom' component={AdminRoom} />
             <ProtectedRoute exact path='/rooms' component={RoomManager} />
+            <ProtectedRoute exact path='/summary' component={ScoreSummary} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
 
