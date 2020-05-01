@@ -17,8 +17,8 @@ export default {
   // deleteAnswer: function(roomId,user,round,question) {
   //   return axios.delete(`/api/rooms/answer?roomId=${roomId}&user=${user}&round=${round}&question=${question}`);
   // },
-  createRoom: function(roomData) {
-    return axios.post('/api/rooms/create', roomData);
+  createRoom: function() {
+    return axios.post('/api/rooms/create');
   },
   populateRooms: function() {
     return axios.get('/api/rooms/populate');

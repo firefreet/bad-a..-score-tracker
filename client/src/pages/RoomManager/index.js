@@ -18,11 +18,11 @@ function RoomManager(props) {
 
   function handleNewRoom(e) {
     e.preventDefault();
-    let roomData = {
-      active: true,
-      roomID: Math.floor(Math.random() * 10000),
-    }
-    API.createRoom(roomData)
+    // let roomData = {
+    //   active: true,
+      // roomID: Math.floor(Math.random() * 10000),
+    // }
+    API.createRoom()
       .then(res => {
         setUserData(true, res.data, roomState);
       })
