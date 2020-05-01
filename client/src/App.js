@@ -77,7 +77,7 @@ function App() {
             <Route exact path='/userroom' component={UserRoom} />
             <ProtectedRoute exact path='/adminroom' component={AdminRoom} />
             <ProtectedRoute exact path='/rooms' component={RoomManager} />
-            <ProtectedRoute exact path='/summary' component={ScoreSummary} />
+            <ProtectedRoute exact path='/gamesummary' component={ScoreSummary} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
 
