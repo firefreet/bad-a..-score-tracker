@@ -9,9 +9,7 @@ const RoomContext = React.createContext({
   selectedQuestion: 1,
   selectedRound: 1,
   updateSelectedQuestion: ()=>{},
-  updateSelectedRound: ()=>{},
-  goToCurrent: false,
-  updateGoToCurr: ()=>{}
+  updateSelectedRound: ()=>{}
 })
 
 export default RoomContext;

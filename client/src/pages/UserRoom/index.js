@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Container, Row } from '../../components/Grid';
 import RoomNav from '../../components/RoomNav';
 import SubmitModal from '../../components/SubmitModal';
@@ -23,9 +23,7 @@ function UserRoom() {
   const submit = useRef();
   const { roomState: { roomData, /* emit, */
     selectedQuestion,
-    selectedRound,
-    updateGoToCurr,
-    goToCurrent
+    selectedRound
   },
     roomState,
     setRoomState
@@ -33,10 +31,14 @@ function UserRoom() {
   const [showGoTo, setShowGoTo] = useState(false);
   const prevRoundQuestion = usePrevious(roomData.rounds);
   const prevRoom_Id = usePrevious(roomData._id);
+  const [goToCurrent, setGoToCurrent] = useState(false);
 
-  useEffect(()=>{
+  useEffect(() => {
     answer.current.value = '';
-  },[])
+    return () => {
+      setGoToCurrent(false);
+    }
+  }, [])
 
   useEffect(() => {
     showResponse(false);
@@ -49,8 +51,8 @@ function UserRoom() {
 
   // set flag to allow changing <select>'s option to Current Round & Q
   const goToQ = () => {
-    // console.log('gotoQ function')
-    updateGoToCurr(true, roomState);
+    console.log('gotoQ function')
+    setGoToCurrent(true);
     setShowGoTo(false);
   }
 
@@ -60,7 +62,7 @@ function UserRoom() {
       (roomData.rounds.length > 1 || roomData.rounds[0] > 1) &&
       (roomData._id !== prevRoom_Id || prevRoundQuestion.length !== currRound || prevRoundQuestion[currRound - 1] !== roomData.rounds[currRound - 1])
     ) {
-      setShowGoTo(true)
+      setShowGoTo(true);
     };
   }, [roomData._id, roomData.rounds])
 
@@ -118,13 +120,18 @@ function UserRoom() {
 
   // looks for previously answered questions and displays if exists
   function showResponse(goTo) {
+    // console.log(goTo);
     let ans = answer.current;
     let qN = selectedQuestion;
     let rN = selectedRound;
+    // console.log('qN: '+qN);
+    // console.log('rN: ' + rN)
     if (goTo) {
       // console.log('go to inside show response')
       rN = roomData.rounds.length;
       qN = roomData.rounds[rN - 1];
+      // console.log(rN);
+      // console.log(qN);
       setRoomState({ ...roomState, selectedQuestion: qN, selectedRound: rN })
     }
     // console.log(roomState.roomData.participants);
@@ -136,10 +143,6 @@ function UserRoom() {
     if (userIndex !== -1) {
       // get the index of the user's answer to the selected Round & Question
       let answerIndex = roomData.participants[userIndex].responses.findIndex(element => {
-        // console.log('response Question Number' +element.questionNumber)
-        // console.log('response Round Number ' + element.roundNumber)
-        // console.log('selected Question ' + qN)
-        // console.log('selected Round ' + rN)
         return (element.questionNumber === qN && element.roundNumber === rN)
       })
       // if the answer was found...
@@ -150,11 +153,9 @@ function UserRoom() {
       else {
         // answer not found for selected Round/Question
         // if also not the current round & question
-        // console.log('answer not found')
-        // console.log(roomState);
         if ((selectedRound !== roomData.rounds.length && selectedQuestion !== roomData.rounds[roomData.rounds.length - 1])
-        || goTo)
-        // blank the answer
+          || goTo)
+        // blank the answer and allow read/write
         {
           ans.value = '';
         }
@@ -164,7 +165,7 @@ function UserRoom() {
     else {
       // user not found (so no answers yet)
       // also confirm that the this is not the current round/question
-      if (selectedRound !== roomData.rounds.length && selectedQuestion !== roomData.rounds[roomData.rounds.length - 1]) 
+      if (selectedRound !== roomData.rounds.length && selectedQuestion !== roomData.rounds[roomData.rounds.length - 1])
       // then blank it.
       { ans.value = ''; }
     }
@@ -172,17 +173,20 @@ function UserRoom() {
     let currRound = roomData.rounds.length;
     // if selected a previous round or question
     if (rN < currRound || (rN === currRound && qN < roomData.rounds[currRound - 1])) {
-      // set to read only
+      // console.log('readOnly')
+      // set to read only 
       toggleReadonly(true);
     } else {
+      // console.log('readWrite')
       // else allow edits
       toggleReadonly(false);
     }
+    // initialize back to false
   }
-  // will run twice for since it gets goToCurrent is getting toggled immediately back by another component
+  // will run twice since it gets goToCurrent is getting toggled immediately back by another component
   useEffect(() => {
     // console.log('goTo current?:' + goToCurrent);
-    if(goToCurrent) {
+    if (goToCurrent) {
       showResponse(true);
     }
   }, [goToCurrent])
@@ -205,7 +209,7 @@ function UserRoom() {
           <textarea ref={answer} onChange={allowSubmit} rows='6' className='mx-auto w-75' placeholder=' .... enter your answers here'></textarea>
         </Row>
         <br />
-        <RndQstSelectors />
+        <RndQstSelectors goToCurrent={goToCurrent} setGoToCurrent={setGoToCurrent}/>
         <Row>
           <Link to='gamesummary'>
             <button className="px-0" style={{ width: '150px' }}>

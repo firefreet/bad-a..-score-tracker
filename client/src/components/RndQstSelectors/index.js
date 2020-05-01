@@ -2,16 +2,14 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Row } from '../../components/Grid';
 import RoomContext from '../../utils/RoomContext';
 
-function RndQstSelectors() {
+function RndQstSelectors(props) {
   const {
     roomState: {
       roomData,
       selectedRound,
       selectedQuestion,
       updateSelectedQuestion,
-      updateSelectedRound,
-      updateGoToCurr,
-      goToCurrent
+      updateSelectedRound
     } } = useContext(RoomContext);
   const { roomState } = useContext(RoomContext);
   const questionSelect = useRef();
@@ -52,10 +50,10 @@ function RndQstSelectors() {
 
   useEffect(() => {
 
-    if (goToCurrent) {
-      if (goToCurrent) {
+    if (props.goToCurrent) {
+      if (props.goToCurrent) {
         async function async() {
-          await updateGoToCurr(false, roomState);
+          await props.setGoToCurrent(false, roomState);
           let rounds = roomData.rounds.length;
           roundSelect.current.value = rounds
           questionSelect.current.value = roomData.rounds[rounds - 1]
@@ -65,7 +63,7 @@ function RndQstSelectors() {
         async();
       }
     }
-  }, [goToCurrent])
+  }, [props.goToCurrent])
 
   return (
     <Row>
