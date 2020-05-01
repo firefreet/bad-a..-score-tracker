@@ -15,7 +15,7 @@ function GameSummary(props) {
 
   useEffect(() => {
     scoreKeeper();
-  }, []);
+  }, [roomState]);
 
   const scoreKeeper = () => {
     console.log('Tabulating Scores');

@@ -38,6 +38,9 @@ export default {
   sendBroadcast: (_id,broadcast)=>{
     return axios.put(`/api/rooms/${_id}/broadcast/`,broadcast);
   },
+  deleteAnswer: (roomId,userId,questionId)=>{
+    return axios.delete(`/api/rooms/answer?roomId=${roomId}&userId=${userId}&questionId=${questionId}`)
+  },
   // Register User
   register: function(userRegData) {
     return axios.post(`/api/users/register`, userRegData);

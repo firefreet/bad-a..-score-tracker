@@ -35,7 +35,8 @@ router.route('/populate')
 router.route('/active/:state/:id')
   .put(isAuthorized, controller.toggleRoomActive);
 
-// router.delete('/answer',controller.deleteAnswer);
+// Matches => /api/rooms/answer
+router.delete('/answer',controller.deleteAnswer);
 
 router.put('/correct',controller.toggleCorrect);
 

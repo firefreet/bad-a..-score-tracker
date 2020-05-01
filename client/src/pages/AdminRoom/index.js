@@ -4,6 +4,7 @@ import RoomContext from '../..//utils/RoomContext';
 import RoomNav from '../../components/RoomNav';
 import RndQstSelectors from '../../components/RndQstSelectors';
 import API from '../../utils/API';
+import TopBar from '../../components/TopBar';
 
 
 function AdminRoom() {
@@ -47,12 +48,40 @@ function AdminRoom() {
   }
 
   const sendBroadcast = ()=>{
-    API.sendBroadcast(roomData._id, {broadcast: broadcastField.current.value});
+    API.sendBroadcast(roomData._id, {broadcast: broadcastField.current.value})
+    .then(resp=>{
+      // console.log(resp);
+    })
+    .catch(err=>{
+      console.log('Error from sendBroadcast');
+      console.log(err)});
   }
 
   const clearBroadcast = () => {
     broadcastField.current.value = '';
     API.sendBroadcast(roomData._id,{broadcast: ''})
+    .then(resp=>{
+      // console.log(resp);
+    })
+    .catch(err=>{
+      console.log('Error from Api.sendBroadcast');
+      console.log(err);
+    })
+  }
+
+  const deleteAnswer = (e)=>{
+    const i = e.target.getAttribute('datanum');
+    const playerRespEl = document.getElementById('playerId' +i);
+    const userId = playerRespEl.getAttribute('userid');
+    const questionId = playerRespEl.getAttribute('questionid');
+    API.deleteAnswer(roomData._id,userId,questionId)
+    .then(delResp=>{
+      // console.log(delResp);
+    })
+    .catch(err=>{
+      console.log('Error from Api.deleteAnswer');
+      console.log(err);
+    })
   }
 
   const toggleCorrect = async (e) => {
@@ -73,6 +102,7 @@ function AdminRoom() {
 
   return (
     <div>
+      <TopBar></TopBar>
       <RoomNav admin="true" room={roomData.roomID} round={roomData.rounds.length} question={roomData.rounds[roomData.rounds.length - 1]} />
       <Container>
         <Row>
@@ -121,7 +151,7 @@ function AdminRoom() {
                       <div ref={score} datascore={v.score} className='text-center'>{v.score}</div>
                     </td>
                     <td className='d-flex'>
-                      <i className="mx-auto fas fa-minus-circle"></i>
+                      <i className="mx-auto fas fa-minus-circle" datanum={i} onClick={deleteAnswer}></i>
                     </td>
                   </tr>
                   <tr>

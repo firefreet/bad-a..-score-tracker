@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
+import {Link} from 'react-router-dom';
 import { Container, Row } from '../../components/Grid';
 import RoomNav from '../../components/RoomNav';
 import SubmitModal from '../../components/SubmitModal';
@@ -6,6 +7,7 @@ import API from '../../utils/API';
 import RoomContext from '../../utils/RoomContext';
 import GoToQModal from '../../components/GoToQModal';
 import RndQstSelectors from '../../components/RndQstSelectors';
+import TopBar from '../../components/TopBar';
 
 // function to establish current state references to check against as previous when state changes
 function usePrevious(value) {
@@ -31,6 +33,10 @@ function UserRoom() {
   const [showGoTo, setShowGoTo] = useState(false);
   const prevRoundQuestion = usePrevious(roomData.rounds);
   const prevRoom_Id = usePrevious(roomData._id);
+
+  useEffect(()=>{
+    answer.current.value = '';
+  },[])
 
   useEffect(() => {
     showResponse(false);
@@ -130,10 +136,10 @@ function UserRoom() {
     if (userIndex !== -1) {
       // get the index of the user's answer to the selected Round & Question
       let answerIndex = roomData.participants[userIndex].responses.findIndex(element => {
-        console.log('response Question Number' +element.questionNumber)
-        console.log('response Round Number ' + element.roundNumber)
-        console.log('selected Question ' + qN)
-        console.log('selected Round ' + rN)
+        // console.log('response Question Number' +element.questionNumber)
+        // console.log('response Round Number ' + element.roundNumber)
+        // console.log('selected Question ' + qN)
+        // console.log('selected Round ' + rN)
         return (element.questionNumber === qN && element.roundNumber === rN)
       })
       // if the answer was found...
@@ -144,13 +150,14 @@ function UserRoom() {
       else {
         // answer not found for selected Round/Question
         // if also not the current round & question
-        console.log('answer not found')
-        console.log(roomState);
-        // if (selectedRound !== roomData.rounds.length && selectedQuestion !== roomData.rounds[roomData.rounds.length - 1])
-        // // blank the answer
-        // {
+        // console.log('answer not found')
+        // console.log(roomState);
+        if ((selectedRound !== roomData.rounds.length && selectedQuestion !== roomData.rounds[roomData.rounds.length - 1])
+        || goTo)
+        // blank the answer
+        {
           ans.value = '';
-        // }
+        }
 
       }
     }
@@ -182,6 +189,7 @@ function UserRoom() {
 
   return (
     <div>
+      <TopBar />
       <RoomNav admin="false" room={roomData.roomID} round={roomData.rounds.length} question={roomData.rounds[roomData.rounds.length - 1]} />
       <Container>
         <Row>
@@ -199,9 +207,11 @@ function UserRoom() {
         <br />
         <RndQstSelectors />
         <Row>
-          <button className="px-0" style={{ width: '150px' }} onClick={() => { document.location.replace('/gamesummary') }}>
-            Score Board
-          </button>
+          <Link to='gamesummary'>
+            <button className="px-0" style={{ width: '150px' }}>
+              Score Board
+            </button>
+          </Link>
           <button ref={submit} className='ml-auto btn-disabled' data-toggle='modal' data-target='#submitModal' style={{ width: '150px' }}>
             Submit Answer
           </button>
