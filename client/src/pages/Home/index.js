@@ -7,9 +7,14 @@ import TopBar from '../../components/TopBar';
 
 function Home(props) {
   const [roomCode, setRoomCode] = useState('');
+  const [validRoomCode, setValidRoomCode] = useState(true);
+  const [nullRoomCode, setNullRoomCode] = useState(false);
   const { roomState: { loggedIn }, roomState, setRoomState } = useContext(RoomContext);
   const roomCodeRef = useRef();
   const participantHandleRef = useRef();
+
+  const invalidRoomCode = <p className="text-danger">That room is not currently in use.</p>
+  const emptyRoomCode = <p className="text-danger">Please enter a room code.</p>
 
   useEffect(() => {
   }, []);
@@ -26,15 +31,23 @@ function Home(props) {
 
   const joinRoomByCode = async (e) => {
     e.preventDefault();
+    setValidRoomCode(true);
+    setNullRoomCode(false);
     try {
-      if (!roomCode) throw new Error('You Must Enter a Room Code');
+      if (!roomCode) {
+        setNullRoomCode(true);
+        throw new Error('You Must Enter a Room Code');
+      }
       const newRoom = await API.getRoomByCode(roomCode);
-      if (!newRoom.data[0]) throw new Error('Room Does Not Exisit');
+      if (!newRoom.data[0]) {
+        setValidRoomCode(false);
+        throw new Error('Room Does Not Exisit');
+      }
 
       setRoomState({ ...roomState, participant: participantHandleRef.current.value ,roomData: newRoom.data[0] })
       props.history.push('./userroom')
     } catch (err) {
-      console.log(err)
+      // console.log(err)
     }
   }
 
@@ -62,6 +75,8 @@ function Home(props) {
                   id="roomCode"
                   aria-describedby="Room Code"
                   placeholder="Room Code" />
+                {!validRoomCode ? invalidRoomCode : null}
+                {nullRoomCode ? emptyRoomCode : null}
                 {roomCode.length === 4 ? (
                   <input
                     onChange={handleInput}
