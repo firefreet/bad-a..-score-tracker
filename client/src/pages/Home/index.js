@@ -62,7 +62,7 @@ function Home(props) {
                   id="roomCode"
                   aria-describedby="Room Code"
                   placeholder="Room Code" />
-                {roomCode.length === 4 ? (
+                {roomCode.length > 0 ? (
                   <input
                     onChange={handleInput}
                     ref={participantHandleRef}

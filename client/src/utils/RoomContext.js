@@ -2,7 +2,6 @@ import React from 'react';
 
 const RoomContext = React.createContext({
   roomData: {},
-  currentRoomID: '',
   loggedIn: false,
   userData: {},
   setUserData: ()=>{},

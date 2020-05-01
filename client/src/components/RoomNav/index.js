@@ -22,7 +22,6 @@ function RoomNav(props) {
   const newRound = async (e) => {
     const { roomData } = roomState
     const { _id } = roomData
-    var { rounds } = roomData
     try {
       var {data} = await API.newRound(_id);
       await setRoomState({ ...roomState, roomData: { ...roomData, rounds: data } })

@@ -23,7 +23,6 @@ function App() {
   const [count, setCount] = useState(0);
   const [roomState, setRoomState] = useState({
     roomData: modelRoom,
-    currentRoomID: '',
     loggedIn: decodeURIComponent(document.cookie) !== '',
     userData: null,
     participant: "",
@@ -34,13 +33,16 @@ function App() {
     selectedQuestion: 1,
     selectedRound: 1,
     updateSelectedQuestion: (selectedQuestion, currentRoomState) => {
+      console.log('update selected Question called')
       setRoomState({ ...currentRoomState, selectedQuestion })
     },
     updateSelectedRound: (selectedRound, currentRoomState) => {
+      console.log('update selected round called')
       setRoomState({ ...currentRoomState, selectedRound })
     },
     goToCurrent: false,
     updateGoToCurr: async (val, currRoomState) => {
+      console.log('update go to called')
       setRoomState({ ...currRoomState, goToCurrent: val })
     }
   });
@@ -58,25 +60,29 @@ function App() {
       const loc = document.location.pathname;
       setCount(count >= 1000 ? 0 : count + 1)
       if(loc === '/userroom' || loc === '/adminroom') {
+        console.log(new Date())
+        console.log('before set statue')
+        console.log(roomState.selectedRound)
         const newData = await API.getRoom(roomState.roomData._id);
-        console.log('new data =')
-        console.log(newData.data[0].rounds);
+        // console.log('new data =')
+        // console.log(newData.data[0].participant);
         setRoomState({...roomState,roomData: newData.data[0]})
       }      
-    }, 10000);
+    }, 5000);
     return ()=>clearInterval(i);
-  }, [count]);
+  }, [count,roomState.selectedRound,roomState.selectedQuestion]);
 
   useEffect(()=>{
-    console.log('roomstate');
-    console.log(roomState.roomData.rounds)
+    console.log('roomstate in use effect');
+    console.log(roomState.selectedRound)
+    console.log(roomState)
   },[roomState])
 
   useEffect(() => {
     API.isAuthenticated()
       .then(res => {
         API.getFirstRoom().then(data => {
-
+          console.log('initial App use effect after auth & get room')
           setRoomState({ ...roomState, loggedIn: true, userData: res.data, roomData: data.data });
         }).catch(err => {
           console.log(err);
@@ -88,7 +94,6 @@ function App() {
       });
   }, []);
 
-  // console.log(roomState);
 
   return (
     <Router>
