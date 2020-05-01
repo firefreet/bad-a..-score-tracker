@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Container, Row, Col } from '../Grid';
 import './style.scss';
 
@@ -9,7 +10,9 @@ function TopBar({ noTitle }) {
     <Container>
       <Row>
         <Col>
-          {noTitle ? 'Ready for some trivia?' : 'Response.io!'}
+          <Link className="home-link" to='/'>
+            {noTitle ? 'Ready for some trivia?' : 'Response.io!'}
+          </Link>
         </Col>
       </Row>
     </Container>

@@ -42,4 +42,8 @@ router.put('/correct',controller.toggleCorrect);
 // './api/rooms/create'
 router.put('/create', controller.createRoom);
 
+// Mathces /api/rooms/roomCode/summary
+router.route('/:roomCode/summary')
+  .get(controller.getGameSummary);
+
 module.exports = router;

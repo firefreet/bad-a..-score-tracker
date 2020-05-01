@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from 'react';
-import { useHistory, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import RoomContext from '../../utils/RoomContext';
 import API from '../../utils/API';
 import { Col, Row, Container } from "../../components/Grid";
@@ -10,18 +10,13 @@ import TopBar from '../../components/TopBar';
 
 function RoomManager(props) {
   const { roomState: { userData, setUserData }, roomState, setRoomState } = useContext(RoomContext);
-  const history = useHistory();
 
   useEffect(() => {
   }, []);
 
-
   function handleNewRoom(e) {
     e.preventDefault();
-    // let roomData = {
-    //   active: true,
-      // roomID: Math.floor(Math.random() * 10000),
-    // }
+
     API.createRoom()
       .then(res => {
         setUserData(true, res.data, roomState);
@@ -35,7 +30,6 @@ function RoomManager(props) {
     const _id = e.target.getAttribute('id');
     const newRoom = await API.getRoom(_id)
     setRoomState({ ...roomState, roomData: newRoom.data[0] })
-    // history.push('./adminroom')
   }
 
   const toggleRoomActive = async (e) => {
@@ -58,7 +52,7 @@ if (userData.rooms.length === 0) {
         <Row>
           <Col>
             <div className="mt-4 border px-3 py-3 text-center">
-              Looks Like you Don't Have Any Open Rooms! <a role="button" className="responseIoLink" onClick={handleNewRoom}>Open Your First Room</a>
+              Looks Like you Don't Have Any Open Rooms! <span role="button" className="responseIoLink" onClick={handleNewRoom}>Open Your First Room</span>
             </div>
             <div className='mt-3'>
               <button
