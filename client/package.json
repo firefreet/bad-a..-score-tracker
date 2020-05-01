@@ -11,7 +11,8 @@
     "react-dom": "^16.6.3",
     "react-router-dom": "^5.1.2",
     "react-scripts": "^2.1.1",
-    "socket.io-client": "^2.3.0"
+    "socket.io-client": "^2.3.0",
+    "node-sass": "^4.14.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -24,8 +25,5 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ],
-  "devDependencies": {
-    "node-sass": "^4.14.0"
-  }
+  ]
 }

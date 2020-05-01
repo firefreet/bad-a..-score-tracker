@@ -4,6 +4,7 @@ import RoomContext from '../..//utils/RoomContext';
 import RoomNav from '../../components/RoomNav';
 import RndQstSelectors from '../../components/RndQstSelectors';
 import API from '../../utils/API';
+import TopBar from '../../components/TopBar';
 
 
 function AdminRoom() {
@@ -101,6 +102,7 @@ function AdminRoom() {
 
   return (
     <div>
+      <TopBar></TopBar>
       <RoomNav admin="true" room={roomData.roomID} round={roomData.rounds.length} question={roomData.rounds[roomData.rounds.length - 1]} />
       <Container>
         <Row>

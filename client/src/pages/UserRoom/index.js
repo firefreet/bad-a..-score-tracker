@@ -7,6 +7,7 @@ import API from '../../utils/API';
 import RoomContext from '../../utils/RoomContext';
 import GoToQModal from '../../components/GoToQModal';
 import RndQstSelectors from '../../components/RndQstSelectors';
+import TopBar from '../../components/TopBar';
 
 // function to establish current state references to check against as previous when state changes
 function usePrevious(value) {
@@ -188,6 +189,7 @@ function UserRoom() {
 
   return (
     <div>
+      <TopBar />
       <RoomNav admin="false" room={roomData.roomID} round={roomData.rounds.length} question={roomData.rounds[roomData.rounds.length - 1]} />
       <Container>
         <Row>
