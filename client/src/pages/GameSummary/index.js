@@ -1,7 +1,6 @@
 import React, { useEffect, useContext, useState } from 'react';
-import { useHistory, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import RoomContext from '../../utils/RoomContext';
-import API from '../../utils/API';
 import { Col, Row, Container } from "../../components/Grid";
 import TopBar from '../../components/TopBar';
 import './style.scss';
@@ -11,7 +10,6 @@ import GameSummaryMessage from '../../components/GameSummaryMessage';
 function GameSummary(props) {
   const { roomState } = useContext(RoomContext);
   const [pointSummary, setPointSummary] = useState({});
-  // const history = useHistory();
   let participants = roomState.roomData.participants;
   let roomData = roomState.roomData;
 
@@ -26,7 +24,6 @@ function GameSummary(props) {
     participants.forEach(participant => {
       participantArr.push(participant.name);
     })
-    console.log(participantArr);
 
     participantArr.forEach(name => {
       let $pointEls = document.getElementsByClassName(`${name}-points`);
@@ -36,14 +33,8 @@ function GameSummary(props) {
       }
     })
 
-    console.log(pointsObj);
     setPointSummary(pointsObj);
-
-
-    // setPointSummary('name')
   }
-
-  // API.gameSummary().then(res => setGameSummary(res)).catch(err => console.log(err));
 
   // If Room Data is empty render this message
   if (!roomState.roomData) {
@@ -84,13 +75,8 @@ function GameSummary(props) {
         <Row>
           <Col>
             <div className="mt-3">
-
-
-
-
               {participants.map((participant, i) => (
                 <div className="mb-2" key={i}>
-
                   <div className="accordion mt-3 mb-3" id={participant.name + i}>
                     <div className="card">
                       <div className="card-header px-2 py-2" id="headingOne">
@@ -102,7 +88,6 @@ function GameSummary(props) {
                           <div className='scoreDiv'>Score: <span className="badge badge-light">{pointSummary[participant.name]}</span></div>
                         </div>
                       </div>
-
                       <div id={participant.name} className="collapse" aria-labelledby="score Summary" data-parent={'#'+participant.name + i}>
                         <div className="card-body">
                           <table className="table table-striped table-sm">
@@ -138,9 +123,7 @@ function GameSummary(props) {
       </div>
     )
   }
-
-
-
+  
 };
 
 export default GameSummary;
