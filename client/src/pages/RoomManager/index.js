@@ -30,8 +30,8 @@ function RoomManager(props) {
     const _id = e.target.getAttribute('id');
     const newRoom = await API.getRoom(_id)
 
-    localStorage.setItem('adminRoom', JSON.stringify({
-      roomID: _id
+    localStorage.setItem('roomState', JSON.stringify({
+      roomID: newRoom.data[0].roomID
     }));
 
     setRoomState({ ...roomState, roomData: newRoom.data[0] })

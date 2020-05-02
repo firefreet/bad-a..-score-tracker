@@ -12,24 +12,11 @@ import SelectedQuestionContext from '../../utils/SelectedQuestionContext';
 function AdminRoom() {
   const { selectedQuestion } = useContext(SelectedQuestionContext);
   const { selectedRound } = useContext(SelectedRoundContext);
-  const { roomState: { roomData, /* emit, */ /* selectedQuestion, selectedRound */ }, setRoomState, roomState } = useContext(RoomContext);
+  const { roomState: { roomData}, setRoomState, roomState } = useContext(RoomContext);
   const [tableState, setTableState] = useState([]);
   var table = [];
   const score = useRef();
   const broadcastField = useRef();
-
-  // useEffect(() => {
-    // const previousInfo = JSON.parse(localStorage.getItem('adminRoom'));
-
-    // if (previousInfo) {
-
-    //   API.getRoom(previousInfo.roomID)
-    //     .then(newRoom => {
-    //       setRoomState({ ...roomState, roomData: newRoom.data[0] })
-    //     });
-      
-    // }
-  // }, []);
 
   // on new questions or rounds, display user answers
   useEffect(() => {
