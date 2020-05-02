@@ -23,6 +23,7 @@ function AdminRoom() {
 
     if (previousInfo) {
       console.log('ima thing' + previousInfo.roomID);
+      
       API.getRoom(previousInfo.roomID)
         .then(newRoom => {
           setRoomState({ ...roomState, roomData: newRoom.data[0] })
