@@ -51,6 +51,7 @@ function UserRoom() {
   // on mount, clear out any previous answers
   // that may have been left behind from back / forward
   useEffect(() => {
+    toggleReadonly(false);
     // get index of user from the Room's participant list array
     userIndex = roomData.participants.findIndex(element => {
       return element.name === roomState.participant
@@ -92,7 +93,6 @@ function UserRoom() {
 
   // set flag to allow changing <select>'s option to Current Round & Q
   const goToQ = () => {
-    console.log('gotoQ function')
     setGoToCurrent(true);
     setShowGoTo(false);
   }
@@ -174,8 +174,6 @@ function UserRoom() {
     if (goTo) {
       rN = roomData.rounds.length;
       qN = roomData.rounds[rN - 1];
-      console.log(rN);
-      console.log(qN);
       setSelectedQuestion(qN);
       setSelectedRound(rN);
     }
@@ -196,19 +194,19 @@ function UserRoom() {
         if (!existingRoom || (existingUser && (prevRoomData.participants[userIndex].responses[answerIndex].answer !== roomData.participants[userIndex].responses[answerIndex].answer))) {
           // display it
           ans.value = roomData.participants[userIndex].responses[answerIndex].answer;
-          toggleReadonly(true);
         }
+        toggleReadonly(true);
       } else {
         toggleReadonly(false);
       }
-      
+    } else {
+      toggleReadonly(false);
     }
     // get the current round
     let currRound = roomData.rounds.length;
     // if selected a previous round or question
     if (rN < currRound || (rN === currRound && qN < roomData.rounds[currRound - 1])) {
       // set to read only 
-      console.log('read')
       toggleReadonly(true);
     }
   }
@@ -241,11 +239,11 @@ function UserRoom() {
         <RndQstSelectors goToCurrent={goToCurrent} setGoToCurrent={setGoToCurrent} />
         <Row>
           <Link to='gamesummary'>
-            <button className="px-0" style={{ width: '150px' }}>
+            <button className="btn-info text-center px-0" style={{ width: '150px' }}>
               Score Board
             </button>
           </Link>
-          <button ref={submit} className='ml-auto btn-disabled' data-toggle='modal' data-target='#submitModal' style={{ width: '150px' }}>
+          <button ref={submit} className='ml-auto btn-disabled btn-success' data-toggle='modal' data-target='#submitModal' style={{ width: '150px' }}>
             Submit Answer
           </button>
         </Row>
