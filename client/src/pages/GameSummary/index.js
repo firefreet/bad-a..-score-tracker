@@ -26,6 +26,7 @@ function GameSummary(props) {
     })
 
     participantArr.forEach(name => {
+      name = name.replace(/ /g, '');
       let $pointEls = document.getElementsByClassName(`${name}-points`);
       pointsObj[name] = 0
       for (let points of $pointEls ) {
@@ -77,18 +78,18 @@ function GameSummary(props) {
             <div className="mt-3">
               {participants.map((participant, i) => (
                 <div className="mb-2" key={i}>
-                  <div className="accordion mt-3 mb-3" id={participant.name + i}>
+                  <div className="accordion mt-3 mb-3" id={participant.name.replace(/ /g, '') + i}>
                     <div className="card">
                       <div className="card-header px-2 py-2" id="headingOne">
                         <div className="d-flex justify-content-between align-items-center">
                           <div><strong>{participant.name}</strong></div>
-                          <button className="btn btn-link responseIoLink my-0 px-0" type="button" data-toggle="collapse" data-target={'#'+participant.name} aria-expanded="false" aria-controls="collapseOne">
+                          <button className="btn btn-link responseIoLink my-0 px-0" type="button" data-toggle="collapse" data-target={'#' + participant.name.replace(/ /g, '')} aria-expanded="false" aria-controls="collapseOne">
                             Show {participant.name}'s Details
                           </button>
-                          <div className='scoreDiv'>Score: <span className="badge badge-light">{pointSummary[participant.name]}</span></div>
+                          <div className='scoreDiv'>Score: <span className="badge badge-light">{pointSummary[participant.name.replace(/ /g, '')]}</span></div>
                         </div>
                       </div>
-                      <div id={participant.name} className="collapse" aria-labelledby="score Summary" data-parent={'#'+participant.name + i}>
+                      <div id={participant.name.replace(/ /g, '')} className="collapse" aria-labelledby="score Summary" data-parent={'#' + participant.name.replace(/ /g, '') + i}>
                         <div className="card-body">
                           <table className="table table-striped table-sm">
                             <thead>
@@ -105,7 +106,7 @@ function GameSummary(props) {
                                   <td>{response.correctInd ? (<i className="fas fa-check-circle text-success mr-2"></i>) : (<i className="fas fa-times-circle text-danger mr-2"></i>)}</td>
                                   <td>{response.roundNumber}</td>
                                   <td>{response.questionNumber}</td>
-                                  <td className={participant.name + '-points'}>{response.correctInd ? response.points : 0}</td>
+                                  <td className={participant.name.replace(/ /g, '') + '-points'}>{response.correctInd ? response.points : 0}</td>
                                 </tr>
                               ))}{/* End Response Loop */}
                             </tbody>

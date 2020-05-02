@@ -9,7 +9,7 @@ function RoomRedirect(props) {
   // const [roomCode, setRoomCode] = useState('');
   // const [validRoomCode, setValidRoomCode] = useState(true);
   // const [nullRoomCode, setNullRoomCode] = useState(false);
-  // const { roomState: { loggedIn }, roomState, setRoomState } = useContext(RoomContext);
+  const { roomState: { loggedIn }, roomState, setRoomState } = useContext(RoomContext);
   // const roomCodeRef = useRef();
   // const participantHandleRef = useRef();
 
@@ -19,12 +19,8 @@ function RoomRedirect(props) {
   useEffect(() => {
     console.log('The room code is ' + props.match.params.roomCode);
     const previousInfo = JSON.parse(localStorage.getItem('roomState'));
-    if (previousInfo) welcomeBackPrompt(previousInfo);
+    // if (previousInfo) welcomeBackPrompt(previousInfo);
   }, []);
-
-  const welcomeBackPrompt = previousInfo => {
-    console.log(previousInfo);
-  };
 
   function handleInput(e) {
     switch (e.target.id) {
@@ -52,11 +48,6 @@ function RoomRedirect(props) {
       // }
 
       // setRoomState({ ...roomState, participant: participantHandleRef.current.value ,roomData: newRoom.data[0] })
-
-      // localStorage.setItem('roomState', JSON.stringify({
-      //   roomID: roomCode,
-      //   participant: participantHandleRef.current.value
-      // }));
 
       // props.history.push('./userroom')
     } catch (err) {
