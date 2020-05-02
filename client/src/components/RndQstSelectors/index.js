@@ -1,15 +1,19 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Row } from '../../components/Grid';
 import RoomContext from '../../utils/RoomContext';
+import SelectedRoundContext from '../../utils/selectedRoundContext';
+import SelectedQuestionContext from '../../utils/SelectedQuestionContext';
 
 function RndQstSelectors(props) {
+  const {selectedRound, setSelectedRound} = useContext(SelectedRoundContext);
+  const {selectedQuestion, setSelectedQuestion} = useContext(SelectedQuestionContext);
   const {
     roomState: {
       roomData,
-      selectedRound,
-      selectedQuestion,
-      updateSelectedQuestion,
-      updateSelectedRound
+/*       selectedRound,
+      selectedQuestion, */
+/*       updateSelectedQuestion,
+      updateSelectedRound */
     } } = useContext(RoomContext);
   const { roomState } = useContext(RoomContext);
   const questionSelect = useRef();
@@ -19,13 +23,13 @@ function RndQstSelectors(props) {
   // get selected round and set state (in order to display answers table)
   const chooseRound = (e) => {
     // console.log('choose round on click')
-    updateSelectedRound(parseInt(e.target.value), roomState);
+    setSelectedRound(parseInt(e.target.value));
   };
 
   // get selected question  and set state (in order to display answers table)
   const chooseQuestion = (e) => {
     // console.log('choose question on click')
-    updateSelectedQuestion(parseInt(e.target.value), roomState);
+    setSelectedQuestion(parseInt(e.target.value));
   }
 
   // create array of Question <options>
@@ -57,7 +61,7 @@ function RndQstSelectors(props) {
           let rounds = roomData.rounds.length;
           roundSelect.current.value = rounds
           questionSelect.current.value = roomData.rounds[rounds - 1]
-          await updateSelectedRound(roomData.rounds.length, roomState);
+          await setSelectedRound(roomData.rounds.length, roomState);
           createQuestionsOptions();
         }
         async();

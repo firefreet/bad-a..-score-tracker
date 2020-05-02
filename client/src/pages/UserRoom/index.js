@@ -8,6 +8,8 @@ import RoomContext from '../../utils/RoomContext';
 import GoToQModal from '../../components/GoToQModal';
 import RndQstSelectors from '../../components/RndQstSelectors';
 import TopBar from '../../components/TopBar';
+import SelectedRoundContext from '../../utils/selectedRoundContext';
+import SelectedQuestionContext from '../../utils/SelectedQuestionContext';
 
 // function to establish current state references to check against as previous when state changes
 function usePrevious(value) {
@@ -22,8 +24,8 @@ function UserRoom() {
   const answer = useRef();
   const submit = useRef();
   const { roomState: { roomData, /* emit, */
-    selectedQuestion,
-    selectedRound
+/*     selectedQuestion,
+    selectedRound */
   },
     roomState,
     setRoomState
@@ -32,7 +34,13 @@ function UserRoom() {
   const prevRoundQuestion = usePrevious(roomData.rounds);
   const prevRoom_Id = usePrevious(roomData._id);
   const [goToCurrent, setGoToCurrent] = useState(false);
-
+  const {selectedRound} = useContext(SelectedRoundContext);
+  const {selectedQuestion} = useContext(SelectedQuestionContext);
+  
+  useEffect(()=>{
+    console.log('selected Question: '+ selectedQuestion);
+    console.log('selected Round: ' + selectedRound);
+  },[])
   useEffect(() => {
     answer.current.value = '';
     return () => {

@@ -5,10 +5,14 @@ import RoomNav from '../../components/RoomNav';
 import RndQstSelectors from '../../components/RndQstSelectors';
 import API from '../../utils/API';
 import TopBar from '../../components/TopBar';
+import SelectedRoundContext from '../../utils/selectedRoundContext';
+import SelectedQuestionContext from '../../utils/SelectedQuestionContext';
 
 
 function AdminRoom() {
-  const { roomState: { roomData, /* emit, */ selectedQuestion, selectedRound }, setRoomState, roomState } = useContext(RoomContext);
+  const { selectedQuestion } = useContext(SelectedQuestionContext);
+  const { selectedRound } = useContext(SelectedRoundContext);
+  const { roomState: { roomData, /* emit, */ /* selectedQuestion, selectedRound */ }, setRoomState, roomState } = useContext(RoomContext);
   const [tableState, setTableState] = useState([]);
   var table = [];
   const score = useRef();
