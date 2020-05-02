@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 // import io from 'socket.io-client'
 import RoomContext from './utils/RoomContext.js';
+import SelectedQuestionContext from './utils/SelectedQuestionContext';
+import SelectedRoundContext from './utils/selectedRoundContext';
 import API from './utils/API';
 import ProtectedRoute from './components/ProtectedRoute';
 import Register from './pages/Register';
@@ -23,6 +25,8 @@ function App() {
   // const socket = io();
   // const [roomData, setRoomData] = useState(modelRoom);
   const [count, setCount] = useState(0);
+  const [selectedRound, setSelectedRound] = useState(1);
+  const [selectedQuestion, setSelectedQuestion] = useState(1);
   const [roomState, setRoomState] = useState({
     roomData: modelRoom,
     loggedIn: decodeURIComponent(document.cookie) !== '',
@@ -57,7 +61,7 @@ function App() {
       const loc = document.location.pathname;
       setCount(count >= 1000 ? 0 : count + 1)
       if (loc === '/userroom' || loc === '/adminroom' || loc === '/gamesummary') {
-        try {        
+        try {
           // console.log(new Date())
           // console.log('before set state')
           // console.log(roomState.roomData._id)
@@ -102,23 +106,27 @@ function App() {
     <Router>
       <div>
         <RoomContext.Provider value={{ roomState, setRoomState }}>
-          <Switch>
-            <Route exact path='/' component={Home} />
-            <Route exact path="/chat" component={Chat} />
-            <Route exact path='/userroom' component={UserRoom} />
-            <ProtectedRoute exact path='/adminroom' component={AdminRoom} />
-            <ProtectedRoute exact path='/rooms' component={RoomManager} />
-            <ProtectedRoute exact path='/gamesummary' component={ScoreSummary} />
-            <Route exact path="/register" component={Register} />
-            <Route exact path="/login" component={Login} />
+          <SelectedRoundContext.Provider value={{ selectedRound, setSelectedRound }}>
+            <SelectedQuestionContext.Provider value={{ selectedQuestion, setSelectedQuestion }}>          <Switch>
+              <Route exact path='/' component={Home} />
+              <Route exact path="/chat" component={Chat} />
 
-            {/* Temp route for room generation */}
-            {/* <Route exact path="/genroom" component={GenerateRoom} /> */}
+              <Route exact path='/userroom' component={UserRoom} />
+              <ProtectedRoute exact path='/adminroom' component={AdminRoom} />
 
-            <Route path="/rm/:roomCode" component={RoomRedirect} />
+              <ProtectedRoute exact path='/rooms' component={RoomManager} />
+              <ProtectedRoute exact path='/gamesummary' component={ScoreSummary} />
+              <Route exact path="/register" component={Register} />
+              <Route exact path="/login" component={Login} />
+              {/* Temp route for room generation */}
+              {/* <Route exact path="/genroom" component={GenerateRoom} /> */}
 
-            <Route component={NoMatch} />
-          </Switch>
+              <Route path="/rm/:roomCode" component={RoomRedirect} />
+
+              <Route component={NoMatch} />
+            </Switch>
+            </SelectedQuestionContext.Provider>
+          </SelectedRoundContext.Provider>
         </RoomContext.Provider>
       </div>
     </Router>
