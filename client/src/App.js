@@ -88,19 +88,32 @@ function App() {
   useEffect(() => {
     API.isAuthenticated()
       .then(res => {
-        API.getFirstRoom().then(data => {
-          // console.log('initial App use effect after auth & get room')
-          setRoomState({ ...roomState, loggedIn: true, userData: res.data, roomData: data.data });
-        }).catch(err => {
-          console.log(err);
-        })
+
+        const previousInfo = JSON.parse(localStorage.getItem('adminRoom'));
+
+        if (previousInfo) {
+
+          API.getRoom(previousInfo.roomID)
+            .then(newRoom => {
+              setRoomState({ ...roomState, loggedIn: true, userData: res.data, roomData: newRoom.data[0] })
+            });
+          
+        } else {
+          API.getFirstRoom().then(data => {
+            // console.log('initial App use effect after auth & get room')
+            setRoomState({ ...roomState, loggedIn: true, userData: res.data, roomData: data.data });
+          }).catch(err => {
+            console.log(err);
+          })
+        }
+
+        
       })
       .catch(err => {
         console.log('USER IS NOT LOGGED IN', err.response)
         setRoomState(currentState => ({ ...currentState, loggedIn: false, userData: null }));
       });
   }, []);
-
 
   return (
     <Router>
