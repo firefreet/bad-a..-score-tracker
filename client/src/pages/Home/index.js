@@ -4,6 +4,7 @@ import RoomContext from '../../utils/RoomContext';
 import API from '../../utils/API';
 import { Col, Row, Container } from "../../components/Grid";
 import TopBar from '../../components/TopBar';
+import WelcomeBackModal from '../../components/WelcomeBackModal';
 
 function Home(props) {
   const [roomCode, setRoomCode] = useState('');
@@ -17,6 +18,10 @@ function Home(props) {
   const emptyRoomCode = <p className="text-danger">Please enter a room code.</p>
 
   useEffect(() => {
+    const previousInfo = JSON.parse(localStorage.getItem('roomState'));
+    if (previousInfo) {
+      console.log(previousInfo);
+    }
   }, []);
 
   function handleInput(e) {
@@ -45,6 +50,12 @@ function Home(props) {
       }
 
       setRoomState({ ...roomState, participant: participantHandleRef.current.value ,roomData: newRoom.data[0] })
+
+      localStorage.setItem('roomState', JSON.stringify({
+        roomID: roomCode,
+        participant: participantHandleRef.current.value
+      }));
+
       props.history.push('./userroom')
     } catch (err) {
       // console.log(err)

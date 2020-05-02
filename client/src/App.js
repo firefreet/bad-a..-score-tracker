@@ -15,6 +15,7 @@ import Home from './pages/Home';
 import GenerateRoom from './pages/GenerateRoom';
 import ScoreSummary from './pages/GameSummary/index.js';
 import modelRoom from './utils/modelRoom';
+import RoomRedirect from './pages/RoomRedirect';
 import './global.scss';
 
 function App() {
@@ -112,7 +113,9 @@ function App() {
             <Route exact path="/login" component={Login} />
 
             {/* Temp route for room generation */}
-            <Route exact path="/genroom" component={GenerateRoom} />
+            {/* <Route exact path="/genroom" component={GenerateRoom} /> */}
+
+            <Route path="/rm/:roomCode" component={RoomRedirect} />
 
             <Route component={NoMatch} />
           </Switch>
