@@ -10,6 +10,9 @@ function Home(props) {
   const [roomCode, setRoomCode] = useState('');
   const [validRoomCode, setValidRoomCode] = useState(true);
   const [nullRoomCode, setNullRoomCode] = useState(false);
+  const [showGoTo, setShowGoTo] = useState(false);
+  const [returningUser, setReturningUser] = useState('');
+  const [returningRoom, setReturningRoom] = useState('');
   const { roomState: { loggedIn }, roomState, setRoomState } = useContext(RoomContext);
   const roomCodeRef = useRef();
   const participantHandleRef = useRef();
@@ -19,8 +22,11 @@ function Home(props) {
 
   useEffect(() => {
     const previousInfo = JSON.parse(localStorage.getItem('roomState'));
+    
     if (previousInfo) {
-      console.log(previousInfo);
+      setReturningRoom(previousInfo.roomID);
+      setReturningUser(previousInfo.participant);
+      setShowGoTo(true);
     }
   }, []);
 
@@ -32,6 +38,10 @@ function Home(props) {
       default:
         break;
     }
+  }
+
+  const handleClose = () => {
+    setShowGoTo(false);
   }
 
   const joinRoomByCode = async (e) => {
@@ -115,6 +125,14 @@ function Home(props) {
           </Col>
         </Row>
       </Container>
+      <WelcomeBackModal
+        show={showGoTo}
+        handleClose={handleClose}
+        participant={returningUser}
+        roomCode={returningRoom}
+        joinRoomByCode={joinRoomByCode}
+        history={props.history}
+      />
     </div>
   )
 
