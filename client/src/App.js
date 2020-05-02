@@ -120,22 +120,19 @@ function App() {
       <div>
         <RoomContext.Provider value={{ roomState, setRoomState }}>
           <SelectedRoundContext.Provider value={{ selectedRound, setSelectedRound }}>
-            <SelectedQuestionContext.Provider value={{ selectedQuestion, setSelectedQuestion }}>          <Switch>
+            <SelectedQuestionContext.Provider value={{ selectedQuestion, setSelectedQuestion }}>          
+            <Switch>
               <Route exact path='/' component={Home} />
-              <Route exact path="/chat" component={Chat} />
-
+              {/* <Route exact path="/chat" component={Chat} /> */}
               <Route exact path='/userroom' component={UserRoom} />
               <ProtectedRoute exact path='/adminroom' component={AdminRoom} />
-
               <ProtectedRoute exact path='/rooms' component={RoomManager} />
-              <ProtectedRoute exact path='/gamesummary' component={ScoreSummary} />
+              <Route exact path='/gamesummary' component={ScoreSummary} />
               <Route exact path="/register" component={Register} />
               <Route exact path="/login" component={Login} />
               {/* Temp route for room generation */}
               {/* <Route exact path="/genroom" component={GenerateRoom} /> */}
-
               <Route path="/rm/:roomCode" component={RoomRedirect} />
-
               <Route component={NoMatch} />
             </Switch>
             </SelectedQuestionContext.Provider>

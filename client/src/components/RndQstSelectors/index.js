@@ -50,6 +50,10 @@ function RndQstSelectors(props) {
 
   useEffect(() => {
     createQuestionsOptions();
+    return ()=>{
+          setSelectedQuestion(1)
+          setSelectedRound(1);
+    }
   }, [roomData, selectedRound, selectedQuestion])
 
   useEffect(() => {
