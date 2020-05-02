@@ -18,6 +18,19 @@ function AdminRoom() {
   const score = useRef();
   const broadcastField = useRef();
 
+  useEffect(() => {
+    const previousInfo = JSON.parse(localStorage.getItem('adminRoom'));
+
+    if (previousInfo) {
+      console.log('ima thing' + previousInfo.roomID);
+      API.getRoom(previousInfo.roomID)
+        .then(newRoom => {
+          setRoomState({ ...roomState, roomData: newRoom.data[0] })
+        });
+      
+    }
+  }, []);
+
   // on new questions or rounds, display user answers
   useEffect(() => {
     setTable();

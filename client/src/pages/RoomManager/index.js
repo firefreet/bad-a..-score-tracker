@@ -29,6 +29,11 @@ function RoomManager(props) {
   const joinRoom = async (e) => {
     const _id = e.target.getAttribute('id');
     const newRoom = await API.getRoom(_id)
+
+    localStorage.setItem('adminRoom', JSON.stringify({
+      roomID: _id
+    }));
+
     setRoomState({ ...roomState, roomData: newRoom.data[0] })
   }
 
