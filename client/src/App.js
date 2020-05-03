@@ -31,16 +31,6 @@ function App() {
     participant: "",
     setUserData: (loginStatus, userObj, currentRoomState) => {
       setRoomState({ ...currentRoomState, loggedIn: loginStatus, userData: userObj })
-    },
-    selectedQuestion: 1,
-    selectedRound: 1,
-    updateSelectedQuestion: (selectedQuestion, currentRoomState) => {
-      // console.log('update selected Question called')
-      setRoomState({ ...currentRoomState, selectedQuestion })
-    },
-    updateSelectedRound: (selectedRound, currentRoomState) => {
-      // console.log('update selected round called')
-      setRoomState({ ...currentRoomState, selectedRound })
     }
   });
 
@@ -70,9 +60,9 @@ function App() {
   }, [count]);
 
   // useEffect(() => {
-    // console.log('roomstate in use effect of App');
-    // console.log(roomState.selectedRound);
-    // console.log(roomState)
+  // console.log('roomstate in use effect of App');
+  // console.log(roomState.selectedRound);
+  // console.log(roomState)
   // }, [roomState])
 
   useEffect(() => {

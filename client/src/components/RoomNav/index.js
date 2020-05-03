@@ -1,20 +1,26 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import API from '../../utils/API';
 import RoomContext from '../../utils/RoomContext';
+import SelectedRoundContext from '../../utils/selectedRoundContext';
+import SelectedQuestionContext from '../../utils/SelectedQuestionContext';
 
 function RoomNav(props) {
-  const { roomState, setRoomState } = useContext(RoomContext);
+  const { roomState, setRoomState, roomState: { roomData } } = useContext(RoomContext);
+  const { selectedRound, setSelectedRound } = useContext(SelectedRoundContext);
+  const { selectedQuestion, setSelectedQuestion } = useContext(SelectedQuestionContext);
 
   const newQuestion = async (e) => {
     const { roomData } = roomState
     const { _id } = roomData
-    var { rounds } = roomData
+    const { rounds } = roomData
     const roundNum = rounds.length - 1
     try {
       var { data } = await API.newQuestion(_id, roundNum);
       rounds[roundNum] = parseInt(data);
-      await setRoomState({ ...roomState, roomData: { ...roomData, rounds } })
+      await setRoomState({ ...roomState, roomData: {...roomData, rounds } })
+      await setSelectedQuestion(rounds[roundNum]);
+      await setSelectedRound(roundNum +1);
     } catch (err) {
       console.log(err);
     }
@@ -25,11 +31,17 @@ function RoomNav(props) {
     const { _id } = roomData
     try {
       var { data } = await API.newRound(_id);
-      await setRoomState({ ...roomState, roomData: { ...roomData, rounds: data } })
+      await setRoomState({ ...roomState, roomData: {...roomData, rounds: data } })
+      await setSelectedRound(data.length);
+      await setSelectedQuestion(1);
     } catch (err) {
       console.log(err);
     }
   }
+
+  useEffect(() => {
+    props.setGoToCurrent(true);
+  }, [selectedQuestion, selectedRound])
 
 
 
@@ -38,7 +50,7 @@ function RoomNav(props) {
       <nav className=" w navbar navbar-expand-lg navbar-light bg-light">
         <div className="container-fluid">
           <div className="row w-100">
-            <div className={props.admin === 'true' ?'col-8':'col-12'}>
+            <div className={props.admin === 'true' ? 'col-8' : 'col-12'}>
               <div className="d-inline-flex">
                 <div className="mx-1">[Room: {props.room}] </div>
               </div>

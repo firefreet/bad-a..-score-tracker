@@ -14,6 +14,7 @@ function AdminRoom() {
   const { selectedRound } = useContext(SelectedRoundContext);
   const { roomState: { roomData }, setRoomState, roomState } = useContext(RoomContext);
   const [tableState, setTableState] = useState([]);
+  const [goToCurrent, setGoToCurrent] = useState(false);
   var table = [];
   const score = useRef();
   const broadcastField = useRef();
@@ -108,7 +109,12 @@ function AdminRoom() {
   return (
     <div>
       <TopBar></TopBar>
-      <RoomNav admin="true" room={roomData.roomID} round={roomData.rounds.length} question={roomData.rounds[roomData.rounds.length - 1]} />
+      <RoomNav admin="true"
+        room={roomData.roomID}
+        round={roomData.rounds.length}
+        question={roomData.rounds[roomData.rounds.length - 1]}
+        goToCurrent={goToCurrent}
+        setGoToCurrent={setGoToCurrent} />
       <Container>
         <Row>
           <textarea rows='6' ref={broadcastField} className='mt-2 mx-auto mb-2 mb-2 w-75' placeholder='...type or paste content here to BROADCAST to players ...'></textarea>
@@ -130,7 +136,7 @@ function AdminRoom() {
         <Row>
           <p className='text-center mx-auto mt-2 border w-75'>See Player Responses: </p>
         </Row>
-        <RndQstSelectors />
+        <RndQstSelectors goToCurrent={goToCurrent} setGoToCurrent={setGoToCurrent} />
         <Row>
           <table className="table table-striped border">
             <thead>

@@ -23,6 +23,7 @@ function RndQstSelectors(props) {
   // get selected round and set state (in order to display answers table)
   const chooseRound = (e) => {
     // console.log('choose round on click')
+    setSelectedQuestion(1);
     setSelectedRound(parseInt(e.target.value));
   };
 
@@ -53,26 +54,21 @@ function RndQstSelectors(props) {
       setSelectedQuestion(1)
       setSelectedRound(1);
     }
-  },[])
+  }, [])
 
   useEffect(() => {
     createQuestionsOptions();
   }, [roomData, selectedRound, selectedQuestion])
 
   useEffect(() => {
-
     if (props.goToCurrent) {
-      if (props.goToCurrent) {
-        async function async() {
-          await props.setGoToCurrent(false, roomState);
-          let rounds = roomData.rounds.length;
-          roundSelect.current.value = rounds
-          questionSelect.current.value = roomData.rounds[rounds - 1]
-          await setSelectedRound(roomData.rounds.length, roomState);
-          createQuestionsOptions();
-        }
-        async();
+      async function async() {
+        await props.setGoToCurrent(false, roomState);
+        roundSelect.current.value = selectedRound;
+        await createQuestionsOptions();
+        questionSelect.current.value = selectedQuestion;
       }
+      async();
     }
   }, [props.goToCurrent])
 
