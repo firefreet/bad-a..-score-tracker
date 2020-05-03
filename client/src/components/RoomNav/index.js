@@ -4,6 +4,7 @@ import API from '../../utils/API';
 import RoomContext from '../../utils/RoomContext';
 import SelectedRoundContext from '../../utils/selectedRoundContext';
 import SelectedQuestionContext from '../../utils/SelectedQuestionContext';
+import { Container, Row, Col } from '../Grid';
 
 function RoomNav(props) {
   const { roomState, setRoomState, roomState: { roomData } } = useContext(RoomContext);
@@ -46,55 +47,38 @@ function RoomNav(props) {
 
 
   return (
-    <div>
-      <nav className=" w navbar navbar-expand-lg navbar-light bg-light">
-        <div className="container-fluid">
-          <div className="row w-100">
-            <div className={props.admin === 'true' ? 'col-8' : 'col-12'}>
-              <div className="d-inline-flex">
-                <div className="mx-1">[Room: {props.room}] </div>
-              </div>
-              <div className="d-inline-flex">
-                <div className='mx-1'>Current Round: {props.round}</div>
-              </div>
-              <div className="d-inline-flex">
-                <div className='mx-1'>Current Q: {props.question}</div>
-              </div>
-            </div>
-            {props.admin === "true" ? (
-              <div className="col px-0">
-                <button className="float-right navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                  <span className="navbar-toggler-icon"></span>
-                </button>
-              </div>
-            ) : ""}
-            {props.admin === "true" ? (
-              <div className="collapse navbar-collapse" id="navbarNav">
-                <ul className="navbar-nav w-100 d-flex justify-content-around">
-                  <li className="nav-item active d-flex">
-                    <button onClick={newRound} className='mx-auto mb-2' style={{ width: '150px' }}>
-                      New Round
-            </button>
-                  </li>
-                  <li className='nav-item active d-flex'>
-                    <button onClick={newQuestion} className='mx-auto mb-2' style={{ width: '150px' }}>
-                      New Question
-            </button>
-                  </li>
-                  <li className="nav-item d-flex">
-                    <Link to='gamesummary' className='mx-auto'>
-                      <button className="mx-auto px-0 mb-2" style={{ width: '150px' }} >
-                        Score Board
-              </button>
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-            ) : ""}
+    <Container classes="container mb-2">
+      <Row>
+        <Col>
+          <h3>Room: <Link className="responseIoLink" to="/rooms">{props.room}</Link></h3>
+          <div className="d-flex mb-2">
+            <div className="mr-2"><strong>Round: {props.round}  |</strong></div>
+            <div><strong>Question: {props.question}</strong></div>
           </div>
-        </div>
-      </nav>
-    </div>
+        </Col>
+      </Row>
+
+      {props.admin === "true" ? (
+        <Row>
+          <Col>
+            <div>
+              <button onClick={newRound} className='btn btn-primary btn-sm mr-1'>
+                New Round
+              </button>
+              <button onClick={newQuestion} className='btn btn-primary btn-sm mr-1'>
+                New Question
+              </button>
+              <Link to='gamesummary' className='mx-auto'>
+              <button className="btn btn-primary btn-sm">
+                Score Board
+              </button>
+              </Link>
+            </div>
+          </Col>
+        </Row>
+      ) : ""}
+
+    </Container>
   )
 }
 
