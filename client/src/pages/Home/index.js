@@ -13,16 +13,18 @@ function Home(props) {
   const [showGoTo, setShowGoTo] = useState(false);
   const [returningUser, setReturningUser] = useState('');
   const [returningRoom, setReturningRoom] = useState('');
+  const [validHandle, setValidHandle] = useState(true);
   const { roomState: { loggedIn }, roomState, setRoomState } = useContext(RoomContext);
   const roomCodeRef = useRef();
   const participantHandleRef = useRef();
 
   const invalidRoomCode = <p className="text-danger">That room is not currently in use.</p>
   const emptyRoomCode = <p className="text-danger">Please enter a room code.</p>
+  const emptyUserHandle = <p className='text-danger'>Must enter a User Handle</p>
 
   useEffect(() => {
     const previousInfo = JSON.parse(localStorage.getItem('roomState'));
-    
+
     if (previousInfo) {
       setReturningRoom(previousInfo.roomID);
       setReturningUser(previousInfo.participant);
@@ -34,6 +36,8 @@ function Home(props) {
     switch (e.target.id) {
       case 'roomCode':
         setRoomCode(e.target.value.slice(0, 4));
+        break;
+      case 'participantHandle': e.target.value.length > 0 ? setValidHandle(true) : setValidHandle(false);
         break;
       default:
         break;
@@ -58,8 +62,12 @@ function Home(props) {
         setValidRoomCode(false);
         throw new Error('Room Does Not Exisit');
       }
+      if (participantHandleRef.current.value.length === 0) {
+        setValidHandle(false);
+        throw new Error('You must enter a User Handle')
+      }
 
-      setRoomState({ ...roomState, participant: participantHandleRef.current.value ,roomData: newRoom.data[0] })
+      setRoomState({ ...roomState, participant: participantHandleRef.current.value, roomData: newRoom.data[0] })
 
       localStorage.setItem('roomState', JSON.stringify({
         roomID: roomCode,
@@ -106,7 +114,9 @@ function Home(props) {
                     className="form-control mt-2"
                     id="participantHandle"
                     aria-describedby="User Handle"
-                    placeholder="User Handle" />) : ""}
+                    placeholder="User Handle" />
+                ) : ""}
+                {validHandle ? '' : emptyUserHandle}
               </div>
               <div className="d-flex justify-content-between">
                 <button
