@@ -18,11 +18,12 @@ import ScoreSummary from './pages/GameSummary/index.js';
 import modelRoom from './utils/modelRoom';
 import RoomRedirect from './pages/RoomRedirect';
 import './global.scss';
+import { set } from 'mongoose';
 
 function App() {
 
+  const [authCheckComplete, setAuthCheckComplete] = useState(false);
   const [count, setCount] = useState(0);
-  const [roomId, setRoomId] = useState('');
   const [selectedRound, setSelectedRound] = useState(1);
   const [selectedQuestion, setSelectedQuestion] = useState(1);
   const [roomState, setRoomState] = useState({
@@ -47,26 +48,28 @@ function App() {
 
   useEffect(() => {
     const i = setInterval(async () => {
+      const { roomID, participant } = JSON.parse(localStorage.getItem('roomState'));
       // console.log('in interval')
       const loc = document.location.pathname;
       setCount(count >= 1000 ? 0 : count + 1)
-      if (roomId !== '' && (loc === '/userroom' || loc === '/adminroom' || loc === '/gamesummary')) {
+      if (authCheckComplete && roomID !== '' && (loc === '/userroom' || loc === '/adminroom' || loc === '/gamesummary')) {
         try {
           // console.log(new Date())
           // console.log('before set state')
-          // console.log(roomId)
-          const newData = await API.getRoomByCode(roomId);
+          // console.log(roomID)
+          const newData = await API.getRoomByCode(roomID);
           // console.log('new data =')
           // console.log(newData.data[0].participant);
-          setRoomState({ ...roomState, roomData: newData.data[0] })
+          if (participant !== undefined) setRoomState({ ...roomState, roomData: newData.data[0], participant })
+          else setRoomState({ ...roomState, roomData: newData.data[0] })
         }
         catch (err) {
-          console.log('unable to get room: ' + roomId)
+          console.log('unable to get room: ' + roomID)
         }
       }
     }, 500);
     return () => clearInterval(i);
-  }, [count/* , roomState */]);
+  }, [count]);
 
   useEffect(() => {
     // console.log('roomstate in use effect of App');
@@ -75,10 +78,6 @@ function App() {
   }, [roomState])
 
   useEffect(() => {
-    const previousInfo = JSON.parse(localStorage.getItem('roomState'));
-    if (previousInfo) {
-      setRoomId(previousInfo.roomID);
-    }
     API.isAuthenticated()
       .then(res => {
         setRoomState({ ...roomState, loggedIn: true, userData: res.data })
@@ -87,6 +86,7 @@ function App() {
         console.log('USER IS NOT LOGGED IN', err.response)
         setRoomState(currentState => ({ ...currentState, loggedIn: false, userData: null }));
       });
+    setAuthCheckComplete(true);
   }, []);
 
   return (
