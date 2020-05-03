@@ -10,7 +10,6 @@ import RndQstSelectors from '../../components/RndQstSelectors';
 import TopBar from '../../components/TopBar';
 import SelectedRoundContext from '../../utils/selectedRoundContext';
 import SelectedQuestionContext from '../../utils/SelectedQuestionContext';
-import { set } from 'mongoose';
 
 // function to establish current state references to check against as previous when state changes
 function usePrevious(value) {
@@ -24,12 +23,7 @@ function usePrevious(value) {
 function UserRoom() {
   const answer = useRef();
   const submit = useRef();
-  const { roomState: { roomData, /* emit, */
-    /*     selectedQuestion,
-        selectedRound */
-  },
-    roomState,
-  } = useContext(RoomContext);
+  const { roomState: { roomData }, roomState } = useContext(RoomContext);
   const [showGoTo, setShowGoTo] = useState(false);
   const prevRoundQuestion = usePrevious(roomData.rounds);
   const prevRoom_Id = usePrevious(roomData._id);
@@ -40,13 +34,6 @@ function UserRoom() {
   const prevSelectedRound = usePrevious(selectedRound);
   const prevSelectedQuestion = usePrevious(selectedQuestion);
   var userIndex = -1;
-
-
-  // useEffect(() => {
-  //   console.log('selected Question: ' + selectedQuestion);
-  //   console.log('selected Round: ' + selectedRound);
-  // }, [])
-
 
   // on mount, clear out any previous answers
   // that may have been left behind from back / forward
@@ -59,8 +46,8 @@ function UserRoom() {
     answer.current.value = '';
     // on unmount initialize variables for same reason
     return () => {
-      setSelectedQuestion(1)
-      setSelectedRound(1);
+      // setSelectedQuestion(1)
+      // setSelectedRound(1);
       setGoToCurrent(false);
     }
   }, [])
@@ -81,7 +68,7 @@ function UserRoom() {
     else if (prevSelectedRound !== selectedRound || prevSelectedQuestion !== selectedQuestion) {
       // blank out answer
       answer.current.value = '';
-    } 
+    }
     // then go see if there is anything in the database to display
     showResponse(false);
   }, [roomData, selectedQuestion, selectedRound]);
