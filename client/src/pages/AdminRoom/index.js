@@ -12,24 +12,12 @@ import SelectedQuestionContext from '../../utils/SelectedQuestionContext';
 function AdminRoom() {
   const { selectedQuestion } = useContext(SelectedQuestionContext);
   const { selectedRound } = useContext(SelectedRoundContext);
-  const { roomState: { roomData, /* emit, */ /* selectedQuestion, selectedRound */ }, setRoomState, roomState } = useContext(RoomContext);
+  const { roomState: { roomData }, setRoomState, roomState } = useContext(RoomContext);
   const [tableState, setTableState] = useState([]);
+  const [goToCurrent, setGoToCurrent] = useState(false);
   var table = [];
   const score = useRef();
   const broadcastField = useRef();
-
-  // useEffect(() => {
-    // const previousInfo = JSON.parse(localStorage.getItem('adminRoom'));
-
-    // if (previousInfo) {
-
-    //   API.getRoom(previousInfo.roomID)
-    //     .then(newRoom => {
-    //       setRoomState({ ...roomState, roomData: newRoom.data[0] })
-    //     });
-      
-    // }
-  // }, []);
 
   // on new questions or rounds, display user answers
   useEffect(() => {
@@ -64,41 +52,42 @@ function AdminRoom() {
     setTableState(table)
   }
 
-  const sendBroadcast = ()=>{
-    API.sendBroadcast(roomData._id, {broadcast: broadcastField.current.value})
-    .then(resp=>{
-      // console.log(resp);
-    })
-    .catch(err=>{
-      console.log('Error from sendBroadcast');
-      console.log(err)});
+  const sendBroadcast = () => {
+    API.sendBroadcast(roomData._id, { broadcast: broadcastField.current.value })
+      .then(resp => {
+        // console.log(resp);
+      })
+      .catch(err => {
+        console.log('Error from sendBroadcast');
+        console.log(err)
+      });
   }
 
   const clearBroadcast = () => {
     broadcastField.current.value = '';
-    API.sendBroadcast(roomData._id,{broadcast: ''})
-    .then(resp=>{
-      // console.log(resp);
-    })
-    .catch(err=>{
-      console.log('Error from Api.sendBroadcast');
-      console.log(err);
-    })
+    API.sendBroadcast(roomData._id, { broadcast: '' })
+      .then(resp => {
+        // console.log(resp);
+      })
+      .catch(err => {
+        console.log('Error from Api.sendBroadcast');
+        console.log(err);
+      })
   }
 
-  const deleteAnswer = (e)=>{
+  const deleteAnswer = (e) => {
     const i = e.target.getAttribute('datanum');
-    const playerRespEl = document.getElementById('playerId' +i);
+    const playerRespEl = document.getElementById('playerId' + i);
     const userId = playerRespEl.getAttribute('userid');
     const questionId = playerRespEl.getAttribute('questionid');
-    API.deleteAnswer(roomData._id,userId,questionId)
-    .then(delResp=>{
-      // console.log(delResp);
-    })
-    .catch(err=>{
-      console.log('Error from Api.deleteAnswer');
-      console.log(err);
-    })
+    API.deleteAnswer(roomData._id, userId, questionId)
+      .then(delResp => {
+        // console.log(delResp);
+      })
+      .catch(err => {
+        console.log('Error from Api.deleteAnswer');
+        console.log(err);
+      })
   }
 
   const toggleCorrect = async (e) => {
@@ -120,16 +109,21 @@ function AdminRoom() {
   return (
     <div>
       <TopBar></TopBar>
-      <RoomNav admin="true" room={roomData.roomID} round={roomData.rounds.length} question={roomData.rounds[roomData.rounds.length - 1]} />
+      <RoomNav admin="true"
+        room={roomData.roomID}
+        round={roomData.rounds.length}
+        question={roomData.rounds[roomData.rounds.length - 1]}
+        goToCurrent={goToCurrent}
+        setGoToCurrent={setGoToCurrent} />
       <Container>
         <Row>
           <textarea rows='6' ref={broadcastField} className='mt-2 mx-auto mb-2 mb-2 w-75' placeholder='...type or paste content here to BROADCAST to players ...'></textarea>
         </Row>
         <Row>
           <div className='mb-2 container-fluid d-flex w-75 p-0'>
-            <button className="btn btn-success btn-sm px-0 mr-auto" 
-            style={{ width: '50px' }}
-            onClick={sendBroadcast}>
+            <button className="btn btn-success btn-sm px-0 mr-auto"
+              style={{ width: '50px' }}
+              onClick={sendBroadcast}>
               Send
               </button>
             <button className='btn btn-info btn-sm ml-auto mr-0'
@@ -142,7 +136,7 @@ function AdminRoom() {
         <Row>
           <p className='text-center mx-auto mt-2 border w-75'>See Player Responses: </p>
         </Row>
-        <RndQstSelectors />
+        <RndQstSelectors goToCurrent={goToCurrent} setGoToCurrent={setGoToCurrent} />
         <Row>
           <table className="table table-striped border">
             <thead>
