@@ -36,25 +36,31 @@ function App() {
 
   useEffect(() => {
     const i = setInterval(async () => {
-      const { roomID, participant } = JSON.parse(localStorage.getItem('roomState'));
-      // console.log('in interval')
-      const loc = document.location.pathname;
-      setCount(count >= 1000 ? 0 : count + 1)
-      if (authCheckComplete && roomID !== '' && (loc === '/userroom' || loc === '/adminroom' || loc === '/gamesummary')) {
-        try {
-          // console.log(new Date())
-          // console.log('before set state')
-          // console.log(roomID)
-          const newData = await API.getRoomByCode(roomID);
-          // console.log('new data =')
-          // console.log(newData.data[0].participant);
-          if (participant !== undefined) setRoomState({ ...roomState, roomData: newData.data[0], participant })
-          else setRoomState({ ...roomState, roomData: newData.data[0] })
+      let ls = localStorage.getItem('roomState');
+      //check to see if local storage exists, if so, parse and 
+      if (ls) {
+        const { roomID, participant } = JSON.parse(localStorage.getItem('roomState'));
+        console.log('in interval' + roomID);
+        const loc = document.location.pathname;
+        setCount(count >= 1000 ? 0 : count + 1)
+        if (authCheckComplete && roomID !== '' && (loc === '/userroom' || loc === '/adminroom' || loc === '/gamesummary')) {
+          try {
+            // console.log(new Date())
+            // console.log('before set state')
+            // console.log(roomID)
+            const newData = await API.getRoomByCode(roomID);
+            // console.log('new data =')
+            // console.log(newData.data[0].participant);
+            if (participant !== undefined) setRoomState({ ...roomState, roomData: newData.data[0], participant })
+            else setRoomState({ ...roomState, roomData: newData.data[0] })
+          }
+          catch (err) {
+            console.log('unable to get room: ' + roomID)
+          }
         }
-        catch (err) {
-          console.log('unable to get room: ' + roomID)
-        }
+
       }
+
     }, 500);
     return () => clearInterval(i);
   }, [count]);
