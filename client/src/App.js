@@ -10,7 +10,6 @@ import Login from './pages/Login';
 import UserRoom from './pages/UserRoom';
 import AdminRoom from './pages/AdminRoom';
 import RoomManager from './pages/RoomManager';
-import Chat from './pages/Chat';
 import NoMatch from './pages/NoMatch';
 import Home from './pages/Home';
 import GenerateRoom from './pages/GenerateRoom';
@@ -18,7 +17,6 @@ import ScoreSummary from './pages/GameSummary/index.js';
 import modelRoom from './utils/modelRoom';
 import RoomRedirect from './pages/RoomRedirect';
 import './global.scss';
-import { set } from 'mongoose';
 
 function App() {
 
@@ -71,11 +69,11 @@ function App() {
     return () => clearInterval(i);
   }, [count]);
 
-  useEffect(() => {
+  // useEffect(() => {
     // console.log('roomstate in use effect of App');
     // console.log(roomState.selectedRound);
     // console.log(roomState)
-  }, [roomState])
+  // }, [roomState])
 
   useEffect(() => {
     API.isAuthenticated()
@@ -97,7 +95,6 @@ function App() {
             <SelectedQuestionContext.Provider value={{ selectedQuestion, setSelectedQuestion }}>
               <Switch>
                 <Route exact path='/' component={Home} />
-                {/* <Route exact path="/chat" component={Chat} /> */}
                 <Route exact path='/userroom' component={UserRoom} />
                 <ProtectedRoute exact path='/adminroom' component={AdminRoom} />
                 <ProtectedRoute exact path='/rooms' component={RoomManager} />

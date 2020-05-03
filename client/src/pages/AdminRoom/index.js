@@ -10,8 +10,8 @@ import SelectedQuestionContext from '../../utils/SelectedQuestionContext';
 
 
 function AdminRoom() {
-  const { selectedQuestion, setSelectedQuestion } = useContext(SelectedQuestionContext);
-  const { selectedRound, setSelectedRound } = useContext(SelectedRoundContext);
+  const { selectedQuestion } = useContext(SelectedQuestionContext);
+  const { selectedRound } = useContext(SelectedRoundContext);
   const { roomState: { roomData }, setRoomState, roomState } = useContext(RoomContext);
   const [tableState, setTableState] = useState([]);
   var table = [];
