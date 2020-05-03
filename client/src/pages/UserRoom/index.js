@@ -47,6 +47,8 @@ function UserRoom() {
     answer.current.value = '';
     // on unmount initialize variables for same reason
     return () => {
+      setSelectedQuestion(1)
+      setSelectedRound(1);
       setGoToCurrent(false);
     }
   }, [])
@@ -67,7 +69,7 @@ function UserRoom() {
     else if (prevSelectedRound !== selectedRound || prevSelectedQuestion !== selectedQuestion) {
       // blank out answer
       answer.current.value = '';
-    } 
+    }
     // then go see if there is anything in the database to display
     showResponse(false);
   }, [roomData, selectedQuestion, selectedRound]);

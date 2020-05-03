@@ -10,9 +10,9 @@ import SelectedQuestionContext from '../../utils/SelectedQuestionContext';
 
 
 function AdminRoom() {
-  const { selectedQuestion } = useContext(SelectedQuestionContext);
-  const { selectedRound } = useContext(SelectedRoundContext);
-  const { roomState: { roomData}, setRoomState, roomState } = useContext(RoomContext);
+  const { selectedQuestion, setSelectedQuestion } = useContext(SelectedQuestionContext);
+  const { selectedRound, setSelectedRound } = useContext(SelectedRoundContext);
+  const { roomState: { roomData }, setRoomState, roomState } = useContext(RoomContext);
   const [tableState, setTableState] = useState([]);
   var table = [];
   const score = useRef();
@@ -21,6 +21,10 @@ function AdminRoom() {
   // on new questions or rounds, display user answers
   useEffect(() => {
     setTable();
+    return () => {
+      setSelectedQuestion(1)
+      setSelectedRound(1);
+    }
   }, [roomData, selectedQuestion, selectedRound])
 
   const setTable = () => {
@@ -51,41 +55,42 @@ function AdminRoom() {
     setTableState(table)
   }
 
-  const sendBroadcast = ()=>{
-    API.sendBroadcast(roomData._id, {broadcast: broadcastField.current.value})
-    .then(resp=>{
-      // console.log(resp);
-    })
-    .catch(err=>{
-      console.log('Error from sendBroadcast');
-      console.log(err)});
+  const sendBroadcast = () => {
+    API.sendBroadcast(roomData._id, { broadcast: broadcastField.current.value })
+      .then(resp => {
+        // console.log(resp);
+      })
+      .catch(err => {
+        console.log('Error from sendBroadcast');
+        console.log(err)
+      });
   }
 
   const clearBroadcast = () => {
     broadcastField.current.value = '';
-    API.sendBroadcast(roomData._id,{broadcast: ''})
-    .then(resp=>{
-      // console.log(resp);
-    })
-    .catch(err=>{
-      console.log('Error from Api.sendBroadcast');
-      console.log(err);
-    })
+    API.sendBroadcast(roomData._id, { broadcast: '' })
+      .then(resp => {
+        // console.log(resp);
+      })
+      .catch(err => {
+        console.log('Error from Api.sendBroadcast');
+        console.log(err);
+      })
   }
 
-  const deleteAnswer = (e)=>{
+  const deleteAnswer = (e) => {
     const i = e.target.getAttribute('datanum');
-    const playerRespEl = document.getElementById('playerId' +i);
+    const playerRespEl = document.getElementById('playerId' + i);
     const userId = playerRespEl.getAttribute('userid');
     const questionId = playerRespEl.getAttribute('questionid');
-    API.deleteAnswer(roomData._id,userId,questionId)
-    .then(delResp=>{
-      // console.log(delResp);
-    })
-    .catch(err=>{
-      console.log('Error from Api.deleteAnswer');
-      console.log(err);
-    })
+    API.deleteAnswer(roomData._id, userId, questionId)
+      .then(delResp => {
+        // console.log(delResp);
+      })
+      .catch(err => {
+        console.log('Error from Api.deleteAnswer');
+        console.log(err);
+      })
   }
 
   const toggleCorrect = async (e) => {
@@ -114,9 +119,9 @@ function AdminRoom() {
         </Row>
         <Row>
           <div className='mb-2 container-fluid d-flex w-75 p-0'>
-            <button className="btn btn-success btn-sm px-0 mr-auto" 
-            style={{ width: '50px' }}
-            onClick={sendBroadcast}>
+            <button className="btn btn-success btn-sm px-0 mr-auto"
+              style={{ width: '50px' }}
+              onClick={sendBroadcast}>
               Send
               </button>
             <button className='btn btn-info btn-sm ml-auto mr-0'
