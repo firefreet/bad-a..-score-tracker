@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Row } from '../../components/Grid';
+import { Row, Col } from '../../components/Grid';
 import RoomContext from '../../utils/RoomContext';
 import SelectedRoundContext from '../../utils/selectedRoundContext';
 import SelectedQuestionContext from '../../utils/SelectedQuestionContext';
@@ -74,22 +74,26 @@ function RndQstSelectors(props) {
 
   return (
     <Row>
-      <div className='col-12 col-md-6 d-flex'>
-        <select ref={roundSelect} className='mx-auto w-50 mb-2' onChange={chooseRound}>
-          {roomData.rounds.map((v, i) => {
-            return (
-              <option value={i + 1} key={i}>
-                Round {i + 1}
-              </option>
-            )
-          })}
-        </select>
-      </div>
-      <div className='col-12 col-md-6 d-flex'>
-        <select ref={questionSelect} className='mx-auto ml-auto mb-2 w-50' onChange={chooseQuestion}>
-          {qListState}
-        </select>
-      </div>
+      <Col>
+        <div className='d-flex justify-content-between my-2'>
+          <div>
+            <select ref={roundSelect} className='form-control-sm' onChange={chooseRound}>
+              {roomData.rounds.map((v, i) => {
+                return (
+                  <option value={i + 1} key={i}>
+                    Round {i + 1}
+                  </option>
+                )
+              })}
+            </select>  
+          </div>
+          <div>
+            <select ref={questionSelect} className='form-control-sm' onChange={chooseQuestion}>
+              {qListState}
+            </select>
+          </div>
+        </div>
+      </Col>
     </Row>
   )
 }
