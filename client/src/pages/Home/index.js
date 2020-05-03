@@ -25,7 +25,7 @@ function Home(props) {
   useEffect(() => {
     const previousInfo = JSON.parse(localStorage.getItem('roomState'));
 
-    if (previousInfo) {
+    if (previousInfo.roomID && previousInfo.participant) {
       setReturningRoom(previousInfo.roomID);
       setReturningUser(previousInfo.participant);
       setShowGoTo(true);

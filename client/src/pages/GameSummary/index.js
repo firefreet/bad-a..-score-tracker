@@ -82,10 +82,9 @@ function GameSummary(props) {
                     <div className="card">
                       <div className="card-header px-2 py-2" id="headingOne">
                         <div className="d-flex justify-content-between align-items-center">
-                          <div><strong>{participant.name}</strong></div>
-                          <button className="btn btn-link responseIoLink my-0 px-0" type="button" data-toggle="collapse" data-target={'#' + participant.name.replace(/ /g, '')} aria-expanded="false" aria-controls="collapseOne">
-                            Show {participant.name}'s Details
-                          </button>
+                          <span className="responseIoLink my-0 px-0" data-toggle="collapse" data-target={'#' + participant.name.replace(/ /g, '')} aria-expanded="false" aria-controls="collapseOne">
+                          {participant.name}
+                          </span>
                           <div className='scoreDiv'>Score: <span className="badge badge-light">{pointSummary[participant.name.replace(/ /g, '')]}</span></div>
                         </div>
                       </div>
