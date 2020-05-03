@@ -21,10 +21,6 @@ function AdminRoom() {
   // on new questions or rounds, display user answers
   useEffect(() => {
     setTable();
-    return () => {
-      setSelectedQuestion(1)
-      setSelectedRound(1);
-    }
   }, [roomData, selectedQuestion, selectedRound])
 
   const setTable = () => {

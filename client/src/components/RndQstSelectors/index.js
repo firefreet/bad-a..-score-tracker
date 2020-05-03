@@ -5,15 +5,15 @@ import SelectedRoundContext from '../../utils/selectedRoundContext';
 import SelectedQuestionContext from '../../utils/SelectedQuestionContext';
 
 function RndQstSelectors(props) {
-  const {selectedRound, setSelectedRound} = useContext(SelectedRoundContext);
-  const {selectedQuestion, setSelectedQuestion} = useContext(SelectedQuestionContext);
+  const { selectedRound, setSelectedRound } = useContext(SelectedRoundContext);
+  const { selectedQuestion, setSelectedQuestion } = useContext(SelectedQuestionContext);
   const {
     roomState: {
       roomData,
-/*       selectedRound,
-      selectedQuestion, */
-/*       updateSelectedQuestion,
-      updateSelectedRound */
+      /*       selectedRound,
+            selectedQuestion, */
+      /*       updateSelectedQuestion,
+            updateSelectedRound */
     } } = useContext(RoomContext);
   const { roomState } = useContext(RoomContext);
   const questionSelect = useRef();
@@ -47,6 +47,13 @@ function RndQstSelectors(props) {
     }
     await setQListState(questionSelectOptions);
   }
+
+  useEffect(() => {
+    return () => {
+      setSelectedQuestion(1)
+      setSelectedRound(1);
+    }
+  },[])
 
   useEffect(() => {
     createQuestionsOptions();

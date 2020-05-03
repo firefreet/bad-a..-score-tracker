@@ -47,8 +47,8 @@ function UserRoom() {
     answer.current.value = '';
     // on unmount initialize variables for same reason
     return () => {
-      setSelectedQuestion(1)
-      setSelectedRound(1);
+      // setSelectedQuestion(1)
+      // setSelectedRound(1);
       setGoToCurrent(false);
     }
   }, [])
