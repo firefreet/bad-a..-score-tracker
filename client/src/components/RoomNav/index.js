@@ -40,7 +40,7 @@ function RoomNav(props) {
   }
 
   useEffect(() => {
-    props.setGoToCurrent(true);
+    // props.setGoToCurrent(true);
   }, [selectedQuestion, selectedRound])
 
 
