@@ -191,11 +191,11 @@ function AdminRoom() {
 
                     <div className="align-self-stretch mr-1 py-2 px-1">
                       [<strong>{v.player}</strong>] {v.answer} <br />
-                      <span ref={score} datascore={v.score}><strong>{v.score} Pts</strong></span>
+                      <span ref={score} datascore={v.score}><strong>{v.score} Pts</strong> {v.score !== 0 ? (<i className="fas fa-check-circle text-success mr-2"></i>) : (<i className="fas fa-times-circle text-danger mr-2"></i>)}</span>
                     </div>
                         
                     <div className="ml-auto py-2 px-1 bg-light">
-                      <i className="text-danger fas fa-minus-circle" datanum={i} onClick={deleteAnswer}></i>
+                      <i className="text-primary fas fa-minus-circle" datanum={i} onClick={deleteAnswer}></i>
                     </div>
                   </div>)
               })}

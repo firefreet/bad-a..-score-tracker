@@ -25,11 +25,16 @@ function Home(props) {
   useEffect(() => {
     const previousInfo = JSON.parse(localStorage.getItem('roomState'));
 
-    if (previousInfo.roomID && previousInfo.participant) {
-      setReturningRoom(previousInfo.roomID);
-      setReturningUser(previousInfo.participant);
-      setShowGoTo(true);
+    if (previousInfo) {
+      
+      if (previousInfo.roomID && previousInfo.participant) {
+        setReturningRoom(previousInfo.roomID);
+        setReturningUser(previousInfo.participant);
+        setShowGoTo(true);
+      }
+
     }
+
   }, []);
 
   function handleInput(e) {
@@ -46,6 +51,7 @@ function Home(props) {
 
   const handleClose = () => {
     setShowGoTo(false);
+    localStorage.clear('roomState');
   }
 
   const joinRoomByCode = async (e) => {

@@ -50,7 +50,7 @@ function RoomNav(props) {
     <Container classes="container mb-2">
       <Row>
         <Col>
-          <h3>Room: <Link className="responseIoLink" to="/rooms">{props.room}</Link></h3>
+          <h3>Room: <Link className="responseIoLink" to={props.admin ? '/rooms' : '/'}>{props.room}</Link></h3>
           <div className="d-flex mb-2">
             <div className="mr-2"><strong>Round: {props.round}  |</strong></div>
             <div><strong>Question: {props.question}</strong></div>
