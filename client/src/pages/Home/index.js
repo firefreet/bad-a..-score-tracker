@@ -133,7 +133,7 @@ function Home(props) {
                 <Link to={loggedIn ? '/rooms' : '/login'}>
                   <button
                     className="btn btn-outline-primary btn-sm login-link ml-2">
-                    Open New Room
+                    Manage Rooms
                   </button>
                 </Link>
               </div>
