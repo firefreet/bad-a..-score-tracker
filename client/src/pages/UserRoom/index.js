@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Container, Row } from '../../components/Grid';
+import { Container, Row, Col } from '../../components/Grid';
 import RoomNav from '../../components/RoomNav';
 import SubmitModal from '../../components/SubmitModal';
 import API from '../../utils/API';
@@ -10,6 +10,7 @@ import RndQstSelectors from '../../components/RndQstSelectors';
 import TopBar from '../../components/TopBar';
 import SelectedRoundContext from '../../utils/selectedRoundContext';
 import SelectedQuestionContext from '../../utils/SelectedQuestionContext';
+import './style.scss';
 
 // function to establish current state references to check against as previous when state changes
 function usePrevious(value) {
@@ -34,6 +35,7 @@ function UserRoom() {
   const prevSelectedRound = usePrevious(selectedRound);
   const prevSelectedQuestion = usePrevious(selectedQuestion);
   var userIndex = -1;
+
 
   // on mount, clear out any previous answers
   // that may have been left behind from back / forward
@@ -197,6 +199,7 @@ function UserRoom() {
       toggleReadonly(true);
     }
   }
+
   // if user decides to go to current question...
   useEffect(() => {
     // tell showResponse function it will need to update selected Round and Question
@@ -205,41 +208,78 @@ function UserRoom() {
     }
   }, [goToCurrent])
 
+
   return (
     <div>
       <TopBar />
-      <RoomNav admin="false" room={roomData.roomID} round={roomData.rounds.length} question={roomData.rounds[roomData.rounds.length - 1]} />
+      <RoomNav admin={false} room={roomData.roomID} round={roomData.rounds.length} question={roomData.rounds[roomData.rounds.length - 1]} />
       <Container>
+
         <Row>
-          <label className='w-100 text-center'>Current Broadcast</label>
+          <Col>
+
+            <div className="d-flex justify-content-center mb-2">
+              <div className="mr-1">
+                <img src="img/communication.svg" className="userRoomBroadcastImg" />
+              </div>
+              <small className="align-self-end">Admin Broadcast:</small>
+            </div>
+          </Col>
         </Row>
+
         <Row>
-          <textarea rows='6' className='mx-auto w-75 bg-light' placeholder=' .... no content from game admin yet' readOnly value={roomData ? roomData.broadcast : ""}></textarea>
+          <Col>
+            <h4 className="text-center">{roomData.broadcast ? roomData.broadcast : "...Waiting for Broadcast from Admin"}</h4>
+            <hr />
+          </Col>
         </Row>
+
         <Row>
-          <label className='mx-auto'>{roomState.participant}'s Response</label>
+          <Col>
+            <div className='mt-3 font-weight-bold'>{roomState.participant}'s response</div>
+          </Col>
         </Row>
+
         <Row>
-          <textarea ref={answer} onChange={allowSubmit} rows='6' className='mx-auto w-75' placeholder=' .... enter your answers here'></textarea>
+          <Col>
+            <textarea ref={answer} onChange={allowSubmit} rows='6' className='form-control p-2 mb-3' placeholder=' ...Enter your answers here'></textarea>
+          </Col>
         </Row>
-        <br />
-        <RndQstSelectors goToCurrent={goToCurrent} setGoToCurrent={setGoToCurrent} />
+
         <Row>
-          <Link to='gamesummary'>
-            <button className="btn-info text-center px-0" style={{ width: '150px' }}>
-              Score Board
-            </button>
-          </Link>
-          <button ref={submit} className='ml-auto btn-disabled btn-success' data-toggle='modal' data-target='#submitModal' style={{ width: '150px' }}>
-            Submit Answer
-          </button>
+          <Col>
+            <div className="d-flex justify-content-between">
+              <Link to='gamesummary'>
+                <button className="btn btn-secondary btn-sm">
+                  Score Board
+                  </button>
+              </Link>
+              <button ref={submit} className='btn btn-warning btn-sm' data-toggle='modal' data-target='#submitModal'>
+                Submit Answer
+                </button>
+            </div>
+          </Col>
         </Row>
+
+        <Row>
+          <Col>
+            <hr />
+            <div>View Previous Answers</div>
+          </Col>
+        </Row>
+
+        <RndQstSelectors admin={false}  goToCurrent={goToCurrent} setGoToCurrent={setGoToCurrent} />
+
         <GoToQModal show={showGoTo} handleClose={handleClose} goToQ={goToQ} />
         <SubmitModal submitAnswer={submitAnswer} />
       </Container>
 
     </div>
   )
+
+
+
+
 }
 
 export default UserRoom;
