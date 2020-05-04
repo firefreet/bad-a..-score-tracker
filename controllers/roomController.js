@@ -225,7 +225,7 @@ module.exports = {
   },
   saveAnswer: (req, res) => {
     const answerData = req.body;
-    const { roomId, userName, answer, roundNumber, questionNumber } = answerData;
+    const { roomId, userName, answer, roundNumber, questionNumber, points } = answerData;
     // check the room for an answer to that question/round by that user
     RoomModel.findOne({ '_id': ObjectId(roomId) }).then(async (data) => {
       try {
@@ -237,7 +237,7 @@ module.exports = {
         // if user is not yet listed in the room, add them
         if (index === -1) {
           await RoomModel.updateOne({ '_id': ObjectId(roomId) }, { $push: { participants: { name: userName, responses: [] } } })
-          update = await RoomModel.updateOne({ '_id': ObjectId(roomId), 'participants.name': userName }, { $push: { 'participants.$.responses': { 'answer': answer, 'questionNumber': questionNumber, 'roundNumber': roundNumber } } })
+          update = await RoomModel.updateOne({ '_id': ObjectId(roomId), 'participants.name': userName }, { $push: { 'participants.$.responses': { 'answer': answer, 'points': points, 'questionNumber': questionNumber, 'roundNumber': roundNumber } } })
 
         } else {
           // check through their responses to see if this question and round already has an answer
@@ -247,7 +247,7 @@ module.exports = {
           // if it was not found
           if (prevAnswer.length === 0) {
             // add their answer in
-            update = await RoomModel.updateOne({ '_id': ObjectId(roomId), 'participants.name': userName }, { $push: { 'participants.$.responses': { 'answer': answer, 'questionNumber': questionNumber, 'roundNumber': roundNumber } } })
+            update = await RoomModel.updateOne({ '_id': ObjectId(roomId), 'participants.name': userName }, { $push: { 'participants.$.responses': { 'answer': answer, 'points': points, 'questionNumber': questionNumber, 'roundNumber': roundNumber } } })
           }
           res.json(update);
         }
