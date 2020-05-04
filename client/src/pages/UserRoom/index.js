@@ -24,6 +24,8 @@ function usePrevious(value) {
 function UserRoom() {
   const answer = useRef();
   const submit = useRef();
+  const points = useRef();
+  const pointsValidator = useRef();
   const { roomState: { roomData }, roomState } = useContext(RoomContext);
   const [showGoTo, setShowGoTo] = useState(false);
   const prevRoundQuestion = usePrevious(roomData.rounds);
@@ -101,13 +103,17 @@ function UserRoom() {
 
   // get user's answer to post to DB
   function submitAnswer() {
+
+    let points = checkPoints();
+    if (!points) return;
+
     const respData = {
       roomId: roomData._id,
       userName: roomState.participant,/* to be made dynamic */
       answer: answer.current.value,
       questionNumber: selectedQuestion,
       roundNumber: selectedRound,
-      points: 3
+      points: points
     };
     API.saveAnswer(respData).then(() => {
       // emit('new update', 'time to refresh room from DB')
@@ -127,13 +133,13 @@ function UserRoom() {
     let sub = submit.current;
     let subClass = sub.classList;
     if (!allowSubmit) {
-      subClass.remove('text-body');
       subClass.add('text-muted');
       sub.setAttribute('disabled', 'true');
+      sub.innerHTML = '<i class="fas fa-check text-success"></i> Submitted';
     } else {
       subClass.remove('text-muted');
-      subClass.add('text-body');
-      sub.removeAttribute('disabled')
+      sub.removeAttribute('disabled');
+      sub.innerHTML='Submit Answer'
     }
   }
 
@@ -208,6 +214,18 @@ function UserRoom() {
     }
   }, [goToCurrent])
 
+  //Check points
+
+  const checkPoints = () => {
+    if (points.current.value === 'NAN') {
+      pointsValidator.current.classList.remove('d-none')
+      return false;
+    } else {
+      pointsValidator.current.classList.add('d-none');
+      return parseInt(points.current.value);
+    }
+  }
+
 
   return (
     <div>
@@ -248,16 +266,27 @@ function UserRoom() {
 
         <Row>
           <Col>
-            <div className="d-flex justify-content-between">
-              <Link to='gamesummary'>
-                <button className="btn btn-secondary btn-sm">
-                  Score Board
-                  </button>
-              </Link>
+            <div className="d-flex justify-content-between align-items-center">
+              <div className="form-group mb-0">
+                <select onChange={checkPoints} ref={points} className="form-control form-control-sm" id="pointSelect">
+                  <option value="NAN">Select Points</option>
+                  <option value='1'>1 Points</option>
+                  <option value='2'>2 Points</option>
+                  <option value='3'>3 Points</option>
+                  <option value='4'>4 Points</option>
+                  <option value='5'>5 Points</option>
+                  <option value='6'>6 Points</option>
+                  <option value='7'>7 Points</option>
+                  <option value='8'>8 Points</option>
+                  <option value='9'>9 Points</option>
+                  <option value='10'>10 Points</option>
+                </select>
+              </div>
               <button ref={submit} className='btn btn-warning btn-sm' data-toggle='modal' data-target='#submitModal'>
                 Submit Answer
                 </button>
             </div>
+            <div ref={pointsValidator} className="text-danger mt-2 d-none">Please Select Points For This Question!</div>
           </Col>
         </Row>
 
@@ -265,10 +294,15 @@ function UserRoom() {
           <Col>
             <hr />
             <div>View Previous Answers</div>
+            <Link to='gamesummary'>
+                <button className="mt-2 btn btn-secondary btn-sm">
+                  Game Summary
+                  </button>
+              </Link>
           </Col>
         </Row>
 
-        <RndQstSelectors admin={false}  goToCurrent={goToCurrent} setGoToCurrent={setGoToCurrent} />
+        {/* <RndQstSelectors admin={false}  goToCurrent={goToCurrent} setGoToCurrent={setGoToCurrent} /> */}
 
         <GoToQModal show={showGoTo} handleClose={handleClose} goToQ={goToQ} />
         <SubmitModal submitAnswer={submitAnswer} />
