@@ -92,7 +92,14 @@ function Home(props) {
       <Container>
         <Row>
           <Col>
-            <h3>Response.io!</h3>
+            <div className="d-flex">
+              <div><img src="img/idea.svg" style={{ 'height': '63px'}} /></div>
+              <div className="align-self-end mt-1">
+                <h3 className='mb-0'>Response.io!</h3>
+                <small className="font-italic">You've Got Questions...<strong>We Expect Answers</strong></small>
+              </div>
+            </div>
+            
             <hr />
           </Col>
         </Row>
