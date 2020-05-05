@@ -5,7 +5,7 @@ import API from '../../utils/API';
 import './style.scss';
 
 function WelcomeBackModal(props) {
-  const { roomState: { loggedIn }, roomState, setRoomState } = useContext(RoomContext);
+  const { roomState, setRoomState } = useContext(RoomContext);
 
   const resumeSession = async () => {
     const newRoom = await API.getRoomByCode(props.roomCode);
@@ -22,7 +22,7 @@ function WelcomeBackModal(props) {
   return (
     <Modal show={props.show} onHide={props.handleClose} centered>
       <Modal.Header closeButton>
-        <Modal.Title><img src="/img/info.svg" className="modalInfoSvg align-bottom" />Welcome Back!</Modal.Title>
+        <Modal.Title><img src="/img/info.svg" alt="trivia!" className="modalInfoSvg align-bottom" />Welcome Back!</Modal.Title>
       </Modal.Header>
 
       <Modal.Body>

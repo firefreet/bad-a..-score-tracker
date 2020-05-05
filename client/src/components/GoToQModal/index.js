@@ -7,7 +7,7 @@ function GoToQModal(props) {
 
   <Modal show={props.show} onHide={props.handleClose} centered>
     <Modal.Header closeButton>
-      <Modal.Title><img src="img/problem-solving.svg" className="modalInfoSvg align-bottom" />New Question</Modal.Title>
+      <Modal.Title><img src="img/problem-solving.svg" alt='trivia!' className="modalInfoSvg align-bottom" />New Question</Modal.Title>
     </Modal.Header>
 
     <Modal.Body>
