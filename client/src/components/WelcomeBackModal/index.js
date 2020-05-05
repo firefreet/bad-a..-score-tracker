@@ -20,7 +20,7 @@ function WelcomeBackModal(props) {
   }
 
   return (
-    <Modal show={props.show} onHide={props.handleClose}>
+    <Modal show={props.show} onHide={props.handleClose} centered>
       <Modal.Header closeButton>
         <Modal.Title><img src="/img/info.svg" className="modalInfoSvg align-bottom" />Welcome Back!</Modal.Title>
       </Modal.Header>
