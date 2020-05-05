@@ -77,14 +77,16 @@ function GameSummary(props) {
           <Col>
             <h3>Game Summary</h3>
             <div><Link to={roomState.loggedIn ? '/adminroom' : '/userroom'} className='responseIoLink'><i className="fas fa-arrow-left"></i> Room {roomData.roomID}</Link></div>
+            <hr />
           </Col>
         </Row>
         <Row>
           <Col>
-            <div className="mt-3">
+            <div className="mt-1">
+              <small>Click on a name for details.</small>
               {participants.map((participant, i) => (
                 <div className="mb-2" key={i}>
-                  <div className="accordion mt-3 mb-3" id={participant.name.replace(/ /g, '') + i}>
+                  <div className="accordion mt-1 mb-3" id={participant.name.replace(/ /g, '') + i}>
                     <div className="card">
                       <div className="card-header px-2 py-2" id="headingOne">
                         <div className="d-flex justify-content-between align-items-center">
