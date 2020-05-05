@@ -147,6 +147,13 @@ function Home(props) {
             </form>
           </Col>
         </Row>
+        <Row>
+          <Col>
+            <div className="p-2 text-center mt-5">
+              Need directions or a trivia starter pack? <Link to="/directions" className="responseIoLink">Get Inspired</Link>
+            </div>
+          </Col>
+        </Row>
       </Container>
       <WelcomeBackModal
         show={showGoTo}
