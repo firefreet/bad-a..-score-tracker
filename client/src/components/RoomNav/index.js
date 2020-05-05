@@ -45,7 +45,6 @@ function RoomNav(props) {
   }, [selectedQuestion, selectedRound])
 
 
-
   return (
     <Container classes="container mb-2">
       <Row>
@@ -69,14 +68,13 @@ function RoomNav(props) {
               </button>
               <Link to='gamesummary' className='mx-auto'>
               <button className="btn btn-primary btn-sm">
-                <i class="fas fa-list-ol"></i> Scores
+                <i className="fas fa-list-ol"></i> Scores
               </button>
               </Link>
             </div>
           </Col>
         </Row>
       ) : null}
-
     </Container>
   )
 }
