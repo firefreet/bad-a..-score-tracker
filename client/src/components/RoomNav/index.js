@@ -65,7 +65,7 @@ function RoomNav(props) {
                 <i className="fas fa-circle-notch"></i> New Round
               </button>
               <button onClick={newQuestion} className='btn btn-primary btn-sm mr-1'>
-                <i class="fas fa-question"></i> New Question
+                <i className="fas fa-question"></i> New Question
               </button>
               <Link to='gamesummary' className='mx-auto'>
               <button className="btn btn-primary btn-sm">
