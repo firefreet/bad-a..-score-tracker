@@ -7,7 +7,7 @@ const isAuthroizedRoute = async (req, res, next) => {
   try {
     let value = req.headers.cookie;
 
-    if(!value.includes('user=')) {
+    if(!value) {
       throw new Error ('USER NOT FOUND: NO COOKIE')
     }
 

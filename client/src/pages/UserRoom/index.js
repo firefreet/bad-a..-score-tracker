@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Container, Row } from '../../components/Grid';
+import { Container, Row, Col } from '../../components/Grid';
 import RoomNav from '../../components/RoomNav';
 import SubmitModal from '../../components/SubmitModal';
 import API from '../../utils/API';
@@ -10,6 +10,7 @@ import RndQstSelectors from '../../components/RndQstSelectors';
 import TopBar from '../../components/TopBar';
 import SelectedRoundContext from '../../utils/selectedRoundContext';
 import SelectedQuestionContext from '../../utils/SelectedQuestionContext';
+import './style.scss';
 
 // function to establish current state references to check against as previous when state changes
 function usePrevious(value) {
@@ -23,6 +24,8 @@ function usePrevious(value) {
 function UserRoom() {
   const answer = useRef();
   const submit = useRef();
+  const points = useRef();
+  const pointsValidator = useRef();
   const { roomState: { roomData }, roomState } = useContext(RoomContext);
   const [showGoTo, setShowGoTo] = useState(false);
   const prevRoundQuestion = usePrevious(roomData.rounds);
@@ -34,6 +37,7 @@ function UserRoom() {
   const prevSelectedRound = usePrevious(selectedRound);
   const prevSelectedQuestion = usePrevious(selectedQuestion);
   var userIndex = -1;
+
 
   // on mount, clear out any previous answers
   // that may have been left behind from back / forward
@@ -99,13 +103,17 @@ function UserRoom() {
 
   // get user's answer to post to DB
   function submitAnswer() {
+
+    let points = checkPoints();
+    if (!points) return;
+
     const respData = {
       roomId: roomData._id,
       userName: roomState.participant,/* to be made dynamic */
       answer: answer.current.value,
       questionNumber: selectedQuestion,
       roundNumber: selectedRound,
-      points: 3
+      points: points
     };
     API.saveAnswer(respData).then(() => {
       // emit('new update', 'time to refresh room from DB')
@@ -125,13 +133,13 @@ function UserRoom() {
     let sub = submit.current;
     let subClass = sub.classList;
     if (!allowSubmit) {
-      subClass.remove('text-body');
       subClass.add('text-muted');
       sub.setAttribute('disabled', 'true');
+      sub.innerHTML = '<i class="fas fa-check text-success"></i> Submitted';
     } else {
       subClass.remove('text-muted');
-      subClass.add('text-body');
-      sub.removeAttribute('disabled')
+      sub.removeAttribute('disabled');
+      sub.innerHTML='Submit Answer'
     }
   }
 
@@ -197,6 +205,7 @@ function UserRoom() {
       toggleReadonly(true);
     }
   }
+
   // if user decides to go to current question...
   useEffect(() => {
     // tell showResponse function it will need to update selected Round and Question
@@ -205,41 +214,106 @@ function UserRoom() {
     }
   }, [goToCurrent])
 
+  //Check points
+
+  const checkPoints = () => {
+    if (points.current.value === 'NAN') {
+      pointsValidator.current.classList.remove('d-none')
+      return false;
+    } else {
+      pointsValidator.current.classList.add('d-none');
+      return parseInt(points.current.value);
+    }
+  }
+
+
   return (
     <div>
       <TopBar />
-      <RoomNav admin="false" room={roomData.roomID} round={roomData.rounds.length} question={roomData.rounds[roomData.rounds.length - 1]} />
+      <RoomNav admin={false} room={roomData.roomID} round={roomData.rounds.length} question={roomData.rounds[roomData.rounds.length - 1]} />
       <Container>
+
         <Row>
-          <label className='w-100 text-center'>Current Broadcast</label>
+          <Col>
+            <hr className="mt-0" />
+            <div className="d-flex justify-content-center mb-2">
+              <div className="mr-1">
+                <img src="img/communication.svg" alt="trivia!" className="userRoomBroadcastImg" />
+              </div>
+              <small className="align-self-end">Admin Broadcast:</small>
+            </div>
+          </Col>
         </Row>
+
         <Row>
-          <textarea rows='6' className='mx-auto w-75 bg-light' placeholder=' .... no content from game admin yet' readOnly value={roomData ? roomData.broadcast : ""}></textarea>
+          <Col>
+            <h4 className="text-center">{roomData.broadcast ? roomData.broadcast : "...Waiting for Broadcast from Admin"}</h4>
+            <hr />
+          </Col>
         </Row>
+
         <Row>
-          <label className='mx-auto'>{roomState.participant}'s Response</label>
+          <Col>
+            <div className='mt-3 font-weight-bold'>{roomState.participant}'s response</div>
+          </Col>
         </Row>
+
         <Row>
-          <textarea ref={answer} onChange={allowSubmit} rows='6' className='mx-auto w-75' placeholder=' .... enter your answers here'></textarea>
+          <Col>
+            <textarea ref={answer} onChange={allowSubmit} rows='6' className='form-control p-2 mb-3' placeholder=' ...Enter your answers here'></textarea>
+          </Col>
         </Row>
-        <br />
-        <RndQstSelectors goToCurrent={goToCurrent} setGoToCurrent={setGoToCurrent} />
+
         <Row>
-          <Link to='gamesummary'>
-            <button className="btn-info text-center px-0" style={{ width: '150px' }}>
-              Score Board
-            </button>
-          </Link>
-          <button ref={submit} className='ml-auto btn-disabled btn-success' data-toggle='modal' data-target='#submitModal' style={{ width: '150px' }}>
-            Submit Answer
-          </button>
+          <Col>
+            <div className="d-flex justify-content-between align-items-center">
+              <div className="form-group mb-0">
+                <select onChange={checkPoints} ref={points} className="form-control form-control-sm" id="pointSelect">
+                  <option value="NAN">Select Points</option>
+                  <option value='1'>1 Points</option>
+                  <option value='2'>2 Points</option>
+                  <option value='3'>3 Points</option>
+                  <option value='4'>4 Points</option>
+                  <option value='5'>5 Points</option>
+                  <option value='6'>6 Points</option>
+                  <option value='7'>7 Points</option>
+                  <option value='8'>8 Points</option>
+                  <option value='9'>9 Points</option>
+                  <option value='10'>10 Points</option>
+                </select>
+              </div>
+              <button ref={submit} className='btn btn-warning btn-sm' data-toggle='modal' data-target='#submitModal'>
+                Submit Answer
+                </button>
+            </div>
+            <div ref={pointsValidator} className="text-danger mt-2 d-none">Please Select Points For This Question!</div>
+          </Col>
         </Row>
+
+        <Row>
+          <Col>
+            <hr />
+            <div>View Previous Answers</div>
+              <Link to='gamesummary'>
+                <button className="mt-2 btn btn-primary btn-sm">
+                  <i className="fas fa-list-ol"></i> Game Summary
+                </button>
+              </Link>
+          </Col>
+        </Row>
+
+        {/* <RndQstSelectors admin={false}  goToCurrent={goToCurrent} setGoToCurrent={setGoToCurrent} /> */}
+
         <GoToQModal show={showGoTo} handleClose={handleClose} goToQ={goToQ} />
         <SubmitModal submitAnswer={submitAnswer} />
       </Container>
 
     </div>
   )
+
+
+
+
 }
 
 export default UserRoom;

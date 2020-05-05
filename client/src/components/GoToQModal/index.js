@@ -1,12 +1,13 @@
 import {Modal,Button} from 'react-bootstrap';
 import React from 'react';
+import '../WelcomeBackModal/style.scss';
 
 function GoToQModal(props) {
   return (
 
-  <Modal show={props.show} onHide={props.handleClose}>
+  <Modal show={props.show} onHide={props.handleClose} centered>
     <Modal.Header closeButton>
-      <Modal.Title>New Question Available</Modal.Title>
+      <Modal.Title><img src="img/problem-solving.svg" alt='trivia!' className="modalInfoSvg align-bottom" />New Question</Modal.Title>
     </Modal.Header>
 
     <Modal.Body>
@@ -14,8 +15,8 @@ function GoToQModal(props) {
     </Modal.Body>
 
     <Modal.Footer>
-      <Button variant="secondary" onClick={props.handleClose}>No</Button>
-      <Button variant="primary" onClick={props.goToQ}>Yes</Button>
+      <Button variant="outline-danger" size="sm" onClick={props.handleClose}>No</Button>
+      <Button variant="warning" size="sm" onClick={props.goToQ}>Yes</Button>
     </Modal.Footer>
   </Modal>
   )

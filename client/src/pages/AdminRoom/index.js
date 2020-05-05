@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
-import { Container, Row } from '../../components/Grid';
+import { Container, Row, Col } from '../../components/Grid';
 import RoomContext from '../..//utils/RoomContext';
 import RoomNav from '../../components/RoomNav';
 import RndQstSelectors from '../../components/RndQstSelectors';
 import API from '../../utils/API';
 import TopBar from '../../components/TopBar';
+import Toast from 'react-bootstrap/Toast';
 import SelectedRoundContext from '../../utils/selectedRoundContext';
 import SelectedQuestionContext from '../../utils/SelectedQuestionContext';
+import './style.scss';
 
 
 function AdminRoom() {
@@ -18,11 +20,13 @@ function AdminRoom() {
   var table = [];
   const score = useRef();
   const broadcastField = useRef();
+  const [showToast, setShowToast] = useState(false);
+
 
   // on new questions or rounds, display user answers
   useEffect(() => {
     setTable();
-  }, [roomData, selectedQuestion, selectedRound])
+  }, [roomData, selectedQuestion, selectedRound, showToast])
 
   const setTable = () => {
     table = [];
@@ -51,11 +55,12 @@ function AdminRoom() {
     }
     setTableState(table)
   }
+  
 
   const sendBroadcast = () => {
     API.sendBroadcast(roomData._id, { broadcast: broadcastField.current.value })
       .then(resp => {
-        // console.log(resp);
+        setShowToast(true);
       })
       .catch(err => {
         console.log('Error from sendBroadcast');
@@ -108,7 +113,40 @@ function AdminRoom() {
 
   return (
     <div>
-      <TopBar></TopBar>
+      <TopBar />
+      <Container>
+      <div
+          aria-live="polite"
+          aria-atomic="true"
+          style={{
+            position: 'relative',
+            zIndex: 10000
+          }}
+        >
+          <div
+            style={{
+              position: 'absolute',
+              top: 0,
+              right: 0,
+            }}
+          >
+            <Toast
+              autohide
+              onClose={() => setShowToast(false)}
+              show={showToast}
+              delay={30000}
+            >
+              <Toast.Header>
+                <img src="img/communication.svg" className="toastImg rounded mr-2" alt="" />
+                <strong className="mr-3">Response.io!</strong>
+                <small>just now</small>
+              </Toast.Header>
+              <Toast.Body>Broadcast set to room</Toast.Body>
+            </Toast>
+          </div>
+        </div>
+      </Container>
+
       <RoomNav admin="true"
         room={roomData.roomID}
         round={roomData.rounds.length}
@@ -117,71 +155,52 @@ function AdminRoom() {
         setGoToCurrent={setGoToCurrent} />
       <Container>
         <Row>
-          <textarea rows='6' ref={broadcastField} className='mt-2 mx-auto mb-2 mb-2 w-75' placeholder='...type or paste content here to BROADCAST to players ...'></textarea>
+          <Col>
+            <textarea rows='4' ref={broadcastField} className='form-control mt-2 mx-auto mb-2 mb-2 w-100 p-2' placeholder='Brodcast message to players'></textarea>
+          </Col>
         </Row>
         <Row>
-          <div className='mb-2 container-fluid d-flex w-75 p-0'>
-            <button className="btn btn-success btn-sm px-0 mr-auto"
-              style={{ width: '50px' }}
-              onClick={sendBroadcast}>
-              Send
+          <Col>
+            <div className='d-flex justify-content-between mb-2'>
+              <button className="btn btn-warning btn-sm"
+                onClick={sendBroadcast}>
+                Broadcast
               </button>
-            <button className='btn btn-info btn-sm ml-auto mr-0'
-              style={{ width: '50px' }}
-              onClick={clearBroadcast}>
-              Clear
+              <button className='btn btn-outline-danger btn-sm'
+                onClick={clearBroadcast}>
+                Clear
               </button>
-          </div>
+            </div>
+          </Col>
         </Row>
-        <Row>
-          <p className='text-center mx-auto mt-2 border w-75'>See Player Responses: </p>
-        </Row>
+
+        <hr />
+
+        <h5>Responses</h5>
         <RndQstSelectors goToCurrent={goToCurrent} setGoToCurrent={setGoToCurrent} />
+
         <Row>
-          <table className="table table-striped border">
-            <thead>
-              <tr>
-                <th width="70%" scope="col">Player</th>
-                <th scope="col" className='text-center'>Correct</th>
-                <th scope="col" className='text-center'>Score</th>
-                <th scope="col" className='text-center'>Delete</th>
-              </tr>
-            </thead>
-            {tableState.map((v, i) => {
-              return (
-                <tbody id={'playerId' + i} questionid={v.questionId} userid={v.userId} key={i}>
-                  <tr>
-                    <td>{v.player}</td>
-                    <td>
-                      <div className='d-flex'>
-                        {v.correctInd ? <i datanum={i} databool='true' onClick={toggleCorrect} className='mx-auto text-center far fa-check-square'></i> :
-                          <i datanum={i} databool='false' onClick={toggleCorrect} className='mx-auto far fa-square'></i>}
-                      </div>
-                    </td>
-                    <td>
-                      <div ref={score} datascore={v.score} className='text-center'>{v.score}</div>
-                    </td>
-                    <td className='d-flex'>
-                      <i className="mx-auto fas fa-minus-circle" datanum={i} onClick={deleteAnswer}></i>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td colSpan='10'>{v.answer}</td>
-                  </tr>
-                </tbody>)
-            })}
-          </table>
+          <Col>
+              {tableState.map((v, i) => {
+                return (
+                  <div id={'playerId' + i} className="d-flex align-items-stretch border-top" questionid={v.questionId} userid={v.userId} key={i}>
+                    <div className="mr-1 py-2 px-1 bg-light">
+                      {v.correctInd ? <i datanum={i} databool='true' onClick={toggleCorrect} className='text-success far fa-check-square'></i> :
+                        <i datanum={i} databool='false' onClick={toggleCorrect} className='text-success far fa-square'></i>}
+                    </div>
+
+                    <div className="align-self-stretch mr-1 py-2 px-1">
+                      [<strong>{v.player}</strong>] {v.answer} <br />
+                      <span ref={score} datascore={v.score}><strong>{v.score} Pts</strong> {v.score !== 0 ? (<i className="fas fa-check-circle align-middle text-success mr-2"></i>) : (<i className="fas fa-times-circle align-middle text-danger mr-2"></i>)}</span>
+                    </div>
+                        
+                    <div className="ml-auto py-2 px-1 bg-light">
+                      <i className="text-primary fas fa-minus-circle" datanum={i} onClick={deleteAnswer}></i>
+                    </div>
+                  </div>)
+              })}
+          </Col>
         </Row>
-        <div className='px-3'>
-          <Row>
-            <div className="col-12 col-md-4 mb-1 d-flex">
-            </div>
-            <div className="col-12 col-md-4 mb-1 d-flex">
-            </div>
-            <div className="col-12 col-md-4 mb-1 d-flex">
-            </div>
-          </Row>
-        </div>
       </Container>
     </div>
   )

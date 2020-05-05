@@ -16,6 +16,7 @@ import GenerateRoom from './pages/GenerateRoom';
 import ScoreSummary from './pages/GameSummary/index.js';
 import modelRoom from './utils/modelRoom';
 import RoomRedirect from './pages/RoomRedirect';
+import Directions from './pages/Directions';
 import './global.scss';
 
 function App() {
@@ -36,25 +37,31 @@ function App() {
 
   useEffect(() => {
     const i = setInterval(async () => {
-      const { roomID, participant } = JSON.parse(localStorage.getItem('roomState'));
-      // console.log('in interval')
-      const loc = document.location.pathname;
-      setCount(count >= 1000 ? 0 : count + 1)
-      if (authCheckComplete && roomID !== '' && (loc === '/userroom' || loc === '/adminroom' || loc === '/gamesummary')) {
-        try {
-          // console.log(new Date())
-          // console.log('before set state')
-          // console.log(roomID)
-          const newData = await API.getRoomByCode(roomID);
-          // console.log('new data =')
-          // console.log(newData.data[0].participant);
-          if (participant !== undefined) setRoomState({ ...roomState, roomData: newData.data[0], participant })
-          else setRoomState({ ...roomState, roomData: newData.data[0] })
+      let ls = localStorage.getItem('roomState');
+      //check to see if local storage exists, if so, parse and 
+      if (ls) {
+        const { roomID, participant } = JSON.parse(localStorage.getItem('roomState'));
+        console.log('in interval' + roomID);
+        const loc = document.location.pathname;
+        setCount(count >= 1000 ? 0 : count + 1)
+        if (authCheckComplete && roomID !== '' && (loc === '/userroom' || loc === '/adminroom' || loc === '/gamesummary')) {
+          try {
+            // console.log(new Date())
+            // console.log('before set state')
+            // console.log(roomID)
+            const newData = await API.getRoomByCode(roomID);
+            // console.log('new data =')
+            // console.log(newData.data[0].participant);
+            if (participant !== undefined) setRoomState({ ...roomState, roomData: newData.data[0], participant })
+            else setRoomState({ ...roomState, roomData: newData.data[0] })
+          }
+          catch (err) {
+            console.log('unable to get room: ' + roomID)
+          }
         }
-        catch (err) {
-          console.log('unable to get room: ' + roomID)
-        }
+
       }
+
     }, 500);
     return () => clearInterval(i);
   }, [count]);
@@ -69,12 +76,13 @@ function App() {
     API.isAuthenticated()
       .then(res => {
         setRoomState({ ...roomState, loggedIn: true, userData: res.data })
+        setAuthCheckComplete(true);
+        console.log('AuthCheck Set'); /* setAuthCheckComplete was outside */
       })
       .catch(err => {
         console.log('USER IS NOT LOGGED IN', err.response)
         setRoomState(currentState => ({ ...currentState, loggedIn: false, userData: null }));
       });
-    setAuthCheckComplete(true);
   }, []);
 
   return (
@@ -94,6 +102,7 @@ function App() {
                 {/* Temp route for room generation */}
                 {/* <Route exact path="/genroom" component={GenerateRoom} /> */}
                 <Route path="/rm/:roomCode" component={RoomRedirect} />
+                <Route exact path='/directions' component={Directions} />
                 <Route component={NoMatch} />
               </Switch>
             </SelectedQuestionContext.Provider>

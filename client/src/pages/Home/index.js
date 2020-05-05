@@ -26,10 +26,15 @@ function Home(props) {
     const previousInfo = JSON.parse(localStorage.getItem('roomState'));
 
     if (previousInfo) {
-      setReturningRoom(previousInfo.roomID);
-      setReturningUser(previousInfo.participant);
-      setShowGoTo(true);
+      
+      if (previousInfo.roomID && previousInfo.participant) {
+        setReturningRoom(previousInfo.roomID);
+        setReturningUser(previousInfo.participant);
+        setShowGoTo(true);
+      }
+
     }
+
   }, []);
 
   function handleInput(e) {
@@ -46,6 +51,7 @@ function Home(props) {
 
   const handleClose = () => {
     setShowGoTo(false);
+    localStorage.clear('roomState');
   }
 
   const joinRoomByCode = async (e) => {
@@ -86,7 +92,14 @@ function Home(props) {
       <Container>
         <Row>
           <Col>
-            <h3>Response.io!</h3>
+            <div className="d-flex">
+              <div><img src="img/idea.svg" alt="trivia!" style={{ 'height': '63px'}} /></div>
+              <div className="align-self-end mt-1">
+                <h3 className='mb-0'>Response.io!</h3>
+                <small className="font-italic">You've Got Questions...<strong>We Expect Answers</strong></small>
+              </div>
+            </div>
+            
             <hr />
           </Col>
         </Row>
@@ -127,11 +140,18 @@ function Home(props) {
                 <Link to={loggedIn ? '/rooms' : '/login'}>
                   <button
                     className="btn btn-outline-primary btn-sm login-link ml-2">
-                    Open New Room
+                    Manage Rooms
                   </button>
                 </Link>
               </div>
             </form>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <div className="p-2 text-center mt-5">
+              Need directions or a trivia starter pack? <Link to="/directions" className="responseIoLink">Get Inspired</Link>
+            </div>
           </Col>
         </Row>
       </Container>

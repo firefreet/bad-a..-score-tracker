@@ -6,19 +6,21 @@ import { Col, Row, Container } from "../../components/Grid";
 import TopBar from '../../components/TopBar';
 
 function RoomRedirect(props) {
-  // const [roomCode, setRoomCode] = useState('');
+  
+  const [roomCode, setRoomCode] = useState('');
   // const [validRoomCode, setValidRoomCode] = useState(true);
   // const [nullRoomCode, setNullRoomCode] = useState(false);
   const { roomState: { loggedIn }, roomState, setRoomState } = useContext(RoomContext);
   // const roomCodeRef = useRef();
-  // const participantHandleRef = useRef();
+  const participantHandleRef = useRef();
 
   // const invalidRoomCode = <p className="text-danger">That room is not currently in use.</p>
   // const emptyRoomCode = <p className="text-danger">Please enter a room code.</p>
 
   useEffect(() => {
-    console.log('The room code is ' + props.match.params.roomCode);
-    const previousInfo = JSON.parse(localStorage.getItem('roomState'));
+    // console.log('The room code is ' + roomCode);
+    // const previousInfo = JSON.parse(localStorage.getItem('roomState'));
+    setRoomCode(props.match.params.roomCode);
     // if (previousInfo) welcomeBackPrompt(previousInfo);
   }, []);
 
@@ -41,15 +43,20 @@ function RoomRedirect(props) {
       //   setNullRoomCode(true);
       //   throw new Error('You Must Enter a Room Code');
       // }
-      // const newRoom = await API.getRoomByCode(roomCode);
-      // if (!newRoom.data[0]) {
-      //   setValidRoomCode(false);
-      //   throw new Error('Room Does Not Exisit');
-      // }
+      const newRoom = await API.getRoomByCode(roomCode);
+      if (!newRoom.data[0]) {
+        // setValidRoomCode(false);
+        throw new Error('Room Does Not Exisit');
+      }
 
-      // setRoomState({ ...roomState, participant: participantHandleRef.current.value ,roomData: newRoom.data[0] })
+      localStorage.setItem('roomState', JSON.stringify({
+        roomID: roomCode,
+        participant: participantHandleRef.current.value
+      }));
 
-      // props.history.push('./userroom')
+      setRoomState({ ...roomState, participant: participantHandleRef.current.value ,roomData: newRoom.data[0] })
+
+      props.history.push('../userroom')
     } catch (err) {
       // console.log(err)
     }
@@ -69,11 +76,11 @@ function RoomRedirect(props) {
           <Col>
             <form className='mt-3'>
               <div className="form-group">
-                <p>You are joining room number {props.match.params.roomCode}.</p>
+                <p>You are joining room number <strong>{roomCode}</strong>!</p>
                 <p>Please enter a display name:</p>
                   <input
                     onChange={handleInput}
-                    // ref={participantHandleRef}
+                    ref={participantHandleRef}
                     type="text"
                     className="form-control mt-2"
                     id="participantHandle"
