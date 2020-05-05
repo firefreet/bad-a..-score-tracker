@@ -235,7 +235,7 @@ function UserRoom() {
 
         <Row>
           <Col>
-
+            <hr className="mt-0" />
             <div className="d-flex justify-content-center mb-2">
               <div className="mr-1">
                 <img src="img/communication.svg" className="userRoomBroadcastImg" />
@@ -294,10 +294,10 @@ function UserRoom() {
           <Col>
             <hr />
             <div>View Previous Answers</div>
-            <Link to='gamesummary'>
-                <button className="mt-2 btn btn-secondary btn-sm">
-                  Game Summary
-                  </button>
+              <Link to='gamesummary'>
+                <button className="mt-2 btn btn-primary btn-sm">
+                  <i className="fas fa-list-ol"></i> Game Summary
+                </button>
               </Link>
           </Col>
         </Row>

@@ -52,8 +52,7 @@ function RoomNav(props) {
         <Col>
           <h3>Room: <Link className="responseIoLink" to={props.admin ? '/rooms' : '/'}>{props.room}</Link></h3>
           <div className="d-flex mb-2">
-            <div className="mr-2"><strong>Round: {props.round}  |</strong></div>
-            <div><strong>Question: {props.question}</strong></div>
+            <h5 className="mr-2">Round: {props.round}  | Question: {props.question}</h5>
           </div>
         </Col>
       </Row>
@@ -63,20 +62,20 @@ function RoomNav(props) {
           <Col>
             <div>
               <button onClick={newRound} className='btn btn-primary btn-sm mr-1'>
-                New Round
+                <i className="fas fa-circle-notch"></i> New Round
               </button>
               <button onClick={newQuestion} className='btn btn-primary btn-sm mr-1'>
-                New Question
+                <i class="fas fa-question"></i> New Question
               </button>
               <Link to='gamesummary' className='mx-auto'>
               <button className="btn btn-primary btn-sm">
-                Score Board
+                <i class="fas fa-list-ol"></i> Scores
               </button>
               </Link>
             </div>
           </Col>
         </Row>
-      ) : ""}
+      ) : null}
 
     </Container>
   )
