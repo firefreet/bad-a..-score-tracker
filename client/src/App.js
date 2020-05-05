@@ -77,7 +77,7 @@ function App() {
       .then(res => {
         setRoomState({ ...roomState, loggedIn: true, userData: res.data })
         setAuthCheckComplete(true);
-        console.log('AuthCheck Set'); /* setAuthCheckComplete was outside this then... */
+        console.log('AuthCheck Set'); /* setAuthCheckComplete was outside */
       })
       .catch(err => {
         console.log('USER IS NOT LOGGED IN', err.response)
