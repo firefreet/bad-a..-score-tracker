@@ -13,7 +13,7 @@ function GameSummaryMessage( { roomCode, message, linkTo, linkText } ) {
           <Row>
             <Col>
               <h3>Game Summary</h3>
-              {roomCode ? (<div><strong>Room Code:</strong> <Link to='/adminroom' className='responseIoLink'>{roomCode}</Link></div>) : ''}
+              {roomCode ? (<div><i className="fas fa-arrow-left"></i><Link to={linkTo} className='responseIoLink'> Room {roomCode}</Link></div>) : null}
             </Col>
           </Row>
           <Row>
