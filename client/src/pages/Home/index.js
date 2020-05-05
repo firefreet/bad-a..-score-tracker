@@ -93,7 +93,7 @@ function Home(props) {
         <Row>
           <Col>
             <div className="d-flex">
-              <div><img src="img/idea.svg" style={{ 'height': '63px'}} /></div>
+              <div><img src="img/idea.svg" alt="trivia!" style={{ 'height': '63px'}} /></div>
               <div className="align-self-end mt-1">
                 <h3 className='mb-0'>Response.io!</h3>
                 <small className="font-italic">You've Got Questions...<strong>We Expect Answers</strong></small>
@@ -145,6 +145,13 @@ function Home(props) {
                 </Link>
               </div>
             </form>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <div className="p-2 text-center mt-5">
+              Need directions or a trivia starter pack? <Link to="/directions" className="responseIoLink">Get Inspired</Link>
+            </div>
           </Col>
         </Row>
       </Container>

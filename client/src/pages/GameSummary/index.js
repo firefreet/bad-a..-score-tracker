@@ -20,7 +20,8 @@ function GameSummary(props) {
 
   useEffect(() => {
     let ls = localStorage.getItem('roomState');
-    if (ls) { ls = JSON.parse(ls); }
+    if (ls === null) { return; }
+    if (ls !== null) { ls = JSON.parse(ls); }
     if (ls.participant) { setLocalStor(ls.participant); }
   }, []);
 
@@ -59,9 +60,9 @@ function GameSummary(props) {
     return (
       <GameSummaryMessage
         roomCode={roomState.roomData.roomID}
-        message="Looks like there aren't any responses yet!"
-        linkTo='/adminroom'
-        linkText='Get Those Responses!'
+        message="Looks like there aren't any responses yet..."
+        linkTo={roomState.loggedIn ? '/adminroom' : '/userroom'}
+        linkText={roomState.loggedIn ? 'Get Those Responses!' : 'Enter Yours Now!'}
       />
     )
   }
@@ -76,7 +77,7 @@ function GameSummary(props) {
         <Row>
           <Col>
             <h3>Game Summary</h3>
-            <div><Link to={roomState.loggedIn ? '/adminroom' : '/userroom'} className='responseIoLink'><i className="fas fa-arrow-left"></i> Room {roomData.roomID}</Link></div>
+            <div><i className="fas fa-arrow-left"></i><Link to={roomState.loggedIn ? '/adminroom' : '/userroom'} className='responseIoLink'> Room {roomData.roomID}</Link></div>
             <hr />
           </Col>
         </Row>

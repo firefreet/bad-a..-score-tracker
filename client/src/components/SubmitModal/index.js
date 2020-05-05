@@ -8,7 +8,7 @@ function SubmitModal(props) {
       <div className="modal-dialog" role="document">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title" id="submitModalLabel"><img src="img/idea.svg" className="align-bottom modalInfoSvg" />Submit Response!!!</h5>
+            <h5 className="modal-title" id="submitModalLabel"><img src="img/idea.svg" alt="trivia!" className="align-bottom modalInfoSvg" />Submit Response!!!</h5>
             <button type="button" className="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>

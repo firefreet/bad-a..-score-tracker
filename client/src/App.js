@@ -16,6 +16,7 @@ import GenerateRoom from './pages/GenerateRoom';
 import ScoreSummary from './pages/GameSummary/index.js';
 import modelRoom from './utils/modelRoom';
 import RoomRedirect from './pages/RoomRedirect';
+import Directions from './pages/Directions';
 import './global.scss';
 
 function App() {
@@ -75,12 +76,13 @@ function App() {
     API.isAuthenticated()
       .then(res => {
         setRoomState({ ...roomState, loggedIn: true, userData: res.data })
+        setAuthCheckComplete(true);
+        console.log('AuthCheck Set'); /* setAuthCheckComplete was outside this then... */
       })
       .catch(err => {
         console.log('USER IS NOT LOGGED IN', err.response)
         setRoomState(currentState => ({ ...currentState, loggedIn: false, userData: null }));
       });
-    setAuthCheckComplete(true);
   }, []);
 
   return (
@@ -100,6 +102,7 @@ function App() {
                 {/* Temp route for room generation */}
                 {/* <Route exact path="/genroom" component={GenerateRoom} /> */}
                 <Route path="/rm/:roomCode" component={RoomRedirect} />
+                <Route exact path='/directions' component={Directions} />
                 <Route component={NoMatch} />
               </Switch>
             </SelectedQuestionContext.Provider>

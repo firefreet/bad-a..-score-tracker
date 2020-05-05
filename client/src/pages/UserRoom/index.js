@@ -238,7 +238,7 @@ function UserRoom() {
             <hr className="mt-0" />
             <div className="d-flex justify-content-center mb-2">
               <div className="mr-1">
-                <img src="img/communication.svg" className="userRoomBroadcastImg" />
+                <img src="img/communication.svg" alt="trivia!" className="userRoomBroadcastImg" />
               </div>
               <small className="align-self-end">Admin Broadcast:</small>
             </div>
