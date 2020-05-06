@@ -43,9 +43,7 @@ module.exports = {
   },
   getAuthorizedUser: async function (req, res) {
     try {
-      console.log(req);
       if (req.user) {
-        console.log(req.user);
         console.log('successfully gathered user data');
         res.status(200).send(req.user);
       } 
@@ -55,7 +53,6 @@ module.exports = {
   },
   logOut: async function (req, res) {
     let user = await db.User.findByIdAndUpdate(req.user._id, {tokens: ''}, {new: true})
-    console.log(user);
     req.user=null
     req.token=null
     res.status(200).send('LOGGED OUT');

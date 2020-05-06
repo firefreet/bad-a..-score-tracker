@@ -36,14 +36,15 @@ function AdminRoom() {
   // on new questions or rounds, display user answers
   useEffect(() => {
     if (broadcastField.current.value === '' && roomData.broadcast !== '' && roomData.broadcast !== undefined && prevBroadcast !== roomData.broadcast) {
-      console.log(roomData);
       broadcastField.current.value = roomData.broadcast;
     }
     setTable();
   }, [roomData, selectedQuestion, selectedRound, showToast])
 
+  // upon having or getting a room id, find out the current round and question
   useEffect(()=>{
     let rounds = roomData.rounds.length;
+    // so that you can set and go to them
     setSelectedRound(rounds);
     setSelectedQuestion(roomData.rounds[rounds-1]);
     setGoToCurrent(true);

@@ -42,6 +42,7 @@ function UserRoom() {
   // that may have been left behind from back / forward
   useEffect(() => {
     toggleReadonly(false);
+    toggleSubmit(false);
     answer.current.value = '';
     // on unmount initialize variables for same reason
     return () => {
