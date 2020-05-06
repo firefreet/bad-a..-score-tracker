@@ -10,10 +10,19 @@ import SelectedRoundContext from '../../utils/selectedRoundContext';
 import SelectedQuestionContext from '../../utils/SelectedQuestionContext';
 import './style.scss';
 
+// function to establish current state references to check against as previous when state changes
+function usePrevious(value) {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = value;
+  })
+  return ref.current;
+}
+
 
 function AdminRoom() {
-  const { selectedQuestion } = useContext(SelectedQuestionContext);
-  const { selectedRound } = useContext(SelectedRoundContext);
+  const { selectedQuestion, setSelectedQuestion } = useContext(SelectedQuestionContext);
+  const { selectedRound, setSelectedRound } = useContext(SelectedRoundContext);
   const { roomState: { roomData }, setRoomState, roomState } = useContext(RoomContext);
   const [tableState, setTableState] = useState([]);
   const [goToCurrent, setGoToCurrent] = useState(false);
@@ -21,10 +30,15 @@ function AdminRoom() {
   const score = useRef();
   const broadcastField = useRef();
   const [showToast, setShowToast] = useState(false);
+  const prevBroadcast = usePrevious(roomData.broadcast);
 
 
   // on new questions or rounds, display user answers
   useEffect(() => {
+    if (broadcastField.current.value === '' && roomData.broadcast !== '' && roomData.broadcast !== undefined && prevBroadcast !== roomData.broadcast) {
+      console.log(roomData);
+      broadcastField.current.value = roomData.broadcast;
+    }
     setTable();
   }, [roomData, selectedQuestion, selectedRound, showToast])
 

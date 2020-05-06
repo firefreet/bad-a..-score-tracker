@@ -19,9 +19,9 @@ function RoomNav(props) {
     try {
       var { data } = await API.newQuestion(_id, roundNum);
       rounds[roundNum] = parseInt(data);
-      await setRoomState({ ...roomState, roomData: {...roomData, rounds } })
+      await setRoomState({ ...roomState, roomData: { ...roomData, rounds } })
       await setSelectedQuestion(rounds[roundNum]);
-      await setSelectedRound(roundNum +1);
+      await setSelectedRound(roundNum + 1);
     } catch (err) {
       console.log(err);
     }
@@ -32,7 +32,7 @@ function RoomNav(props) {
     const { _id } = roomData
     try {
       var { data } = await API.newRound(_id);
-      await setRoomState({ ...roomState, roomData: {...roomData, rounds: data } })
+      await setRoomState({ ...roomState, roomData: { ...roomData, rounds: data } })
       await setSelectedRound(data.length);
       await setSelectedQuestion(1);
     } catch (err) {
@@ -41,7 +41,7 @@ function RoomNav(props) {
   }
 
   useEffect(() => {
-    props.setGoToCurrent(true);
+    if (props.setGoToCurrent) props.setGoToCurrent(true);
   }, [selectedQuestion, selectedRound])
 
 
@@ -67,8 +67,8 @@ function RoomNav(props) {
                 <i className="fas fa-question"></i> New Question
               </button>
               <Link to='gamesummary' className='mx-auto'>
-              <button className="btn btn-primary btn-sm">
-                <i className="fas fa-list-ol"></i> Scores
+                <button className="btn btn-primary btn-sm">
+                  <i className="fas fa-list-ol"></i> Scores
               </button>
               </Link>
             </div>
