@@ -43,7 +43,9 @@ module.exports = {
   },
   getAuthorizedUser: async function (req, res) {
     try {
+      console.log(req);
       if (req.user) {
+        console.log(req.user);
         console.log('successfully gathered user data');
         res.status(200).send(req.user);
       } 

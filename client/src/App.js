@@ -21,7 +21,6 @@ import './global.scss';
 
 function App() {
 
-  const [authCheckComplete, setAuthCheckComplete] = useState(false);
   const [count, setCount] = useState(0);
   const [selectedRound, setSelectedRound] = useState(1);
   const [selectedQuestion, setSelectedQuestion] = useState(1);
@@ -32,20 +31,21 @@ function App() {
     participant: "",
     setUserData: (loginStatus, userObj, currentRoomState) => {
       setRoomState({ ...currentRoomState, loggedIn: loginStatus, userData: userObj })
-    }
+    },
+    authCheckComplete: false
   });
 
   //// 1 /////
   useEffect(() => {
     API.isAuthenticated()
       .then(res => {
-        setRoomState({ ...roomState, loggedIn: true, userData: res.data })
+        setRoomState({ ...roomState, loggedIn: true, userData: res.data, authCheckComplete: true })
+        console.log('AuthCheck Set'); /* setAuthCheckComplete was outside */
       })
       .catch(err => {
         console.log('USER IS NOT LOGGED IN', err.response)
-        setRoomState(currentState => ({ ...currentState, loggedIn: false, userData: null }));
+        setRoomState({ ...roomState, loggedIn: false, userData: null, authCheckComplete: true });
       });
-      setAuthCheckComplete(true);
   }, []);
 
   ////// 2 ///////
@@ -55,10 +55,11 @@ function App() {
       //check to see if local storage exists, if so, parse and 
       if (ls) {
         const { roomID, participant } = JSON.parse(localStorage.getItem('roomState'));
-        console.log('in interval' + roomID);
+        // console.log('in interval ' + roomID);
         const loc = document.location.pathname;
         setCount(count >= 1000 ? 0 : count + 1)
-        if (authCheckComplete && roomID !== '' && (loc === '/userroom' || loc === '/adminroom' || loc === '/gamesummary')) {
+        // console.log(roomState.authCheckComplete);
+        if (roomState.authCheckComplete && roomID !== '' && (loc === '/userroom' || loc === '/adminroom' || loc === '/gamesummary')) {
           try {
             // console.log(new Date())
             // console.log('before set state')
@@ -78,7 +79,7 @@ function App() {
 
     }, 500);
     return () => clearInterval(i);
-  }, [count]);
+  }, [count, roomState.authCheckComplete]);
 
   // useEffect(() => {
   // console.log('roomstate in use effect of App');
