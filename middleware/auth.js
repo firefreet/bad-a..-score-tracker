@@ -40,7 +40,7 @@ const isAuthroizedRoute = async (req, res, next) => {
     
   } catch (err) {
     console.log('ACCESS TO ROUTE DENITED');
-    res.send('Error from Auth');
+    res.status(401).send('unauthorized access to route')
   }
 };
 
