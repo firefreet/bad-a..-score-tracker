@@ -42,6 +42,15 @@ function AdminRoom() {
     setTable();
   }, [roomData, selectedQuestion, selectedRound, showToast])
 
+  useEffect(()=>{
+    let rounds = roomData.rounds.length;
+    setSelectedRound(rounds);
+    setSelectedQuestion(roomData.rounds[rounds-1]);
+    setGoToCurrent(true);
+  },[roomData._id])
+
+
+
   const setTable = () => {
     table = [];
     if (roomData.participants) {

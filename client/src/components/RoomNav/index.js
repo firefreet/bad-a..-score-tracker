@@ -40,11 +40,6 @@ function RoomNav(props) {
     }
   }
 
-  useEffect(() => {
-    if (props.setGoToCurrent) props.setGoToCurrent(true);
-  }, [selectedQuestion, selectedRound])
-
-
   return (
     <Container classes="container mb-2">
       <Row>
