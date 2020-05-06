@@ -107,6 +107,7 @@ function GameSummary(props) {
                                   {participant.name === localStor ? (<th className="text-left">Response</th>) : null}
                                   <th>Round</th>
                                   <th>Question</th>
+                                  <th>Wager</th>
                                   <th>Points</th>
                                 </tr>
                               </thead>
@@ -117,7 +118,8 @@ function GameSummary(props) {
                                     {participant.name === localStor ? (<td className="text-left">{response.answer}</td>) : null}
                                     <td className="align-middle">{response.roundNumber}</td>
                                     <td className="align-middle">{response.questionNumber}</td>
-                                    <td className={participant.name.replace(/ /g, '') + '-points align-middle'}>{response.correctInd ? response.points : 0}</td>
+                                    <td className='align-middle text-muted'>{response.points}</td>
+                                    <td className={participant.name.replace(/ /g, '') + '-points align-middle'}>{response.correctInd ? response.points : response.points < 0 ? response.points : 0}</td>
                                   </tr>
                                 ))}{/* End Response Loop */}
                               </tbody>

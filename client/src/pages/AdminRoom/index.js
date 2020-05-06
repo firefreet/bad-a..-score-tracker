@@ -68,7 +68,7 @@ function AdminRoom() {
             {
               player: player.name,
               answer,
-              score: correctInd ? points : 0,
+              score: correctInd ? points : points < 0 ? points : 0,
               userId: player._id,
               questionId: _id,
               correctInd
