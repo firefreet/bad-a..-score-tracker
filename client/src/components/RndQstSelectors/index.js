@@ -63,7 +63,7 @@ function RndQstSelectors(props) {
   useEffect(() => {
     if (props.goToCurrent) {
       async function async() {
-        await props.setGoToCurrent(false, roomState);
+        await props.setGoToCurrent(false);
         roundSelect.current.value = selectedRound;
         await createQuestionsOptions();
         questionSelect.current.value = selectedQuestion;

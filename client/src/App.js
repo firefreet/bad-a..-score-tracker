@@ -40,7 +40,7 @@ function App() {
     API.isAuthenticated()
       .then(res => {
         setRoomState({ ...roomState, loggedIn: true, userData: res.data, authCheckComplete: true })
-        console.log('AuthCheck Set'); /* setAuthCheckComplete was outside */
+        // console.log('AuthCheck Set'); 
       })
       .catch(err => {
         console.log('USER IS NOT LOGGED IN', err.response)
