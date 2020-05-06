@@ -10,10 +10,6 @@ function RndQstSelectors(props) {
   const {
     roomState: {
       roomData,
-      /*       selectedRound,
-            selectedQuestion, */
-      /*       updateSelectedQuestion,
-            updateSelectedRound */
     } } = useContext(RoomContext);
   const { roomState } = useContext(RoomContext);
   const questionSelect = useRef();
