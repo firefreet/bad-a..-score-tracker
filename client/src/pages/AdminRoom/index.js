@@ -135,6 +135,61 @@ function AdminRoom() {
     }
   }
 
+  const showNewPointsDiv = (e) => {
+    let i = e.target.getAttribute('datanum');
+    let editPointsBtn = e.target;
+    let newPointsDiv = document.getElementById('newPointsDiv' + i);
+    editPointsBtn.classList.add('d-none');
+    newPointsDiv.classList.remove('d-none')
+  }
+
+  const editPoints = async (e) => {
+    let i = e.target.getAttribute('datanum');
+    let editPointsBtn = document.getElementById('editPointsBtn' + i);
+    let newPointsDiv = document.getElementById('newPointsDiv' + i);
+    let newPointsInput = document.getElementById('newPointsInput' + i);
+    let points = parseInt(newPointsInput.value);
+    
+    console.log(points);
+    
+    if (isNaN(points)) {
+      let warningDiv = document.getElementById('pointsWarning' + i);
+      warningDiv.classList.remove('d-none'); 
+      console.log('not a number pease out'); 
+      return; 
+    }
+    
+    console.log('after NAN check');
+    let playerResp = document.getElementById('playerId' + i)
+    let userId = playerResp.getAttribute('userid');
+    let questionId = playerResp.getAttribute('questionid');
+    try {
+      await API.editPoints(roomData._id, userId, questionId, points).catch(err => { console.log(err) });
+      const { data } = await API.getRoomByCode(roomData.roomID);
+      await setRoomState({ ...roomState, roomData: data[0]});
+      editPointsBtn.classList.remove('d-none');
+      newPointsDiv.classList.add('d-none');
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  const closeNewPoints = (e) => {
+    let i = e.target.getAttribute('datanum');
+    let editPointsBtn = document.getElementById('editPointsBtn' + i);
+    let newPointsDiv = document.getElementById('newPointsDiv' + i);
+    editPointsBtn.classList.remove('d-none');
+    newPointsDiv.classList.add('d-none');
+  }
+
+  const hideWarning = (e) => {
+    let i = e.target.getAttribute('datanum');
+    if (e.target.value.length > 0) {
+      let warningDiv = document.getElementById('pointsWarning' + i);
+      warningDiv.classList.add('d-none'); 
+    }
+  }
+
   return (
     <div>
       <TopBar />
@@ -215,7 +270,16 @@ function AdminRoom() {
 
                     <div className="align-self-stretch mr-1 py-2 px-1">
                       [<strong>{v.player}</strong>] {v.answer} <br />
-                      <span ref={score} datascore={v.score}><strong>{v.score} Pts</strong> {v.score !== 0 ? (<i className="fas fa-check-circle align-middle text-success mr-2"></i>) : (<i className="fas fa-times-circle align-middle text-danger mr-2"></i>)}</span>
+                      <span ref={score} datascore={v.score}><strong>{v.score} Pts</strong> {v.score > 0 ? (<i className="fas fa-check-circle align-middle text-success mr-2"></i>) : (<i className="fas fa-times-circle align-middle text-danger mr-2"></i>)}</span>
+                      <span id={'editPointsBtn' + i} datanum={i} className='responseIoLink' onClick={showNewPointsDiv}>Edit Points</span>
+                      
+                      <div className="d-none" id={'newPointsDiv' + i}>
+                        <input datanum={i} id={'newPointsInput' + i} onChange={hideWarning} type="number" className="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm " />
+                        <div id={'pointsWarning' + i} className="text-danger d-none">You must enter a point value</div>
+                        <span datanum={i} onClick={editPoints} className='responseIoLink mr-1'>Save</span>
+                        <span datanum={i} onClick={closeNewPoints} className='font-weight-bold text-muted'> Close</span>
+                      </div>
+
                     </div>
                         
                     <div className="ml-auto py-2 px-1 bg-light">
