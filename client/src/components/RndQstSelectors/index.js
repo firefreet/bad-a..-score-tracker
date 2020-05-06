@@ -10,10 +10,6 @@ function RndQstSelectors(props) {
   const {
     roomState: {
       roomData,
-      /*       selectedRound,
-            selectedQuestion, */
-      /*       updateSelectedQuestion,
-            updateSelectedRound */
     } } = useContext(RoomContext);
   const { roomState } = useContext(RoomContext);
   const questionSelect = useRef();
@@ -63,7 +59,7 @@ function RndQstSelectors(props) {
   useEffect(() => {
     if (props.goToCurrent) {
       async function async() {
-        await props.setGoToCurrent(false, roomState);
+        await props.setGoToCurrent(false);
         roundSelect.current.value = selectedRound;
         await createQuestionsOptions();
         questionSelect.current.value = selectedQuestion;

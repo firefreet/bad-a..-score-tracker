@@ -31,7 +31,6 @@ function UserRoom() {
   const prevRoundQuestion = usePrevious(roomData.rounds);
   const prevRoom_Id = usePrevious(roomData._id);
   const prevRoomData = usePrevious(roomData);
-  const [goToCurrent, setGoToCurrent] = useState(false);
   const { selectedRound, setSelectedRound } = useContext(SelectedRoundContext);
   const { selectedQuestion, setSelectedQuestion } = useContext(SelectedQuestionContext);
   const prevSelectedRound = usePrevious(selectedRound);
@@ -43,21 +42,46 @@ function UserRoom() {
   // that may have been left behind from back / forward
   useEffect(() => {
     toggleReadonly(false);
-    // get index of user from the Room's participant list array
-    userIndex = roomData.participants.findIndex(element => {
-      return element.name === roomState.participant
-    })
+    toggleSubmit(false);
     answer.current.value = '';
     // on unmount initialize variables for same reason
     return () => {
-      // setSelectedQuestion(1)
-      // setSelectedRound(1);
-      setGoToCurrent(false);
+      setSelectedQuestion(1)
+      setSelectedRound(1);
     }
   }, [])
 
-  // 
+  // on moving to a new room, or the room's round/question data changing
   useEffect(() => {
+    const currRound = roomData.rounds.length;
+    // if there is a new question or round
+    if (
+      (roomData.rounds.length > 1 || roomData.rounds[0] > 1) &&
+      (roomData._id !== prevRoom_Id || prevRoundQuestion.length !== currRound || prevRoundQuestion[currRound - 1] !== roomData.rounds[currRound - 1])
+    ) {
+      // set 'selected' round and question as most recent
+      let rN = roomData.rounds.length;
+      let qN = roomData.rounds[rN - 1];
+      setSelectedQuestion(qN);
+      setSelectedRound(rN);
+      // display FYI modal to user
+      setShowGoTo(true);
+    };
+  }, [roomData._id, roomData.rounds])
+
+  // when the 'selected' (current) round changes...
+  useEffect(() => {
+    if (prevSelectedRound !== selectedRound || prevSelectedQuestion !== selectedQuestion) {
+      // blank out answer
+      answer.current.value = '';
+      // then check if the DB has any old answers to display
+      showResponse();
+    }
+  }, [selectedQuestion, selectedRound])
+
+  // when the room's participant data changes...
+  useEffect(() => {
+    // get the index of the participant
     userIndex = roomData.participants.findIndex(element => {
       return element.name === roomState.participant
     })
@@ -67,39 +91,15 @@ function UserRoom() {
     if (!prevData || (JSON.stringify(prevRoomData.participants[userIndex]) !== JSON.stringify(roomData.participants[userIndex]))) {
       // blank out the answer
       answer.current.value = '';
+      // then go see if there is anything in the database to display
+      showResponse();
     }
-    // check if this useEffect was triggered by selected Round or Question updates
-    else if (prevSelectedRound !== selectedRound || prevSelectedQuestion !== selectedQuestion) {
-      // blank out answer
-      answer.current.value = '';
-    }
-    // then go see if there is anything in the database to display
-    showResponse(false);
-  }, [roomData, selectedQuestion, selectedRound]);
+  }, [roomData.participants]);
 
   // hide GoToQModal
   const handleClose = () => {
     setShowGoTo(false);
   }
-
-  // set flag to allow changing <select>'s option to Current Round & Q
-  const goToQ = () => {
-    setGoToCurrent(true);
-    setShowGoTo(false);
-  }
-
-
-  useEffect(() => {
-    const currRound = roomData.rounds.length;
-    // if there is a new question or round
-    if (
-      (roomData.rounds.length > 1 || roomData.rounds[0] > 1) &&
-      (roomData._id !== prevRoom_Id || prevRoundQuestion.length !== currRound || prevRoundQuestion[currRound - 1] !== roomData.rounds[currRound - 1])
-    ) {
-      // display modal to ask user if they want to go to the new Q / R
-      setShowGoTo(true);
-    };
-  }, [roomData._id, roomData.rounds])
 
   // get user's answer to post to DB
   function submitAnswer() {
@@ -116,7 +116,6 @@ function UserRoom() {
       points: points
     };
     API.saveAnswer(respData).then(() => {
-      // emit('new update', 'time to refresh room from DB')
     })
       .catch(err => console.log(err));
     // make textarea readonly
@@ -139,7 +138,7 @@ function UserRoom() {
     } else {
       subClass.remove('text-muted');
       sub.removeAttribute('disabled');
-      sub.innerHTML='Submit Answer'
+      sub.innerHTML = 'Submit Answer'
     }
   }
 
@@ -159,19 +158,11 @@ function UserRoom() {
     }
   }
 
-
   // looks for previously answered questions and displays if exists
-  function showResponse(goTo) {
+  function showResponse() {
     let ans = answer.current;
     let qN = selectedQuestion;
     let rN = selectedRound;
-    // on go to current question, set selected round and question
-    if (goTo) {
-      rN = roomData.rounds.length;
-      qN = roomData.rounds[rN - 1];
-      setSelectedQuestion(qN);
-      setSelectedRound(rN);
-    }
     userIndex = roomData.participants.findIndex(element => {
       return element.name === roomState.participant
     });
@@ -197,25 +188,9 @@ function UserRoom() {
     } else {
       toggleReadonly(false);
     }
-    // get the current round
-    let currRound = roomData.rounds.length;
-    // if selected a previous round or question
-    if (rN < currRound || (rN === currRound && qN < roomData.rounds[currRound - 1])) {
-      // set to read only 
-      toggleReadonly(true);
-    }
   }
 
-  // if user decides to go to current question...
-  useEffect(() => {
-    // tell showResponse function it will need to update selected Round and Question
-    if (goToCurrent) {
-      showResponse(true);
-    }
-  }, [goToCurrent])
-
   //Check points
-
   const checkPoints = () => {
     if (points.current.value === 'NAN') {
       pointsValidator.current.classList.remove('d-none')
@@ -226,13 +201,11 @@ function UserRoom() {
     }
   }
 
-
   return (
     <div>
       <TopBar />
       <RoomNav admin={false} room={roomData.roomID} round={roomData.rounds.length} question={roomData.rounds[roomData.rounds.length - 1]} />
       <Container>
-
         <Row>
           <Col>
             <hr className="mt-0" />
@@ -244,14 +217,12 @@ function UserRoom() {
             </div>
           </Col>
         </Row>
-
         <Row>
           <Col>
             <h4 className="text-center">{roomData.broadcast ? roomData.broadcast : "...Waiting for Broadcast from Admin"}</h4>
             <hr />
           </Col>
         </Row>
-
         <Row>
           <Col>
             <div className='mt-3 font-weight-bold'>{roomState.participant}'s response</div>
@@ -263,7 +234,6 @@ function UserRoom() {
             <textarea ref={answer} onChange={allowSubmit} rows='6' className='form-control p-2 mb-3' placeholder=' ...Enter your answers here'></textarea>
           </Col>
         </Row>
-
         <Row>
           <Col>
             <div className="d-flex justify-content-between align-items-center">
@@ -289,31 +259,22 @@ function UserRoom() {
             <div ref={pointsValidator} className="text-danger mt-2 d-none">Please Select Points For This Question!</div>
           </Col>
         </Row>
-
         <Row>
           <Col>
             <hr />
             <div>View Previous Answers</div>
-              <Link to='gamesummary'>
-                <button className="mt-2 btn btn-primary btn-sm">
-                  <i className="fas fa-list-ol"></i> Game Summary
+            <Link to='gamesummary'>
+              <button className="mt-2 btn btn-primary btn-sm">
+                <i className="fas fa-list-ol"></i> Game Summary
                 </button>
-              </Link>
+            </Link>
           </Col>
         </Row>
-
-        {/* <RndQstSelectors admin={false}  goToCurrent={goToCurrent} setGoToCurrent={setGoToCurrent} /> */}
-
-        <GoToQModal show={showGoTo} handleClose={handleClose} goToQ={goToQ} />
+        <GoToQModal show={showGoTo} handleClose={handleClose} />
         <SubmitModal submitAnswer={submitAnswer} />
       </Container>
-
     </div>
   )
-
-
-
-
 }
 
 export default UserRoom;
