@@ -43,7 +43,7 @@ function App() {
         // console.log('AuthCheck Set'); 
       })
       .catch(err => {
-        console.log('USER IS NOT LOGGED IN', err.response)
+        console.log('USER IS NOT LOGGED IN')
         setRoomState({ ...roomState, loggedIn: false, userData: null, authCheckComplete: true });
       });
   }, []);
