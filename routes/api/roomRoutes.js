@@ -39,6 +39,9 @@ router.route('/active/:state/:id')
 // Matches => /api/rooms/answer
 router.delete('/answer',controller.deleteAnswer);
 
+// Matches => /api/rooms/points
+router.put('/points', controller.editPoints);
+
 router.put('/correct',controller.toggleCorrect);
 
 // './api/rooms/create'
