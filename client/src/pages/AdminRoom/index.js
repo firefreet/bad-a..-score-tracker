@@ -104,7 +104,7 @@ function AdminRoom() {
     let questionId = playerResp.getAttribute('questionid');
     try {
       await API.toggleCorrect(roomData._id, userId, questionId, value).catch(err => { console.log(err) });
-      const { data } = await API.getRoom(roomData._id);
+      const { data } = await API.getRoomByCode(roomData.roomID);
       await setRoomState({ ...roomState, roomData: data[0] });
     } catch (err) {
       console.log(err);

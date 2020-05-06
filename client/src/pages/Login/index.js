@@ -59,7 +59,7 @@ function Login(props) {
         setUserData(true, user, roomState);
 
         // set for later
-        props.history.push('/rooms');
+        window.location.href = '/rooms';
 
       })
       .catch(err => {

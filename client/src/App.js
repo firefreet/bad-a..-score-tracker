@@ -35,6 +35,20 @@ function App() {
     }
   });
 
+  //// 1 /////
+  useEffect(() => {
+    API.isAuthenticated()
+      .then(res => {
+        setRoomState({ ...roomState, loggedIn: true, userData: res.data })
+      })
+      .catch(err => {
+        console.log('USER IS NOT LOGGED IN', err.response)
+        setRoomState(currentState => ({ ...currentState, loggedIn: false, userData: null }));
+      });
+      setAuthCheckComplete(true);
+  }, []);
+
+  ////// 2 ///////
   useEffect(() => {
     const i = setInterval(async () => {
       let ls = localStorage.getItem('roomState');
@@ -71,19 +85,6 @@ function App() {
   // console.log(roomState.selectedRound);
   // console.log(roomState)
   // }, [roomState])
-
-  useEffect(() => {
-    API.isAuthenticated()
-      .then(res => {
-        setRoomState({ ...roomState, loggedIn: true, userData: res.data })
-        setAuthCheckComplete(true);
-        console.log('AuthCheck Set'); /* setAuthCheckComplete was outside */
-      })
-      .catch(err => {
-        console.log('USER IS NOT LOGGED IN', err.response)
-        setRoomState(currentState => ({ ...currentState, loggedIn: false, userData: null }));
-      });
-  }, []);
 
   return (
     <Router>
