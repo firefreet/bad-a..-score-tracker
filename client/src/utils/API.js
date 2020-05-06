@@ -41,6 +41,10 @@ export default {
   deleteAnswer: (roomId,userId,questionId)=>{
     return axios.delete(`/api/rooms/answer?roomId=${roomId}&userId=${userId}&questionId=${questionId}`)
   },
+  //Edit points
+  editPoints: (roomId,userId,questionId, points) => {
+    return axios.put(`/api/rooms/points?roomId=${roomId}&userId=${userId}&questionId=${questionId}&points=${points}`)
+  },
   // Register User
   register: function(userRegData) {
     return axios.post(`/api/users/register`, userRegData);
