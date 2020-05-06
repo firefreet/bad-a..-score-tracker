@@ -12,8 +12,8 @@ function RoomManager(props) {
   const { roomState: { userData, setUserData }, roomState, setRoomState } = useContext(RoomContext);
 
   useEffect(() => {
-    console.log(userData);
-  }, [userData]);
+    console.log();
+  }, []);
 
   function handleNewRoom(e) {
     e.preventDefault();
