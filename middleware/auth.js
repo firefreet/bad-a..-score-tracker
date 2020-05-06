@@ -6,11 +6,9 @@ const mongojs = require("mongojs");
 const isAuthroizedRoute = async (req, res, next) => {
   try {
     let value = req.headers.cookie;
-
     if(!value) {
       throw new Error ('USER NOT FOUND: NO COOKIE')
     }
-
     let cookie = value.split('user=').pop().split(';').shift();
     const decoded = jwt.verify(cookie, process.env.JWT_SECRET);
     const userArray = await db.User.find({
@@ -42,6 +40,7 @@ const isAuthroizedRoute = async (req, res, next) => {
     
   } catch (err) {
     console.log('ACCESS TO ROUTE DENITED');
+    res.send('Error from Auth');
   }
 };
 
