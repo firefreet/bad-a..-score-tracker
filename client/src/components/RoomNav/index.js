@@ -40,6 +40,11 @@ function RoomNav(props) {
     }
   }
 
+    // upon having or getting a room id, find out the current round and question
+    useEffect(()=>{
+      if(props.setGoToCurrent) props.setGoToCurrent(true);
+    },[selectedRound,selectedQuestion])
+
   return (
     <Container classes="container mb-2">
       <Row>

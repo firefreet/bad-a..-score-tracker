@@ -115,8 +115,6 @@ function UserRoom() {
       roundNumber: selectedRound,
       points: points
     };
-    console.log('save Q: ' + respData.questionNumber);
-    console.log('save R: ' + respData.roundNumber);
     API.saveAnswer(respData).then(() => {
     })
       .catch(err => console.log(err));
