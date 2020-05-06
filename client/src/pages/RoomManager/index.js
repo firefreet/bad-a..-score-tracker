@@ -28,10 +28,10 @@ function RoomManager(props) {
 
   const joinRoom = async (e) => {
     const _id = e.target.getAttribute('id');
-    const newRoom = await API.getRoom(_id)
+    const newRoom = await API.getRoomByCode(_id)
 
     localStorage.setItem('roomState', JSON.stringify({
-      roomID: newRoom.data[0].roomID
+      roomID: _id
     }));
 
     setRoomState({ ...roomState, roomData: newRoom.data[0] })
@@ -106,7 +106,7 @@ if (userData.rooms.length > 0) {
                         <label className="custom-control-label" htmlFor={room._id}></label>
                       </div>
                     </td>
-                    <td className="text-right pr-3"><Link to="/adminroom" className="responseIoLink" onClick={joinRoom} id={room._id}>Enter</Link></td>
+                    <td className="text-right pr-3"><Link to="/adminroom" className="responseIoLink" onClick={joinRoom} id={room.roomID}>Enter</Link></td>
                   </tr>
                 ))}
               </tbody>

@@ -63,7 +63,7 @@ function Home(props) {
         setNullRoomCode(true);
         throw new Error('You Must Enter a Room Code');
       }
-      const newRoom = await API.getRoomByCode(roomCode);
+      const newRoom = await API.getActiveRoom(roomCode);
       if (!newRoom.data[0]) {
         setValidRoomCode(false);
         throw new Error('Room Does Not Exisit');
