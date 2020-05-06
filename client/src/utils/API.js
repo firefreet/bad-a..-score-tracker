@@ -2,11 +2,11 @@ import axios from 'axios';
 
 export default {
   
-  // Gets the room with the given id
-  getRoom: function(roomId) {
-    return axios.get('/api/rooms/id/' + roomId);
+  // Gets the active room with the given Code
+  getActiveRoom: function(code) {
+    return axios.get('/api/rooms/active/' + code);
   },
-  // Gets the room with the given Room Code
+  // Gets the room with the given Room Code and is active
   getRoomByCode: function(code) {
     return axios.get('/api/rooms/code/' + code);
   },

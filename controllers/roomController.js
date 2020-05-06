@@ -101,19 +101,19 @@ module.exports = {
       })
   },
 
-  getRoom: (req, res) => {
-    const id = req.params.id;
-    RoomModel.find({ "_id": ObjectId(id) })
+  getActiveRoom: (req, res) => {
+    const code = req.params.code;
+    RoomModel.find({ 'roomID': code, 'active': true })
       .then(room => {
         res.json(room);
       })
       .catch(err => {
-        res.json(err);
+        res.json(err)
       })
   },
   getRoomByCode: (req, res) => {
     const code = req.params.code;
-    RoomModel.find({ 'roomID': code, 'active': true })
+    RoomModel.find({ 'roomID': code })
       .then(room => {
         res.json(room);
       })
