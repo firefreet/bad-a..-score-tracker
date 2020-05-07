@@ -29,31 +29,30 @@ const mailer = {
       if (err) {
         console.log(err);
       } else {
-        console.log(info);
+        // console.log(info);
       }
     });
   },
 
-  sendPassReset: (id, recipient, bufStr) => {
+  sendPassReset: (id, recipient, bufStr, urlPrefix) => {
     const resetEmail = {
       from: fromStr,
       to: recipient,
       subject: 'Response.io: Reset your password.',
       text: `You're receiving this email because you've requested a password reset from Response.io.
             Please copy the following link and paste it into your browser in order to reset your password:
-            ${process.env.HOST_URL}/passreset/${id}/${bufStr}`,
+            ${urlPrefix}/passreset/${id}/${bufStr}`,
       html: `<p>You're receiving this email because you've requested a password reset from Response.io.
-            Please click on <a href="${process.env.HOST_URL}/passreset/${id}/${bufStr}" target="_blank" rel="noopener noreferrer">this link</a>,
+            Please click on <a href="${urlPrefix}/passreset/${id}/${bufStr}" target="_blank" rel="noopener noreferrer">this link</a>,
             or copy the following link text and paste it into your browser in order to reset your password:
-            ${process.env.HOST_URL}/passreset/${id}/${bufStr}`
+            ${urlPrefix}/passreset/${id}/${bufStr}`
     }
 
     transporter.sendMail(resetEmail, (err, info) => {
       if (err) {
         console.log(err);
       } else {
-        console.log(process.env.HOST_URL);
-        console.log(info);
+        // console.log(info);
       }
     })
   }
