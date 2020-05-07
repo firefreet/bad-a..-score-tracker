@@ -1,0 +1,8 @@
+.pass-reset-link {
+  color: blue;
+  text-decoration: underline;
+}
+
+.pass-reset-link:hover {
+  cursor: pointer;
+}
