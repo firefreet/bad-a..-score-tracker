@@ -119,7 +119,7 @@ function GameSummary(props) {
                                     <td className="align-middle">{response.roundNumber}</td>
                                     <td className="align-middle">{response.questionNumber}</td>
                                     <td className='align-middle text-muted'>{response.points}</td>
-                                    <td className={participant.name.replace(/ /g, '') + '-points align-middle'}>{response.correctInd ? response.points : response.points < 0 ? response.points : 0}</td>
+                                    <td className={participant.name.replace(/ /g, '') + '-points align-middle font-weight-bold'}>{response.correctInd ? response.points : response.points < 0 ? response.points : 0}</td>
                                   </tr>
                                 ))}{/* End Response Loop */}
                               </tbody>
