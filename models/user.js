@@ -30,6 +30,9 @@ const UserSchema = new Schema({
     trim: true,
     required: true,
   },
+  passResetCode: {
+    type: String
+  },
   tokens: {
     type: String,
     default: null,
@@ -84,14 +87,13 @@ User.findByCredentials = async (email, password) => {
   let user = userArray[0];
 
   if (!user) {
-    throw new Error("Unable to login");
+    return 'Email address not found.';
   }
 
   const isMatch = await bcrypt.compare(password, user.password);
 
   if (!isMatch) {
-    console.log("Password mismatch");
-    throw new Error("Unable to login!");
+    return 'Incorrect password.';
   }
 
   return user;
