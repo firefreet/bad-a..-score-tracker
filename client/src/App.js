@@ -17,6 +17,7 @@ import ScoreSummary from './pages/GameSummary/index.js';
 import modelRoom from './utils/modelRoom';
 import RoomRedirect from './pages/RoomRedirect';
 import Directions from './pages/Directions';
+import PassReset from './pages/PassReset';
 import './global.scss';
 
 function App() {
@@ -105,6 +106,7 @@ function App() {
                 {/* <Route exact path="/genroom" component={GenerateRoom} /> */}
                 <Route path="/rm/:roomCode" component={RoomRedirect} />
                 <Route exact path='/directions' component={Directions} />
+                <Route path="/passreset/:_id/:passResetCode" component={PassReset} />
                 <Route component={NoMatch} />
               </Switch>
             </SelectedQuestionContext.Provider>

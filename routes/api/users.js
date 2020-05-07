@@ -15,6 +15,12 @@ router.route("/logout")
 // MATCHES -> "/api/users/auth"
 router.route('/auth')
   .get(isAuthroizedRoute, userController.getAuthorizedUser);
+// MATCHES -> "/api/users/sendpassemail"
+router.route('/sendpassemail')
+  .post(userController.sendPassEmail);
+// MATCHES -> "/api/users/resetpass"
+router.route('/resetpass')
+  .post(userController.resetPass);
 
 
 module.exports = router;
