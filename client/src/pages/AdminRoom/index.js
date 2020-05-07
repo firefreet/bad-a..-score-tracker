@@ -85,6 +85,11 @@ function AdminRoom() {
     API.sendBroadcast(roomData._id, { broadcast: broadcastField.current.value })
       .then(resp => {
         setShowToast(true);
+        
+        setTimeout(() => {
+          setShowToast(false);
+        }, 4000)
+
       })
       .catch(err => {
         console.log('Error from sendBroadcast');
@@ -213,14 +218,13 @@ function AdminRoom() {
               autohide
               onClose={() => setShowToast(false)}
               show={showToast}
-              delay={30000}
             >
               <Toast.Header>
                 <img src="img/communication.svg" className="toastImg rounded mr-2" alt="" />
                 <strong className="mr-3">Response.io!</strong>
                 <small>just now</small>
               </Toast.Header>
-              <Toast.Body>Broadcast set to room</Toast.Body>
+              <Toast.Body>Broadcast sent to room</Toast.Body>
             </Toast>
           </div>
         </div>
