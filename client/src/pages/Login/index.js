@@ -5,6 +5,7 @@ import RoomContext from '../../utils/RoomContext';
 import API from '../../utils/API';
 import cookies from '../../utils/cookie';
 import TopBar from "../../components/TopBar";
+import './style.css';
 
 function Login(props) {
   const {roomState} = useContext(RoomContext);
@@ -12,19 +13,27 @@ function Login(props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [validation, setValidation] = useState('');
+  const [validEmail, setValidEmail] = useState(true);
+  const [validPassword, setValidPassword] = useState(true);
 
   const emailRef = useRef();
   const passwordRef = useRef();
+
+  const invalidEmail = <p className="text-danger">Our lemmings can't find that email in our system.</p>
+  const invalidPasswordMessage = "That password is incorrect."
 
   useEffect(() => {
   }, []);
 
   function handleInput(e) {
+    setValidPassword(true);
     switch (e.target.id) {
       case 'email':
+        setValidEmail(true);
         setEmail(e.target.value);
         break;
       case 'password':
+        setValidPassword(true);
         setPassword(e.target.value);
         break;
       default:
@@ -42,24 +51,33 @@ function Login(props) {
 
     API.login(userData)
       .then(res => {
-        let matchedUser = res.data.populatedUser;
+        if (typeof(res.data) === 'string') { // incorrect email or pass
+          const errorMsg = res.data;
+          if (errorMsg === 'Incorrect password.') {
+            setValidPassword(false);
+          } else { // error is 'Email address not found.'
+            setValidEmail(false);
+          }
+        } else { // successful login
+          let matchedUser = res.data.populatedUser;
 
-        if (matchedUser) { setValidation(''); }
+          if (matchedUser) { setValidation(''); }
 
-        let userCookie = matchedUser.tokens;
-        let user = {
-          _id: matchedUser._id,
-          tokens: matchedUser.tokens,
-          rooms: matchedUser.rooms,
-          firstName: matchedUser.firstName,
-          lastName: matchedUser.lastName,
-          email: matchedUser.email
+          let userCookie = matchedUser.tokens;
+          let user = {
+            _id: matchedUser._id,
+            tokens: matchedUser.tokens,
+            rooms: matchedUser.rooms,
+            firstName: matchedUser.firstName,
+            lastName: matchedUser.lastName,
+            email: matchedUser.email
+          }
+          cookies.setCookie('user', userCookie, 1);
+          setUserData(true, user, roomState);
+
+          // set for later
+          window.location.href = '/rooms';
         }
-        cookies.setCookie('user', userCookie, 1);
-        setUserData(true, user, roomState);
-
-        // set for later
-        window.location.href = '/rooms';
 
       })
       .catch(err => {
@@ -68,6 +86,16 @@ function Login(props) {
         setValidation(err.response.data.error);
       });
 
+  }
+
+  const sendEmail = () => {
+    API.sendPassEmail({email: email})
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   return (
@@ -89,6 +117,7 @@ function Login(props) {
                   id="email"
                   aria-describedby="email"
                   placeholder="Enter Email" />
+                  {validEmail ? null : invalidEmail}
               </div>
               <div className="form-group">
                 <label htmlFor="password">Password</label>
@@ -100,6 +129,19 @@ function Login(props) {
                   id="password"
                   aria-describedby="password"
                   placeholder="Enter Password" />
+                  {validPassword ? null : (
+                    <p>
+                      <span className="text-danger">{invalidPasswordMessage}</span>
+                      <span
+                        className="pass-reset-link"
+                        data-toggle="modal"
+                        data-target="#passResetModal"
+                        onClick={sendEmail}
+                      >
+                          Reset my password.
+                      </span>
+                    </p>
+                  )}
               </div>
               <button
                 onClick={handleSubmit}
@@ -123,6 +165,26 @@ function Login(props) {
           </Col>
         </Row>
       </Container>
+
+      <div class="modal fade" id="passResetModal" tabindex="-1" role="dialog" aria-labelledby="passResetModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="passResetModalTitle">Email Sent</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p>Please check your email. We've sent you a link that you can use to reset your Response.io password.</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   )
 };
