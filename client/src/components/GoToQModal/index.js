@@ -7,16 +7,13 @@ function GoToQModal(props) {
 
   <Modal show={props.show} onHide={props.handleClose} centered>
     <Modal.Header closeButton>
-      <Modal.Title><img src="img/problem-solving.svg" alt='trivia!' className="modalInfoSvg align-bottom" />Moving to current Question</Modal.Title>
+      <Modal.Title><img src="img/problem-solving.svg" alt='trivia!' className="modalInfoSvg align-bottom" />Next Question</Modal.Title>
     </Modal.Header>
 
     <Modal.Body>
-      <p>Good Luck!</p>
+      <Button variant="warning" size="sm" onClick={props.handleClose}>I want to go to there</Button>
     </Modal.Body>
 
-    <Modal.Footer>
-      <Button variant="warning" size="sm" onClick={props.handleClose}>OK</Button>
-    </Modal.Footer>
   </Modal>
   )
 }
