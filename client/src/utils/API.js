@@ -68,8 +68,8 @@ export default {
   gameSummary: (roomCode) => {
     return axios.get(`/api/rooms/${roomCode}/summary`)
   },
-  sendPassEmail: email => {
-    return axios.post('/api/users/sendpassemail', email);
+  sendPassEmail: emailInfo => {
+    return axios.post('/api/users/sendpassemail', emailInfo);
   },
   resetPass: (userData) => {
     return axios.post('/api/users/resetpass', userData);
