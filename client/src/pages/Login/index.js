@@ -89,7 +89,12 @@ function Login(props) {
   }
 
   const sendEmail = () => {
-    API.sendPassEmail({email: email})
+    const urlArr = window.location.href.split('/');
+    const urlPrefix = urlArr[0] + '//' + urlArr[2]
+    API.sendPassEmail({
+      email,
+      urlPrefix
+    })
       .then(res => {
         console.log(res);
       })

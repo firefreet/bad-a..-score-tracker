@@ -76,7 +76,7 @@ module.exports = {
       const user = await db.User.findOneAndUpdate(filter, update);
 
       // send password reset email
-      mailer.sendPassReset(user._id, user.email, bufStr);
+      mailer.sendPassReset(user._id, user.email, bufStr, req.body.urlPrefix);
       res.send('Email sent.');
     } catch (err) {
       console.log(err);

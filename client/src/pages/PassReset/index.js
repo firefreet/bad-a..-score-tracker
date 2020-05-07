@@ -47,7 +47,8 @@ const PassReset = props => {
         password: password
       })
         .then(response => {
-          if (response.data === "Password updated.") {
+          console.log(response.data);
+          if (response.data === "Password updated") {
             setFinalMessage('Your password has been updated successfully!');
           } else {
             setFinalMessage('Uhoh. Something went wrong. Are you sure you copied the link from your email successfully?');
