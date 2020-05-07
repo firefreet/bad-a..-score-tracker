@@ -1,15 +1,20 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import RoomContext from '../../utils/RoomContext';
 import API from '../../utils/API';
 import { Col, Row, Container } from "../../components/Grid";
 import Profile from '../../components/Profile';
 import TopBar from '../../components/TopBar';
+import { Tooltip, Overlay } from 'react-bootstrap';
 
 //ROOM MANAGER
 
 function RoomManager(props) {
   const { roomState: { userData, setUserData }, roomState, setRoomState } = useContext(RoomContext);
+  const [showTooltip, setShowTooltip] = useState(false);
+  const tooltipTarget = useRef(null);
+  const urlArr = window.location.href.split('/');
+  const urlPrefix = urlArr[0] + '//' + urlArr[2] + '/rm/';
 
   useEffect(() => {
     console.log();
@@ -44,6 +49,24 @@ function RoomManager(props) {
     let res = await API.toggleRoomActive(state, id);
     setUserData(true, res.data, roomState);    
   }
+
+  const copyLink = roomID => {
+    setShowTooltip(true);
+    const linkURL = urlPrefix + roomID;
+    navigator.clipboard.writeText(linkURL);
+
+    setTimeout(() => {
+      setShowTooltip(false);
+    }, 2000)
+  }
+
+  // const copiedTooltip = () => {
+  //   return (
+  //     <Tooltip>
+  //       Link Copied
+  //     </Tooltip>
+  //   );
+  // }
 
 if (userData.rooms.length === 0) {
   return (
@@ -94,7 +117,7 @@ if (userData.rooms.length > 0) {
                 <tr>
                   <th scope='col' className="pl-3">Room #</th>
                   <th scope='col' className="text-center">Active</th>
-                  <th scope='col' className="text-right pr-3">Action</th>
+                  <th scope='col' className="text-right pr-3">Copy Link / Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -107,7 +130,12 @@ if (userData.rooms.length > 0) {
                         <label className="custom-control-label" htmlFor={room._id}></label>
                       </div>
                     </td>
-                    <td className="text-right pr-3"><Link to="/adminroom" className="responseIoLink" onClick={joinRoom} id={room.roomID}>Enter</Link></td>
+                    <td className="text-right pr-3">
+                      {/* copy icon */}
+                      <i className="fas fa-clipboard" ref={tooltipTarget} onClick={() => copyLink(room.roomID)}></i>&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;
+
+                      <Link to="/adminroom" className="responseIoLink" onClick={joinRoom} id={room.roomID}>Enter</Link>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -119,6 +147,16 @@ if (userData.rooms.length > 0) {
           </div>
         </Col>
       </Row>
+
+      {/* copied tooltip */}
+      <Overlay target={tooltipTarget.current} show={showTooltip} placement="top">
+        {(props) => (
+          <Tooltip id="copied-tooltip" {...props}>
+            Link Copied
+          </Tooltip>
+        )}
+      </Overlay>
+
       <Profile />
     </Container>
     </div>
