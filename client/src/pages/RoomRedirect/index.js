@@ -54,9 +54,10 @@ function RoomRedirect(props) {
         participant: participantHandleRef.current.value
       }));
 
-      setRoomState({ ...roomState, participant: participantHandleRef.current.value ,roomData: newRoom.data[0] })
-
-      props.history.push('../userroom')
+      setRoomState({ ...roomState, participant: participantHandleRef.current.value , roomData: newRoom.data[0] })
+      
+      document.location.href = '../userroom';
+      // props.history.push('../userroom')
     } catch (err) {
       // console.log(err)
     }
