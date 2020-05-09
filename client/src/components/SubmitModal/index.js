@@ -5,7 +5,7 @@ import '../WelcomeBackModal/style.scss';
 function SubmitModal(props) {
   return (
     <div className="modal fade" id="submitModal" tabIndex="-1" role="dialog" aria-labelledby="submitModalLabel" aria-hidden="true">
-      <div className="modal-dialog" role="document">
+      <div className="modal-dialog modal-dialog-centered" role="document">
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title" id="submitModalLabel"><img src="img/idea.svg" alt="trivia!" className="align-bottom modalInfoSvg" />Submit Response!!!</h5>

@@ -129,7 +129,7 @@ const PassReset = props => {
           {finalMessage === 'Your password has been updated successfully!' ? (
             <Link className="btn btn-primary" to="/login">Log In</Link>
           ) : (null)}
-          <button type="button" className="btn btn-primary" onClick={() => {setShowModal(false)}}>OK</button>
+          <button type="button" className="btn btn-warning" onClick={() => {setShowModal(false)}}>OK</button>
         </Modal.Footer>
       </Modal>
     </div>

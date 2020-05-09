@@ -276,6 +276,29 @@ module.exports = {
       res.status(409).send(err);
     })
   },
+  editPoints: (req, res) => {
+    const { roomId, userId, questionId, points } = req.query;
+    RoomModel.updateOne({'_id': ObjectId(roomId)},
+      {
+        // { $set: { rounds: doc.rounds } }
+        $set: { 
+          'participants.$[i].responses.$[j].points': points
+        }
+      },
+      {
+        'arrayFilters': [
+          {'i._id': ObjectId(userId)},
+          {'j._id': ObjectId(questionId)}
+        ]
+      }
+    )
+    .then(updatedRes => {res.status(200).send(updatedRes)})
+    .catch(err => {
+      console.log('Error for edit points inside roomController')
+      console.log(err);
+      res.status(409).send(err);
+    })
+  },
   getGameSummary: async (req, res) => {
     let roomCode = req.params.roomCode;
     let participantNames = await RoomModel.find({ roomID: roomCode }).distinct('name');

@@ -5,14 +5,14 @@ import API from '../../utils/API';
 import { Col, Row, Container } from "../../components/Grid";
 import Profile from '../../components/Profile';
 import TopBar from '../../components/TopBar';
-import { Tooltip, Overlay } from 'react-bootstrap';
+import { Tooltip, Overlay, Toast } from 'react-bootstrap';
 
 //ROOM MANAGER
 
 function RoomManager(props) {
   const { roomState: { userData, setUserData }, roomState, setRoomState } = useContext(RoomContext);
-  const [showTooltip, setShowTooltip] = useState(false);
-  const tooltipTarget = useRef(null);
+  const [showToast, setShowToast] = useState(false);
+  // const tooltipTarget = useRef(null);
   const urlArr = window.location.href.split('/');
   const urlPrefix = urlArr[0] + '//' + urlArr[2] + '/rm/';
 
@@ -51,12 +51,12 @@ function RoomManager(props) {
   }
 
   const copyLink = roomID => {
-    setShowTooltip(true);
+    setShowToast(true);
     const linkURL = urlPrefix + roomID;
     navigator.clipboard.writeText(linkURL);
 
     setTimeout(() => {
-      setShowTooltip(false);
+      setShowToast(false);
     }, 2000)
   }
 
@@ -104,6 +104,35 @@ if (userData.rooms.length > 0) {
     <div>
     <TopBar />
     <Container>
+      <div
+          aria-live="polite"
+          aria-atomic="true"
+          style={{
+            position: 'relative',
+            zIndex: 10000
+          }}
+        >
+          <div
+            style={{
+              position: 'absolute',
+              top: 0,
+              right: 0,
+            }}
+          >
+            <Toast
+              autohide
+              onClose={() => setShowToast(false)}
+              show={showToast}
+            >
+              <Toast.Header>
+                <img src="img/communication.svg" className="toastImg rounded mr-2" alt="" />
+                <strong className="mr-3">Response.io!</strong>
+                <small>just now</small>
+              </Toast.Header>
+              <Toast.Body>Link Copied To Clipboard!</Toast.Body>
+            </Toast>
+          </div>
+        </div>
       <Row>
         <Col>
           <h3>{userData.firstName}'s Rooms</h3>
@@ -117,7 +146,7 @@ if (userData.rooms.length > 0) {
                 <tr>
                   <th scope='col' className="pl-3">Room #</th>
                   <th scope='col' className="text-center">Active</th>
-                  <th scope='col' className="text-right pr-3">Copy Link / Action</th>
+                  <th scope='col' className="text-right pr-3">Copy / Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -132,8 +161,7 @@ if (userData.rooms.length > 0) {
                     </td>
                     <td className="text-right pr-3">
                       {/* copy icon */}
-                      <i className="fas fa-clipboard" ref={tooltipTarget} onClick={() => copyLink(room.roomID)}></i>&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;
-
+                      <i className="fas fa-clipboard mr-4" style={{'cursor': 'pointer'}} /* ref={tooltipTarget} */ onClick={() => copyLink(room.roomID)}></i>
                       <Link to="/adminroom" className="responseIoLink" onClick={joinRoom} id={room.roomID}>Enter</Link>
                     </td>
                   </tr>
@@ -149,13 +177,13 @@ if (userData.rooms.length > 0) {
       </Row>
 
       {/* copied tooltip */}
-      <Overlay target={tooltipTarget.current} show={showTooltip} placement="top">
+      {/* <Overlay target={tooltipTarget.current} show={showTooltip} placement="top">
         {(props) => (
           <Tooltip id="copied-tooltip" {...props}>
             Link Copied
           </Tooltip>
         )}
-      </Overlay>
+      </Overlay> */}
 
       <Profile />
     </Container>

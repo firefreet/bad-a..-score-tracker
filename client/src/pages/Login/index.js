@@ -136,9 +136,9 @@ function Login(props) {
                   placeholder="Enter Password" />
                   {validPassword ? null : (
                     <p>
-                      <span className="text-danger">{invalidPasswordMessage}</span>
+                      <span className="text-danger">{invalidPasswordMessage} </span>
                       <span
-                        className="pass-reset-link"
+                        className="pass-reset-link responseIoLink"
                         data-toggle="modal"
                         data-target="#passResetModal"
                         onClick={sendEmail}
@@ -184,7 +184,7 @@ function Login(props) {
               <p>Please check your email. We've sent you a link that you can use to reset your Response.io password.</p>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+              <button type="button" class="btn btn-warning" data-dismiss="modal">OK</button>
             </div>
           </div>
         </div>

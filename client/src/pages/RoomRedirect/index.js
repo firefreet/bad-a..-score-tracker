@@ -54,9 +54,10 @@ function RoomRedirect(props) {
         participant: participantHandleRef.current.value
       }));
 
-      setRoomState({ ...roomState, participant: participantHandleRef.current.value ,roomData: newRoom.data[0] })
-
-      props.history.push('../userroom')
+      setRoomState({ ...roomState, participant: participantHandleRef.current.value , roomData: newRoom.data[0] })
+      
+      document.location.href = '../userroom';
+      // props.history.push('../userroom')
     } catch (err) {
       // console.log(err)
     }
@@ -68,16 +69,23 @@ function RoomRedirect(props) {
       <Container>
         <Row>
           <Col>
-            <h3>Response.io!</h3>
+          <div className="d-flex">
+              <div><img src="../img/idea.svg" alt="trivia!" style={{ 'height': '63px'}} /></div>
+              <div className="align-self-end mt-1">
+                <h3 className='mb-0'>Response.io!</h3>
+                <small className="font-italic">You've Got Questions...<strong>We Expect Answers</strong></small>
+              </div>
+            </div>
+            
             <hr />
           </Col>
         </Row>
         <Row>
           <Col>
+            <h5>You are joining room number <span className='responseIoLink'>{roomCode}</span>!</h5>
             <form className='mt-3'>
               <div className="form-group">
-                <p>You are joining room number <strong>{roomCode}</strong>!</p>
-                <p>Please enter a display name:</p>
+                <label htmlFor='participantHandle'>Please enter a display name:</label>
                   <input
                     onChange={handleInput}
                     ref={participantHandleRef}
