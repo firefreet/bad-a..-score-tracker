@@ -1,15 +1,18 @@
 {
-  "name": "mern",
+  "name": "trvioreact",
   "version": "0.1.0",
   "private": true,
   "proxy": "http://localhost:3001/",
   "dependencies": {
     "axios": "^0.18.0",
+    "bootstrap": "^4.4.1",
     "react": "^16.6.3",
+    "react-bootstrap": "^1.0.1",
     "react-dom": "^16.6.3",
     "react-router-dom": "^5.1.2",
     "react-scripts": "^2.1.1",
-    "socket.io-client": "^2.3.0"
+    "socket.io-client": "^2.3.0",
+    "node-sass": "^4.14.0"
   },
   "scripts": {
     "start": "react-scripts start",
